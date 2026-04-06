@@ -1,0 +1,9 @@
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/simulation.dir
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/StaticGLEW.dir
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/simulation_other_files.dir
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/edit_cache.dir
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/rebuild_cache.dir
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/simulation_autogen_timestamp_deps.dir
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/simulation_autogen.dir
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/StaticGLEW_autogen_timestamp_deps.dir
+/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/StaticGLEW_autogen.dir

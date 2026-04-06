@@ -1,0 +1,2 @@
+/usr/bin/ar qc libStaticGLEW.a CMakeFiles/StaticGLEW.dir/StaticGLEW_autogen/mocs_compilation.cpp.o CMakeFiles/StaticGLEW.dir/glew/src/glew.c.o
+/usr/bin/ranlib libStaticGLEW.a

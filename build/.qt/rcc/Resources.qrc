@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="resources/shaders/shader.frag">/home/alanxw/school/csci2240/env-induced-deformation/resources/shaders/shader.frag</file>
+    <file alias="resources/shaders/shader.vert">/home/alanxw/school/csci2240/env-induced-deformation/resources/shaders/shader.vert</file>
+    <file alias="resources/shaders/skybox.frag">/home/alanxw/school/csci2240/env-induced-deformation/resources/shaders/skybox.frag</file>
+    <file alias="resources/shaders/skybox.vert">/home/alanxw/school/csci2240/env-induced-deformation/resources/shaders/skybox.vert</file>
+  </qresource>
+</RCC>
+

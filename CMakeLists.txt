@@ -83,7 +83,6 @@ qt6_add_resources(${PROJECT_NAME} "Resources"
         resources/shaders/shader.vert
         resources/shaders/skybox.frag
         resources/shaders/skybox.vert
-        example-meshes/single-tet.mesh
 )
 
 # GLEW: this provides support for Windows (including 64-bit)
