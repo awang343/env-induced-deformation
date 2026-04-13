@@ -8,13 +8,9 @@ using namespace Eigen;
 
 Shape::Shape()
     : m_surfaceVao(-1),
-      m_tetVao(-1),
       m_surfaceVbo(-1),
-      m_tetVbo(-1),
       m_surfaceIbo(-1),
-      m_tetIbo(-1),
       m_numSurfaceVertices(),
-      m_numTetVertices(),
       m_verticesSize(),
       m_modelMatrix(Eigen::Matrix4f::Identity()),
       m_wireframe(false)
@@ -29,14 +25,7 @@ void Shape::cleanup()
         glDeleteBuffers(1, &m_surfaceIbo);
         m_surfaceVao = -1;
     }
-    if (m_tetVao != static_cast<GLuint>(-1)) {
-        glDeleteVertexArrays(1, &m_tetVao);
-        glDeleteBuffers(1, &m_tetVbo);
-        glDeleteBuffers(1, &m_tetIbo);
-        m_tetVao = -1;
-    }
     m_numSurfaceVertices = 0;
-    m_numTetVertices = 0;
     m_verticesSize = 0;
 }
 
@@ -130,58 +119,10 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     m_verticesSize = vertices.size();
     m_faces = triangles;
 
-    if (vertices.size() >= 4 && triangles.size() > 2) { //shape
-        m_red = 0.55f;
-        m_green = 0.35f;
-        m_blue = 0.95f;
-        m_alpha = 1.f;
-    } else { //ground
-        m_red = 0.85f;
-        m_green = 0.75f;
-        m_blue = 0.6f;
-        m_alpha = 1.f;
-    }
-//    m_red = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-//    m_blue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-//    m_green = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-//    m_alpha = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-}
-
-void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3i> &triangles, const std::vector<Eigen::Vector4i> &tetIndices)
-{
-    init(vertices, triangles);
-
-    std::vector<Eigen::Vector2i> lines;
-    for(Vector4i tet : tetIndices) {
-        lines.emplace_back(tet[0], tet[1]);
-        lines.emplace_back(tet[0], tet[2]);
-        lines.emplace_back(tet[0], tet[3]);
-        lines.emplace_back(tet[1], tet[2]);
-        lines.emplace_back(tet[1], tet[3]);
-        lines.emplace_back(tet[2], tet[3]);
-    }
-    glGenBuffers(1, &m_tetVbo);
-    glGenBuffers(1, &m_tetIbo);
-    glGenVertexArrays(1, &m_tetVao);
-
-    glBindBuffer(GL_ARRAY_BUFFER, m_tetVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(double) * vertices.size() * 3, vertices.data(), GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_tetIbo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * 2 * lines.size(), static_cast<const void *>(lines.data()), GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    glBindVertexArray(m_tetVao);
-    glBindBuffer(GL_ARRAY_BUFFER, m_tetVbo);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, static_cast<GLvoid *>(0));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_tetIbo);
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    m_numTetVertices = lines.size() * 2;
+    m_red = 0.55f;
+    m_green = 0.35f;
+    m_blue = 0.95f;
+    m_alpha = 1.f;
 }
 
 void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices)
@@ -211,10 +152,6 @@ void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices)
     glBindBuffer(GL_ARRAY_BUFFER, m_surfaceVbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double) * verts.size() * 3, static_cast<const void *>(verts.data()));
     glBufferSubData(GL_ARRAY_BUFFER, sizeof(double) * verts.size() * 3, sizeof(double) * verts.size() * 3, static_cast<const void *>(normals.data()));
-    if(m_tetVao != static_cast<GLuint>(-1)) {
-        glBindBuffer(GL_ARRAY_BUFFER, m_tetVbo);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double) * vertices.size() * 3, static_cast<const void *>(vertices.data()));
-    }
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -249,27 +186,20 @@ void Shape::draw(Shader *shader)
     Eigen::Matrix3f m3 = m_modelMatrix.topLeftCorner(3, 3);
     Eigen::Matrix3f inverseTransposeModel = m3.inverse().transpose();
 
-    if(m_wireframe && m_tetVao != static_cast<GLuint>(-1)) {
-        shader->setUniform("wire", 1);
-        shader->setUniform("model", m_modelMatrix);
-        shader->setUniform("inverseTransposeModel", inverseTransposeModel);
-        shader->setUniform("red",   1);
-        shader->setUniform("green", 1);
-        shader->setUniform("blue",  1);
-        shader->setUniform("alpha", 1);
-        glBindVertexArray(m_tetVao);
-        glDrawElements(GL_LINES, m_numTetVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
-        glBindVertexArray(0);
-    } else {
-        shader->setUniform("wire", 0);
-        shader->setUniform("model", m_modelMatrix);
-        shader->setUniform("inverseTransposeModel", inverseTransposeModel);
-        shader->setUniform("red",   m_red);
-        shader->setUniform("green", m_green);
-        shader->setUniform("blue",  m_blue);
-        shader->setUniform("alpha", m_alpha);
-        glBindVertexArray(m_surfaceVao);
+    shader->setUniform("wire", m_wireframe ? 1 : 0);
+    shader->setUniform("model", m_modelMatrix);
+    shader->setUniform("inverseTransposeModel", inverseTransposeModel);
+    shader->setUniform("red",   m_red);
+    shader->setUniform("green", m_green);
+    shader->setUniform("blue",  m_blue);
+    shader->setUniform("alpha", m_alpha);
+    glBindVertexArray(m_surfaceVao);
+    if (m_wireframe) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, m_numSurfaceVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
-        glBindVertexArray(0);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    } else {
+        glDrawElements(GL_TRIANGLES, m_numSurfaceVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
     }
+    glBindVertexArray(0);
 }

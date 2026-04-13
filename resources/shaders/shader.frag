@@ -17,6 +17,9 @@ void main() {
     }
 
     vec3 N = normalize(normal_worldSpace.xyz);
+    // Thin shell: flip the normal on back-facing fragments so both
+    // sides of the surface get lit consistently.
+    if (!gl_FrontFacing) N = -N;
     vec3 baseColor = vec3(red, green, blue);
 
     // Two-point lighting

@@ -17,7 +17,6 @@ public:
 
     void init(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3d> &normals, const std::vector<Eigen::Vector3i> &triangles);
     void init(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3i> &triangles);
-    void init(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3i> &triangles, const std::vector<Eigen::Vector4i> &tetIndices);
 
     void setVertices(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3d> &normals);
     void setVertices(const std::vector<Eigen::Vector3d> &vertices);
@@ -30,14 +29,10 @@ public:
 
 private:
     GLuint m_surfaceVao;
-    GLuint m_tetVao;
     GLuint m_surfaceVbo;
-    GLuint m_tetVbo;
     GLuint m_surfaceIbo;
-    GLuint m_tetIbo;
 
     unsigned int m_numSurfaceVertices;
-    unsigned int m_numTetVertices;
     unsigned int m_verticesSize;
     float m_red;
     float m_blue;

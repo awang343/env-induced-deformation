@@ -32,6 +32,9 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     src/mainwindow.cpp
     src/simulation.cpp
+    src/shell_mesh.cpp
+    src/shell_energy.cpp
+    src/demo.cpp
     src/glwidget.cpp
     src/graphics/camera.cpp
     src/graphics/graphicsdebug.cpp
@@ -41,6 +44,9 @@ add_executable(${PROJECT_NAME}
 
     src/mainwindow.h
     src/simulation.h
+    src/shell_mesh.h
+    src/shell_energy.h
+    src/demo.h
     src/glwidget.h
     src/graphics/camera.h
     src/graphics/graphicsdebug.h

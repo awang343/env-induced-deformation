@@ -48,10 +48,11 @@ void GLWidget::initializeGL()
     // Set clear color to white
     glClearColor(1, 1, 1, 1);
 
-    // Enable depth-testing and backface culling
+    // Enable depth-testing. Back-face culling stays off because thin
+    // shells have two visible sides; the fragment shader flips the
+    // normal for back-facing fragments so both sides are lit.
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    glDisable(GL_CULL_FACE);
 
     // Initialize shaders
     m_shader = new Shader(":/resources/shaders/shader.vert", ":/resources/shaders/shader.frag");
@@ -186,10 +187,10 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_D:
         m_sideways += SPEED;
         break;
-    case Qt::Key_F:
+    case Qt::Key_Q:
         m_vertical -= SPEED;
         break;
-    case Qt::Key_R:
+    case Qt::Key_E:
         m_vertical += SPEED;
         break;
     case Qt::Key_C:
@@ -201,11 +202,15 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Space:
         m_sim.togglePause();
         break;
+    case Qt::Key_R:
     case Qt::Key_P:
         m_sim.reset();
         break;
     case Qt::Key_O:
         m_sim.toggleParallel();
+        break;
+    case Qt::Key_G:
+        m_sim.cycleGrowthDemo();
         break;
     case Qt::Key_Escape:
         QApplication::quit();
@@ -231,10 +236,10 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
     case Qt::Key_D:
         m_sideways -= SPEED;
         break;
-    case Qt::Key_F:
+    case Qt::Key_Q:
         m_vertical += SPEED;
         break;
-    case Qt::Key_R:
+    case Qt::Key_E:
         m_vertical -= SPEED;
         break;
     }

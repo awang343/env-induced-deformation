@@ -9,10 +9,17 @@
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/Eigenvalues
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/Geometry
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/Householder
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/IterativeLinearSolvers
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/Jacobi
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/LU
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/OrderingMethods
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/QR
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/SVD
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/Sparse
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/SparseCholesky
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/SparseCore
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/SparseLU
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/SparseQR
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Cholesky/LDLT.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Cholesky/LLT.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Core/ArithmeticSequence.h
@@ -160,12 +167,23 @@
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Householder/BlockHouseholder.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Householder/Householder.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Householder/HouseholderSequence.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/IterativeLinearSolvers/BasicPreconditioners.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/IterativeLinearSolvers/IterativeSolverBase.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/IterativeLinearSolvers/LeastSquareConjugateGradient.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/IterativeLinearSolvers/SolveWithGuess.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Jacobi/Jacobi.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/LU/Determinant.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/LU/FullPivLU.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/LU/InverseImpl.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/LU/PartialPivLU.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/LU/arch/InverseSize4.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/OrderingMethods/Amd.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/OrderingMethods/Eigen_Colamd.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/OrderingMethods/Ordering.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/QR/ColPivHouseholderQR.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/QR/CompleteOrthogonalDecomposition.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/QR/FullPivHouseholderQR.h
@@ -174,6 +192,56 @@
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SVD/JacobiSVD.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SVD/SVDBase.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SVD/UpperBidiagonalization.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCholesky/SimplicialCholesky.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCholesky/SimplicialCholesky_impl.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/AmbiVector.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/CompressedStorage.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/MappedSparseMatrix.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseAssign.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseBlock.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseColEtree.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseCompressedBase.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseCwiseBinaryOp.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseCwiseUnaryOp.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseDenseProduct.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseDiagonalProduct.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseDot.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseFuzzy.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseMap.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseMatrix.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseMatrixBase.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparsePermutation.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseProduct.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseRedux.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseRef.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseSelfAdjointView.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseSolverBase.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseSparseProductWithPruning.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseTranspose.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseTriangularView.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseUtil.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseVector.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/SparseView.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseCore/TriangularSolver.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLUImpl.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_Memory.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_Structs.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_SupernodalMatrix.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_Utils.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_column_bmod.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_column_dfs.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_gemm_kernel.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_heap_relax_snode.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_kernel_bmod.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_panel_bmod.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_panel_dfs.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_pivotL.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_pruneL.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_relax_snode.h
+ /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseQR/SparseQR.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/misc/Image.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/misc/Kernel.h
  /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/misc/RealSvd2x2.h
@@ -191,6 +259,8 @@
  /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/4.3.1/CMakeSystem.cmake
  /home/alanxw/school/csci2240/env-induced-deformation/build/simulation_autogen/moc_predefs.h
  /home/alanxw/school/csci2240/env-induced-deformation/glew/include/GL/glew.h
+ /home/alanxw/school/csci2240/env-induced-deformation/src/demo.cpp
+ /home/alanxw/school/csci2240/env-induced-deformation/src/demo.h
  /home/alanxw/school/csci2240/env-induced-deformation/src/glwidget.cpp
  /home/alanxw/school/csci2240/env-induced-deformation/src/glwidget.h
  /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/camera.cpp
@@ -206,6 +276,10 @@
  /home/alanxw/school/csci2240/env-induced-deformation/src/main.cpp
  /home/alanxw/school/csci2240/env-induced-deformation/src/mainwindow.cpp
  /home/alanxw/school/csci2240/env-induced-deformation/src/mainwindow.h
+ /home/alanxw/school/csci2240/env-induced-deformation/src/shell_energy.cpp
+ /home/alanxw/school/csci2240/env-induced-deformation/src/shell_energy.h
+ /home/alanxw/school/csci2240/env-induced-deformation/src/shell_mesh.cpp
+ /home/alanxw/school/csci2240/env-induced-deformation/src/shell_mesh.h
  /home/alanxw/school/csci2240/env-induced-deformation/src/simulation.cpp
  /home/alanxw/school/csci2240/env-induced-deformation/src/simulation.h
  /home/alanxw/school/csci2240/env-induced-deformation/util/tiny_obj_loader.h

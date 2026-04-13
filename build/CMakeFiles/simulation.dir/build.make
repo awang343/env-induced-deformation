@@ -144,10 +144,52 @@ CMakeFiles/simulation.dir/src/simulation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/simulation.dir/src/simulation.cpp.s"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alanxw/school/csci2240/env-induced-deformation/src/simulation.cpp -o CMakeFiles/simulation.dir/src/simulation.cpp.s
 
+CMakeFiles/simulation.dir/src/shell_mesh.cpp.o: CMakeFiles/simulation.dir/flags.make
+CMakeFiles/simulation.dir/src/shell_mesh.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/shell_mesh.cpp
+CMakeFiles/simulation.dir/src/shell_mesh.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/simulation.dir/src/shell_mesh.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/shell_mesh.cpp.o -MF CMakeFiles/simulation.dir/src/shell_mesh.cpp.o.d -o CMakeFiles/simulation.dir/src/shell_mesh.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/shell_mesh.cpp
+
+CMakeFiles/simulation.dir/src/shell_mesh.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/simulation.dir/src/shell_mesh.cpp.i"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alanxw/school/csci2240/env-induced-deformation/src/shell_mesh.cpp > CMakeFiles/simulation.dir/src/shell_mesh.cpp.i
+
+CMakeFiles/simulation.dir/src/shell_mesh.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/simulation.dir/src/shell_mesh.cpp.s"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alanxw/school/csci2240/env-induced-deformation/src/shell_mesh.cpp -o CMakeFiles/simulation.dir/src/shell_mesh.cpp.s
+
+CMakeFiles/simulation.dir/src/shell_energy.cpp.o: CMakeFiles/simulation.dir/flags.make
+CMakeFiles/simulation.dir/src/shell_energy.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/shell_energy.cpp
+CMakeFiles/simulation.dir/src/shell_energy.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/simulation.dir/src/shell_energy.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/shell_energy.cpp.o -MF CMakeFiles/simulation.dir/src/shell_energy.cpp.o.d -o CMakeFiles/simulation.dir/src/shell_energy.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/shell_energy.cpp
+
+CMakeFiles/simulation.dir/src/shell_energy.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/simulation.dir/src/shell_energy.cpp.i"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alanxw/school/csci2240/env-induced-deformation/src/shell_energy.cpp > CMakeFiles/simulation.dir/src/shell_energy.cpp.i
+
+CMakeFiles/simulation.dir/src/shell_energy.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/simulation.dir/src/shell_energy.cpp.s"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alanxw/school/csci2240/env-induced-deformation/src/shell_energy.cpp -o CMakeFiles/simulation.dir/src/shell_energy.cpp.s
+
+CMakeFiles/simulation.dir/src/demo.cpp.o: CMakeFiles/simulation.dir/flags.make
+CMakeFiles/simulation.dir/src/demo.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/demo.cpp
+CMakeFiles/simulation.dir/src/demo.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/simulation.dir/src/demo.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/demo.cpp.o -MF CMakeFiles/simulation.dir/src/demo.cpp.o.d -o CMakeFiles/simulation.dir/src/demo.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/demo.cpp
+
+CMakeFiles/simulation.dir/src/demo.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/simulation.dir/src/demo.cpp.i"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/alanxw/school/csci2240/env-induced-deformation/src/demo.cpp > CMakeFiles/simulation.dir/src/demo.cpp.i
+
+CMakeFiles/simulation.dir/src/demo.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/simulation.dir/src/demo.cpp.s"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/alanxw/school/csci2240/env-induced-deformation/src/demo.cpp -o CMakeFiles/simulation.dir/src/demo.cpp.s
+
 CMakeFiles/simulation.dir/src/glwidget.cpp.o: CMakeFiles/simulation.dir/flags.make
 CMakeFiles/simulation.dir/src/glwidget.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/glwidget.cpp
 CMakeFiles/simulation.dir/src/glwidget.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/simulation.dir/src/glwidget.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/simulation.dir/src/glwidget.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/glwidget.cpp.o -MF CMakeFiles/simulation.dir/src/glwidget.cpp.o.d -o CMakeFiles/simulation.dir/src/glwidget.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/glwidget.cpp
 
 CMakeFiles/simulation.dir/src/glwidget.cpp.i: cmake_force
@@ -161,7 +203,7 @@ CMakeFiles/simulation.dir/src/glwidget.cpp.s: cmake_force
 CMakeFiles/simulation.dir/src/graphics/camera.cpp.o: CMakeFiles/simulation.dir/flags.make
 CMakeFiles/simulation.dir/src/graphics/camera.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/camera.cpp
 CMakeFiles/simulation.dir/src/graphics/camera.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/simulation.dir/src/graphics/camera.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/simulation.dir/src/graphics/camera.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/graphics/camera.cpp.o -MF CMakeFiles/simulation.dir/src/graphics/camera.cpp.o.d -o CMakeFiles/simulation.dir/src/graphics/camera.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/camera.cpp
 
 CMakeFiles/simulation.dir/src/graphics/camera.cpp.i: cmake_force
@@ -175,7 +217,7 @@ CMakeFiles/simulation.dir/src/graphics/camera.cpp.s: cmake_force
 CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o: CMakeFiles/simulation.dir/flags.make
 CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/graphicsdebug.cpp
 CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o -MF CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o.d -o CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/graphicsdebug.cpp
 
 CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.i: cmake_force
@@ -189,7 +231,7 @@ CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.s: cmake_force
 CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.o: CMakeFiles/simulation.dir/flags.make
 CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/meshloader.cpp
 CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.o -MF CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.o.d -o CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/meshloader.cpp
 
 CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.i: cmake_force
@@ -203,7 +245,7 @@ CMakeFiles/simulation.dir/src/graphics/meshloader.cpp.s: cmake_force
 CMakeFiles/simulation.dir/src/graphics/shader.cpp.o: CMakeFiles/simulation.dir/flags.make
 CMakeFiles/simulation.dir/src/graphics/shader.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/shader.cpp
 CMakeFiles/simulation.dir/src/graphics/shader.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/simulation.dir/src/graphics/shader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/simulation.dir/src/graphics/shader.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/graphics/shader.cpp.o -MF CMakeFiles/simulation.dir/src/graphics/shader.cpp.o.d -o CMakeFiles/simulation.dir/src/graphics/shader.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/shader.cpp
 
 CMakeFiles/simulation.dir/src/graphics/shader.cpp.i: cmake_force
@@ -217,7 +259,7 @@ CMakeFiles/simulation.dir/src/graphics/shader.cpp.s: cmake_force
 CMakeFiles/simulation.dir/src/graphics/shape.cpp.o: CMakeFiles/simulation.dir/flags.make
 CMakeFiles/simulation.dir/src/graphics/shape.cpp.o: /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/shape.cpp
 CMakeFiles/simulation.dir/src/graphics/shape.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/simulation.dir/src/graphics/shape.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/simulation.dir/src/graphics/shape.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/src/graphics/shape.cpp.o -MF CMakeFiles/simulation.dir/src/graphics/shape.cpp.o.d -o CMakeFiles/simulation.dir/src/graphics/shape.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/src/graphics/shape.cpp
 
 CMakeFiles/simulation.dir/src/graphics/shape.cpp.i: cmake_force
@@ -231,7 +273,7 @@ CMakeFiles/simulation.dir/src/graphics/shape.cpp.s: cmake_force
 CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.o: CMakeFiles/simulation.dir/flags.make
 CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.o: .qt/rcc/qrc_Resources.cpp
 CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.o: CMakeFiles/simulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.o -MF CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.o.d -o CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/.qt/rcc/qrc_Resources.cpp
 
 CMakeFiles/simulation.dir/build/.qt/rcc/qrc_Resources.cpp.i: cmake_force
@@ -248,6 +290,9 @@ simulation_OBJECTS = \
 "CMakeFiles/simulation.dir/src/main.cpp.o" \
 "CMakeFiles/simulation.dir/src/mainwindow.cpp.o" \
 "CMakeFiles/simulation.dir/src/simulation.cpp.o" \
+"CMakeFiles/simulation.dir/src/shell_mesh.cpp.o" \
+"CMakeFiles/simulation.dir/src/shell_energy.cpp.o" \
+"CMakeFiles/simulation.dir/src/demo.cpp.o" \
 "CMakeFiles/simulation.dir/src/glwidget.cpp.o" \
 "CMakeFiles/simulation.dir/src/graphics/camera.cpp.o" \
 "CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o" \
@@ -263,6 +308,9 @@ simulation: CMakeFiles/simulation.dir/simulation_autogen/mocs_compilation.cpp.o
 simulation: CMakeFiles/simulation.dir/src/main.cpp.o
 simulation: CMakeFiles/simulation.dir/src/mainwindow.cpp.o
 simulation: CMakeFiles/simulation.dir/src/simulation.cpp.o
+simulation: CMakeFiles/simulation.dir/src/shell_mesh.cpp.o
+simulation: CMakeFiles/simulation.dir/src/shell_energy.cpp.o
+simulation: CMakeFiles/simulation.dir/src/demo.cpp.o
 simulation: CMakeFiles/simulation.dir/src/glwidget.cpp.o
 simulation: CMakeFiles/simulation.dir/src/graphics/camera.cpp.o
 simulation: CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o
@@ -285,7 +333,7 @@ simulation: /usr/lib/libQt6Core.so.6.11.0
 simulation: /usr/lib64/libomp.so
 simulation: /usr/lib/libpthread.a
 simulation: CMakeFiles/simulation.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable simulation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX executable simulation"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/simulation.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -1,8 +1,5 @@
 #include "graphics/meshloader.h"
 
-#define TINYOBJLOADER_IMPLEMENTATION
-#include "util/tiny_obj_loader.h"
-
 #include <iostream>
 
 #include <QString>
@@ -12,42 +9,47 @@
 
 using namespace Eigen;
 
-bool MeshLoader::loadTetMesh(const std::string &filepath, std::vector<Eigen::Vector3d> &vertices, std::vector<Eigen::Vector4i> &tets)
+bool MeshLoader::loadTriMesh(const std::string &filepath,
+                             std::vector<Eigen::Vector3d> &vertices,
+                             std::vector<Eigen::Vector3i> &faces)
 {
     QString qpath = QString::fromStdString(filepath);
     QFile file(qpath);
 
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         std::cout << "Error opening file: " << filepath << std::endl;
         return false;
     }
     QTextStream in(&file);
 
-    QRegularExpression vrxp("v (-?\\d*\\.?\\d+) +(-?\\d*\\.?\\d+) +(-?\\d*\\.?\\d+)");
-    QRegularExpression trxp("t (\\d+) +(\\d+) +(\\d+) +(\\d+)");
+    // Matches Wavefront-OBJ style lines:
+    //   v  x y z                    (possibly with scientific notation)
+    //   f  i  j  k                  (1-indexed vertex ids)
+    //   f  i/t/n  j/t/n  k/t/n      (only the vertex index is used)
+    // Leading `vn`/`vt` lines and comments are ignored.
+    const QString num = "(-?\\d*\\.?\\d+(?:[eE][-+]?\\d+)?)";
+    QRegularExpression vrxp("^v\\s+" + num + "\\s+" + num + "\\s+" + num);
+    QRegularExpression frxp("^f\\s+(\\d+)(?:/\\S*)?\\s+(\\d+)(?:/\\S*)?\\s+(\\d+)(?:/\\S*)?");
 
-    while(!in.atEnd()) {
+    while (!in.atEnd()) {
         QString line = in.readLine();
-        auto match = vrxp.match(line);
-        if(match.hasMatch()) {
-            vertices.emplace_back(match.captured(1).toDouble(),
-                                  match.captured(2).toDouble(),
-                                  match.captured(3).toDouble());
+        auto vm = vrxp.match(line);
+        if (vm.hasMatch()) {
+            vertices.emplace_back(vm.captured(1).toDouble(),
+                                  vm.captured(2).toDouble(),
+                                  vm.captured(3).toDouble());
             continue;
         }
-        match = trxp.match(line);
-        if(match.hasMatch()) {
-            tets.emplace_back(match.captured(1).toInt(),
-                              match.captured(2).toInt(),
-                              match.captured(3).toInt(),
-                              match.captured(4).toInt());
+        auto fm = frxp.match(line);
+        if (fm.hasMatch()) {
+            // OBJ indices are 1-based; convert to 0-based.
+            faces.emplace_back(fm.captured(1).toInt() - 1,
+                               fm.captured(2).toInt() - 1,
+                               fm.captured(3).toInt() - 1);
         }
     }
     file.close();
     return true;
 }
 
-MeshLoader::MeshLoader()
-{
-
-}
+MeshLoader::MeshLoader() {}

@@ -873,6 +873,12 @@
 	"HEADERS" : 
 	[
 		[
+			"/home/alanxw/school/csci2240/env-induced-deformation/src/demo.h",
+			"MU",
+			"UVLADIE3JM/moc_demo.cpp",
+			null
+		],
+		[
 			"/home/alanxw/school/csci2240/env-induced-deformation/src/glwidget.h",
 			"MU",
 			"UVLADIE3JM/moc_glwidget.cpp",
@@ -912,6 +918,18 @@
 			"/home/alanxw/school/csci2240/env-induced-deformation/src/mainwindow.h",
 			"MU",
 			"UVLADIE3JM/moc_mainwindow.cpp",
+			null
+		],
+		[
+			"/home/alanxw/school/csci2240/env-induced-deformation/src/shell_energy.h",
+			"MU",
+			"UVLADIE3JM/moc_shell_energy.cpp",
+			null
+		],
+		[
+			"/home/alanxw/school/csci2240/env-induced-deformation/src/shell_mesh.h",
+			"MU",
+			"UVLADIE3JM/moc_shell_mesh.cpp",
 			null
 		],
 		[
@@ -1011,6 +1029,11 @@
 	"SOURCES" : 
 	[
 		[
+			"/home/alanxw/school/csci2240/env-induced-deformation/src/demo.cpp",
+			"MU",
+			null
+		],
+		[
 			"/home/alanxw/school/csci2240/env-induced-deformation/src/glwidget.cpp",
 			"MU",
 			null
@@ -1047,6 +1070,16 @@
 		],
 		[
 			"/home/alanxw/school/csci2240/env-induced-deformation/src/mainwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/alanxw/school/csci2240/env-induced-deformation/src/shell_energy.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/alanxw/school/csci2240/env-induced-deformation/src/shell_mesh.cpp",
 			"MU",
 			null
 		],

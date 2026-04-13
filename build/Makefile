@@ -303,6 +303,30 @@ simulation_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/simulation_autogen/mocs_compilation.cpp.s
 .PHONY : simulation_autogen/mocs_compilation.cpp.s
 
+src/demo.o: src/demo.cpp.o
+.PHONY : src/demo.o
+
+# target to build an object file
+src/demo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/demo.cpp.o
+.PHONY : src/demo.cpp.o
+
+src/demo.i: src/demo.cpp.i
+.PHONY : src/demo.i
+
+# target to preprocess a source file
+src/demo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/demo.cpp.i
+.PHONY : src/demo.cpp.i
+
+src/demo.s: src/demo.cpp.s
+.PHONY : src/demo.s
+
+# target to generate assembly for a file
+src/demo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/demo.cpp.s
+.PHONY : src/demo.cpp.s
+
 src/glwidget.o: src/glwidget.cpp.o
 .PHONY : src/glwidget.o
 
@@ -495,6 +519,54 @@ src/mainwindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/mainwindow.cpp.s
 .PHONY : src/mainwindow.cpp.s
 
+src/shell_energy.o: src/shell_energy.cpp.o
+.PHONY : src/shell_energy.o
+
+# target to build an object file
+src/shell_energy.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/shell_energy.cpp.o
+.PHONY : src/shell_energy.cpp.o
+
+src/shell_energy.i: src/shell_energy.cpp.i
+.PHONY : src/shell_energy.i
+
+# target to preprocess a source file
+src/shell_energy.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/shell_energy.cpp.i
+.PHONY : src/shell_energy.cpp.i
+
+src/shell_energy.s: src/shell_energy.cpp.s
+.PHONY : src/shell_energy.s
+
+# target to generate assembly for a file
+src/shell_energy.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/shell_energy.cpp.s
+.PHONY : src/shell_energy.cpp.s
+
+src/shell_mesh.o: src/shell_mesh.cpp.o
+.PHONY : src/shell_mesh.o
+
+# target to build an object file
+src/shell_mesh.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/shell_mesh.cpp.o
+.PHONY : src/shell_mesh.cpp.o
+
+src/shell_mesh.i: src/shell_mesh.cpp.i
+.PHONY : src/shell_mesh.i
+
+# target to preprocess a source file
+src/shell_mesh.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/shell_mesh.cpp.i
+.PHONY : src/shell_mesh.cpp.i
+
+src/shell_mesh.s: src/shell_mesh.cpp.s
+.PHONY : src/shell_mesh.s
+
+# target to generate assembly for a file
+src/shell_mesh.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/simulation.dir/build.make CMakeFiles/simulation.dir/src/shell_mesh.cpp.s
+.PHONY : src/shell_mesh.cpp.s
+
 src/simulation.o: src/simulation.cpp.o
 .PHONY : src/simulation.o
 
@@ -546,6 +618,9 @@ help:
 	@echo "... simulation_autogen/mocs_compilation.o"
 	@echo "... simulation_autogen/mocs_compilation.i"
 	@echo "... simulation_autogen/mocs_compilation.s"
+	@echo "... src/demo.o"
+	@echo "... src/demo.i"
+	@echo "... src/demo.s"
 	@echo "... src/glwidget.o"
 	@echo "... src/glwidget.i"
 	@echo "... src/glwidget.s"
@@ -570,6 +645,12 @@ help:
 	@echo "... src/mainwindow.o"
 	@echo "... src/mainwindow.i"
 	@echo "... src/mainwindow.s"
+	@echo "... src/shell_energy.o"
+	@echo "... src/shell_energy.i"
+	@echo "... src/shell_energy.s"
+	@echo "... src/shell_mesh.o"
+	@echo "... src/shell_mesh.i"
+	@echo "... src/shell_mesh.s"
 	@echo "... src/simulation.o"
 	@echo "... src/simulation.i"
 	@echo "... src/simulation.s"
