@@ -27,6 +27,9 @@ class Simulation
     void setUniformGrowth(double factor);
     void cycleGrowthDemo();
 
+    // Run a single integration step (for single-stepping while paused).
+    void singleStep();
+
   private:
     void stepOnce();
 

@@ -212,6 +212,18 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_G:
         m_sim.cycleGrowthDemo();
         break;
+    case Qt::Key_BracketRight:
+        m_physicsRate = std::max(1, m_physicsRate / 2);
+        std::cout << "Physics: every " << m_physicsRate << " frame(s)" << std::endl;
+        break;
+    case Qt::Key_BracketLeft:
+        m_physicsRate = std::min(128, m_physicsRate * 2);
+        std::cout << "Physics: every " << m_physicsRate << " frame(s)" << std::endl;
+        break;
+    case Qt::Key_Period:
+        m_sim.singleStep();
+        update();
+        break;
     case Qt::Key_Escape:
         QApplication::quit();
     }
@@ -250,7 +262,11 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
 void GLWidget::tick()
 {
     float deltaSeconds = m_deltaTimeProvider.restart() / 1000.f;
-    m_sim.update(deltaSeconds);
+    m_tickCount++;
+    if (m_tickCount >= m_physicsRate) {
+        m_tickCount = 0;
+        m_sim.update(deltaSeconds);
+    }
 
     // Move camera
     auto look = m_camera.getLook();

@@ -153,6 +153,14 @@ void Simulation::cycleGrowthDemo()
     ::cycleGrowthDemo(m_growth, m_paused);
 }
 
+void Simulation::singleStep()
+{
+    stepOnce();
+    m_shape.setModelMatrix(Affine3f::Identity());
+    m_shape.setVertices(m_mesh.vertices);
+    std::cout << "Step" << std::endl;
+}
+
 void Simulation::draw(Shader *shader)
 {
     m_shape.draw(shader);

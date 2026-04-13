@@ -70,15 +70,50 @@ void initStereographicDemo(ShellMesh &mesh,
     const int nF = mesh.numFaces();
     const int nV = mesh.numVerts();
 
-    // Conformal rest metric: g = (2/(1+r²))² · a0 per face centroid.
+    // Compute aBar from the discrete geometry: map each vertex onto the
+    // unit sphere via inverse stereographic projection, then compute the
+    // first fundamental form of each triangle from the mapped positions.
+    // This respects the actual edge lengths on the sphere rather than
+    // evaluating a continuous conformal factor at the centroid.
+    auto stereoProject = [](const Vector3d &v) -> Vector3d {
+        double r2 = v.x() * v.x() + v.z() * v.z();
+        double d  = 1.0 + r2;
+        return Vector3d(2.0 * v.x() / d,
+                        (1.0 - r2) / d,
+                        2.0 * v.z() / d);
+    };
+
+    std::vector<Vector3d> sphereVerts(nV);
+    for (int i = 0; i < nV; ++i)
+        sphereVerts[i] = stereoProject(mesh.vertices[i]);
+
     for (int f = 0; f < nF; ++f) {
         const Vector3i &tri = mesh.faces[f];
-        Vector3d c = (mesh.vertices[tri[0]] + mesh.vertices[tri[1]] + mesh.vertices[tri[2]]) / 3.0;
-        double r2 = c.x() * c.x() + c.z() * c.z();
-        double s  = 2.0 / (1.0 + r2);
-        rest.aBar[f]    = (s * s) * a0[f];
+        Vector3d e1 = sphereVerts[tri[1]] - sphereVerts[tri[0]];
+        Vector3d e2 = sphereVerts[tri[2]] - sphereVerts[tri[0]];
+        double d12 = e1.dot(e2);
+        rest.aBar[f] << e1.dot(e1), d12,
+                         d12,        e2.dot(e2);
         rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, rest.aBar[f].determinant()));
     }
+
+    // Compute bBar from the sphere geometry. The sphere has nonzero
+    // curvature, so bBar must reflect that — otherwise the bending energy
+    // penalizes the sphere's curvature and the equilibrium is a compromise
+    // between flat (zero bending) and spherical (zero stretching).
+    //
+    // We temporarily swap in sphere positions, compute face normals and b
+    // using the standard mid-edge formulation, then restore.
+    auto flatVerts = mesh.vertices;
+    mesh.vertices = sphereVerts;
+
+    std::vector<Vector3d> sphereFN;
+    computeFaceNormals(mesh, sphereFN);
+
+    for (int f = 0; f < nF; ++f)
+        rest.bBar[f] = secondFundamentalForm(mesh, sphereFN, f);
+
+    mesh.vertices = flatVerts;
 
     // Small random perturbation to break the flat symmetry (paper §7.1).
     // The flat configuration is an unstable equilibrium; Newton's method

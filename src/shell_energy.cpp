@@ -499,27 +499,6 @@ void assembleGradientAndHessian(
 // Implicit Euler with Newton
 // =============================================================================
 
-// Incremental potential for line search:
-//   Φ(x) = (1/2dt²) ||x - x̃||²_M + E(x)
-// where x̃ = x0 + dt*v0 + dt²*g is the inertial prediction.
-static double incrementalPotential(
-    const ShellMesh &mesh,
-    const ShellRestState &rest,
-    const MaterialParams &mat,
-    const std::vector<double> &masses,
-    const std::vector<Vector3d> &xTilde,
-    double dt)
-{
-    double kinetic = 0.0;
-    const int n = mesh.numVerts();
-    const double inv_dt2 = 1.0 / (dt * dt);
-    for (int i = 0; i < n; ++i) {
-        Vector3d dx = mesh.vertices[i] - xTilde[i];
-        kinetic += 0.5 * masses[i] * inv_dt2 * dx.dot(dx);
-    }
-    return kinetic + totalEnergy(mesh, rest, mat);
-}
-
 void stepImplicitEuler(
     ShellMesh &mesh,
     const ShellRestState &rest,
@@ -533,6 +512,7 @@ void stepImplicitEuler(
 {
     const int n = mesh.numVerts();
     const int dim = 3 * n;
+    const double inv_dt2 = 1.0 / (dt * dt);
 
     // Inertial prediction: x̃ = x0 + dt*v0 + dt²*g
     auto pos0 = mesh.vertices;
@@ -540,84 +520,68 @@ void stepImplicitEuler(
     for (int i = 0; i < n; ++i)
         xTilde[i] = pos0[i] + dt * velocities[i] + dt * dt * gravity;
 
-    // Initial guess: the inertial prediction itself.
+    // Initial guess = inertial prediction.
     mesh.vertices = xTilde;
 
-    // Newton iteration to minimize Φ(x) = ½/dt² ||x-x̃||²_M + E(x).
-    // Gradient: ∇Φ = M(x-x̃)/dt² + ∇E
-    // Hessian:  ∇²Φ = M/dt² + ∇²E
+    // Newton iteration to minimize the incremental potential:
+    //   Φ(x) = ½/dt² ||x - x̃||²_M + E(x)
+    // ∇Φ  = M(x-x̃)/dt² + ∇E
+    // ∇²Φ = M/dt² + ∇²E
+    //
+    // When ∇²E is indefinite (StVK in compression), we regularize the
+    // diagonal until SimplicialLDLT succeeds (paper Section 5).
     for (int iter = 0; iter < maxIters; ++iter) {
         VectorXd eGrad;
         std::vector<Triplet<double>> hTrip;
         assembleGradientAndHessian(mesh, rest, mat, gravity, masses, eGrad, hTrip);
 
-        // Full gradient of Φ.
+        // ∇Φ
         VectorXd grad(dim);
-        const double inv_dt2 = 1.0 / (dt * dt);
         for (int i = 0; i < n; ++i) {
             Vector3d dx = mesh.vertices[i] - xTilde[i];
             grad.segment<3>(3*i) = masses[i] * inv_dt2 * dx
                                  + Vector3d(eGrad.segment<3>(3*i));
         }
 
-        double gradNorm = grad.norm();
-        if (gradNorm < tol) break;
+        if (grad.norm() < tol) break;
 
-        // Hessian of Φ: M/dt² + ∇²E.
-        std::vector<Triplet<double>> sysTriplets;
-        sysTriplets.reserve(hTrip.size() + dim);
-        for (int i = 0; i < n; ++i) {
-            double mdt2 = masses[i] * inv_dt2;
-            for (int a = 0; a < 3; ++a)
-                sysTriplets.emplace_back(3*i+a, 3*i+a, mdt2);
-        }
-        for (auto &t : hTrip)
-            sysTriplets.emplace_back(t.row(), t.col(), t.value());
+        // ∇²Φ = M/dt² + ∇²E, with progressively stronger regularization
+        // until the factorization succeeds.
+        VectorXd dx;
+        bool solved = false;
+        for (double alpha = 0.0; alpha < 1e8; alpha = (alpha == 0.0) ? 1.0 : alpha * 2.0) {
+            std::vector<Triplet<double>> sysTriplets;
+            sysTriplets.reserve(hTrip.size() + dim);
+            for (int i = 0; i < n; ++i) {
+                double diag = (1.0 + alpha) * masses[i] * inv_dt2;
+                for (int a = 0; a < 3; ++a)
+                    sysTriplets.emplace_back(3*i+a, 3*i+a, diag);
+            }
+            for (auto &t : hTrip)
+                sysTriplets.emplace_back(t.row(), t.col(), t.value());
 
-        SparseMatrix<double> H(dim, dim);
-        H.setFromTriplets(sysTriplets.begin(), sysTriplets.end());
-
-        // Solve H * δx = -∇Φ.
-        SimplicialLDLT<SparseMatrix<double>> solver;
-        solver.compute(H);
-        if (solver.info() != Eigen::Success) {
-            // Regularize and retry.
-            double reg = 1e-4 * H.diagonal().cwiseAbs().mean();
-            for (int i = 0; i < dim; ++i)
-                sysTriplets.emplace_back(i, i, reg);
+            SparseMatrix<double> H(dim, dim);
             H.setFromTriplets(sysTriplets.begin(), sysTriplets.end());
-            solver.compute(H);
-            if (solver.info() != Eigen::Success) {
-                std::cerr << "Newton: solver failed at iter " << iter << std::endl;
-                break;
-            }
-        }
-        VectorXd dx = solver.solve(-grad);
 
-        // Backtracking line search on Φ.
-        double Phi0 = incrementalPotential(mesh, rest, mat, masses, xTilde, dt);
-        double dirDeriv = grad.dot(dx);
-        auto posSave = mesh.vertices;
-        double alpha_ls = 1.0;
-        bool accepted = false;
-        for (int ls = 0; ls < 12; ++ls) {
-            for (int i = 0; i < n; ++i)
-                mesh.vertices[i] = posSave[i] + alpha_ls * Vector3d(dx.segment<3>(3*i));
-            double Phi1 = incrementalPotential(mesh, rest, mat, masses, xTilde, dt);
-            if (Phi1 <= Phi0 + 1e-4 * alpha_ls * dirDeriv) {
-                accepted = true;
-                break;
+            SimplicialLDLT<SparseMatrix<double>> solver;
+            solver.compute(H);
+            if (solver.info() == Eigen::Success) {
+                dx = solver.solve(-grad);
+                if (solver.info() == Eigen::Success) {
+                    solved = true;
+                    break;
+                }
             }
-            alpha_ls *= 0.5;
         }
-        if (!accepted) {
-            // Accept smallest step anyway to avoid getting stuck.
-            for (int i = 0; i < n; ++i)
-                mesh.vertices[i] = posSave[i] + alpha_ls * Vector3d(dx.segment<3>(3*i));
-        }
+        if (!solved) break;
+
+        // Take the full Newton step (no line search — the mass
+        // regularization M/dt² ensures the step is bounded).
+        for (int i = 0; i < n; ++i)
+            mesh.vertices[i] += Vector3d(dx.segment<3>(3*i));
     }
 
-    // Recover velocity: v^{i+1} = (x^{i+1} - x^i) / dt.
+    // Recover velocity: v = (x^{i+1} - x^i) / dt.
     for (int i = 0; i < n; ++i)
         velocities[i] = (mesh.vertices[i] - pos0[i]) / dt;
 }

@@ -60,6 +60,9 @@ private:
     bool m_capture;
     std::string mesh_path;
 
+    int m_physicsRate = 1;   // run physics every Nth tick (1 = every frame)
+    int m_tickCount = 0;
+
 private slots:
 
     // Physics Tick

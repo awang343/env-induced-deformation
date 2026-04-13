@@ -98,8 +98,8 @@ void stepImplicitEuler(
     std::vector<double> &masses,
     std::vector<Eigen::Vector3d> &velocities,
     double dt,
-    int maxIters = 20,
-    double tol = 1e-8);
+    int maxIters = 5,
+    double tol = 1e-6);
 
 // ---- Lumped mass ----
 
