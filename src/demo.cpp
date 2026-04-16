@@ -97,25 +97,14 @@ void initStereographicDemo(ShellMesh &mesh,
         rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, rest.aBar[f].determinant()));
     }
 
-    // Compute bBar from the sphere geometry. The sphere has nonzero
-    // curvature, so bBar must reflect that — otherwise the bending energy
-    // penalizes the sphere's curvature and the equilibrium is a compromise
-    // between flat (zero bending) and spherical (zero stretching).
-    //
-    // We temporarily swap in sphere positions, compute face normals and b
-    // using the standard mid-edge formulation, then restore.
-    auto flatVerts = mesh.vertices;
-    mesh.vertices = sphereVerts;
+    // bBar = 0 per the paper (Figure 3 caption): "we set b̄ = 0 and ā
+    // to this conformal metric." The stretching energy alone drives the
+    // shape; bending with b̄ = 0 provides smoothness. For thin shells
+    // (h << L), stretching dominates by 1/h² and the equilibrium is
+    // very close to the sphere.
+    // (rest.bBar is already zero from init.)
 
-    std::vector<Vector3d> sphereFN;
-    computeFaceNormals(mesh, sphereFN);
-
-    for (int f = 0; f < nF; ++f)
-        rest.bBar[f] = secondFundamentalForm(mesh, sphereFN, f);
-
-    mesh.vertices = flatVerts;
-
-    // Small random perturbation to break the flat symmetry (paper §7.1).
+    // Small perturbation to break the flat symmetry (paper §7.1).
     // The flat configuration is an unstable equilibrium; Newton's method
     // needs a nudge to find the buckled (spherical) energy minimum.
     for (int i = 0; i < nV; ++i) {

@@ -32,7 +32,10 @@ def main():
     verts = [(0.0, 0.0, 0.0)]  # center vertex, index 0
 
     for k in range(1, N_rings + 1):
-        r = R * k / N_rings
+        # Bias radii toward the boundary: t ∈ (0,1] → r = R·√t
+        # gives tighter ring spacing near r=R.
+        t = k / N_rings
+        r = R * math.sqrt(t)
         for s in range(N_sectors):
             angle = 2.0 * math.pi * s / N_sectors
             verts.append((r * math.cos(angle), 0.0, r * math.sin(angle)))
