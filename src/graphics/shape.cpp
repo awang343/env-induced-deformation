@@ -10,10 +10,15 @@ Shape::Shape()
     : m_surfaceVao(-1),
       m_surfaceVbo(-1),
       m_surfaceIbo(-1),
+      m_energyVbo(-1),
       m_numSurfaceVertices(),
       m_verticesSize(),
+      m_red(0.55f),
+      m_blue(0.95f),
+      m_green(0.35f),
+      m_alpha(1.f),
       m_modelMatrix(Eigen::Matrix4f::Identity()),
-      m_wireframe(false)
+      m_displayMode(0)
 {
 }
 
@@ -23,7 +28,9 @@ void Shape::cleanup()
         glDeleteVertexArrays(1, &m_surfaceVao);
         glDeleteBuffers(1, &m_surfaceVbo);
         glDeleteBuffers(1, &m_surfaceIbo);
+        if (m_energyVbo != static_cast<GLuint>(-1)) glDeleteBuffers(1, &m_energyVbo);
         m_surfaceVao = -1;
+        m_energyVbo = -1;
     }
     m_numSurfaceVertices = 0;
     m_verticesSize = 0;
@@ -38,12 +45,19 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     }
     glGenBuffers(1, &m_surfaceVbo);
     glGenBuffers(1, &m_surfaceIbo);
+    glGenBuffers(1, &m_energyVbo);
     glGenVertexArrays(1, &m_surfaceVao);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_surfaceVbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(double) * vertices.size() * 3 * 2, nullptr, GL_DYNAMIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double) * vertices.size() * 3, static_cast<const void *>(vertices.data()));
     glBufferSubData(GL_ARRAY_BUFFER, sizeof(double) * vertices.size() * 3, sizeof(double) * vertices.size() * 3, static_cast<const void *>(normals.data()));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Energy VBO: one float per expanded vertex (3 per face), initialized to 0.
+    std::vector<float> zeroEnergy(triangles.size() * 3, 0.0f);
+    glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * zeroEnergy.size(), zeroEnergy.data(), GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_surfaceIbo);
@@ -56,6 +70,9 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, static_cast<GLvoid *>(0));
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 0, reinterpret_cast<GLvoid *>(sizeof(double) * vertices.size() * 3));
+    glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, static_cast<GLvoid *>(0));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_surfaceIbo);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -78,8 +95,8 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
         auto& v1 = vertices[f[0]];
         auto& v2 = vertices[f[1]];
         auto& v3 = vertices[f[2]];
-        auto& e1 = v2 - v1;
-        auto& e2 = v3 - v1;
+        auto e1 = v2 - v1;
+        auto e2 = v3 - v1;
         auto n = e1.cross(e2);
         int s = verts.size();
         faces.push_back(Eigen::Vector3i(s, s + 1, s + 2));
@@ -92,12 +109,18 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     }
     glGenBuffers(1, &m_surfaceVbo);
     glGenBuffers(1, &m_surfaceIbo);
+    glGenBuffers(1, &m_energyVbo);
     glGenVertexArrays(1, &m_surfaceVao);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_surfaceVbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(double) * verts.size() * 3 * 2, nullptr, GL_DYNAMIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double) * verts.size() * 3, static_cast<const void *>(verts.data()));
     glBufferSubData(GL_ARRAY_BUFFER, sizeof(double) * verts.size() * 3, sizeof(double) * verts.size() * 3, static_cast<const void *>(normals.data()));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    std::vector<float> zeroEnergy(faces.size() * 3, 0.0f);
+    glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * zeroEnergy.size(), zeroEnergy.data(), GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_surfaceIbo);
@@ -110,6 +133,9 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, static_cast<GLvoid *>(0));
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 0, reinterpret_cast<GLvoid *>(sizeof(double) * verts.size() * 3));
+    glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, static_cast<GLvoid *>(0));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_surfaceIbo);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -139,8 +165,8 @@ void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices)
         auto& v1 = vertices[f[0]];
         auto& v2 = vertices[f[1]];
         auto& v3 = vertices[f[2]];
-        auto& e1 = v2 - v1;
-        auto& e2 = v3 - v1;
+        auto e1 = v2 - v1;
+        auto e2 = v3 - v1;
         auto n = e1.cross(e2);
         normals.push_back(n);
         normals.push_back(n);
@@ -155,14 +181,32 @@ void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Shape::setFaceEnergies(const std::vector<double> &energies)
+{
+    // Expand per-face energy to per-expanded-vertex (3 per face).
+    std::vector<float> expanded;
+    expanded.reserve(m_faces.size() * 3);
+    for (size_t f = 0; f < m_faces.size(); ++f) {
+        float e = (f < energies.size()) ? static_cast<float>(energies[f]) : 0.0f;
+        expanded.push_back(e);
+        expanded.push_back(e);
+        expanded.push_back(e);
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * expanded.size(), expanded.data());
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void Shape::setModelMatrix(const Eigen::Affine3f &model)
 {
     m_modelMatrix = model.matrix();
 }
 
-void Shape::toggleWireframe()
+void Shape::cycleDisplayMode()
 {
-    m_wireframe = !m_wireframe;
+    m_displayMode = (m_displayMode + 1) % 3;
+    const char *names[] = {"Solid", "Energy heatmap", "Wireframe"};
+    std::cout << "Display: " << names[m_displayMode] << std::endl;
 }
 
 void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3d> &normals)
@@ -186,7 +230,7 @@ void Shape::draw(Shader *shader)
     Eigen::Matrix3f m3 = m_modelMatrix.topLeftCorner(3, 3);
     Eigen::Matrix3f inverseTransposeModel = m3.inverse().transpose();
 
-    shader->setUniform("wire", m_wireframe ? 1 : 0);
+    shader->setUniform("displayMode", m_displayMode);
     shader->setUniform("model", m_modelMatrix);
     shader->setUniform("inverseTransposeModel", inverseTransposeModel);
     shader->setUniform("red",   m_red);
@@ -194,7 +238,7 @@ void Shape::draw(Shader *shader)
     shader->setUniform("blue",  m_blue);
     shader->setUniform("alpha", m_alpha);
     glBindVertexArray(m_surfaceVao);
-    if (m_wireframe) {
+    if (m_displayMode == 2) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, m_numSurfaceVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

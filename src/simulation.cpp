@@ -11,7 +11,6 @@ using namespace Eigen;
 
 Simulation::Simulation()
     : m_dt(1e-4),
-      m_dampingCoef(5.0),
       m_gravity(0.0, -9.81, 0.0)
 {
     omp_set_num_threads(std::max(1, omp_get_num_procs() - 2));
@@ -28,8 +27,8 @@ void Simulation::init(const std::string &config_path)
     m_mat.young      = cfg.value("young",       m_mat.young).toDouble();
     m_mat.poisson    = cfg.value("poisson",     m_mat.poisson).toDouble();
     m_mat.density    = cfg.value("density",     m_mat.density).toDouble();
+    m_mat.viscosity  = cfg.value("eta",         m_mat.viscosity).toDouble();
     m_dt             = cfg.value("dt",          m_dt).toDouble();
-    m_dampingCoef    = cfg.value("damping",     m_dampingCoef).toDouble();
     m_growth.rate    = cfg.value("growth_rate", m_growth.rate).toDouble();
     m_gravity.x()    = cfg.value("gravity_x",   m_gravity.x()).toDouble();
     m_gravity.y()    = cfg.value("gravity_y",   m_gravity.y()).toDouble();
@@ -50,15 +49,14 @@ void Simulation::init(const std::string &config_path)
     m_rest.restArea.resize(nF);
     m_a0.resize(nF);
     for (int f = 0; f < nF; ++f) {
-        m_a0[f]          = firstFundamentalForm(m_mesh, f);
-        m_rest.aBar[f]   = m_a0[f];
+        m_a0[f]            = firstFundamentalForm(m_mesh, f);
+        m_rest.aBar[f]     = m_a0[f];
         m_rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, m_a0[f].determinant()));
     }
 
-    // ---- Demo-specific overrides ----
-    if (m_restMetric == "stereographic") {
+    // ---- Demo overrides ----
+    if (m_restMetric == "stereographic")
         initStereographicDemo(m_mesh, m_a0, m_rest);
-    }
 
     // ---- Snapshot for reset ----
     m_initialRest  = m_rest;
@@ -66,49 +64,64 @@ void Simulation::init(const std::string &config_path)
 
     // ---- Per-vertex state ----
     m_velocities.assign(m_mesh.numVerts(), Vector3d::Zero());
-    m_mPlus.assign(m_mesh.numVerts(), 0.0);
-    m_mMinus.assign(m_mesh.numVerts(), 0.0);
     computeLumpedMasses(m_mesh, m_rest, m_mat, m_masses);
 
+    // ---- Initialize damping state (prev forms = current forms) ----
+    m_damp.aPrev.resize(nF);
+    m_damp.bPrev.resize(nF);
+    std::vector<Vector3d> fN; computeFaceNormals(m_mesh, fN);
+    for (int f = 0; f < nF; ++f) {
+        m_damp.aPrev[f] = firstFundamentalForm(m_mesh, f);
+        m_damp.bPrev[f] = secondFundamentalForm(m_mesh, fN, f);
+    }
+
     // ---- Diagnostics ----
-    if (runFDCheck) verifyForceGradient(m_mesh, m_rest, m_mat, m_gravity, m_masses);
+    if (runFDCheck) verifyForceGradient(m_mesh, m_rest, m_mat, m_damp, m_dt);
 
-    m_shape.setModelMatrix(Affine3f::Identity());
-    m_shape.setVertices(m_mesh.vertices);
+    updateDisplay();
 }
-
-// =============================================================================
-// Time integration
-// =============================================================================
 
 void Simulation::stepOnce()
 {
-    // 1. Growth ramp (swelling demo only).
     if (m_restMetric.empty())
         stepGrowthRamp(m_growth, m_dt, m_a0, m_rest);
 
-    // 2. Implicit Euler with Newton's method (paper Section 5).
     stepImplicitEuler(m_mesh, m_rest, m_mat, m_gravity,
-                      m_masses, m_velocities, m_dt);
+                      m_masses, m_velocities, m_damp, m_dt);
 }
 
-void Simulation::update(double seconds)
+void Simulation::update(double /*seconds*/)
 {
     if (m_mesh.vertices.empty() || m_paused) return;
-
-    double remaining = seconds;
-    while (remaining > 0.0) {
-        remaining -= std::min(m_dt, remaining);
-        stepOnce();
-    }
-
-    m_shape.setModelMatrix(Affine3f::Identity());
-    m_shape.setVertices(m_mesh.vertices);
+    stepOnce();
+    updateDisplay();
 }
 
-// =============================================================================
-// UI / lifecycle
-// =============================================================================
+void Simulation::updateDisplay()
+{
+    m_shape.setModelMatrix(Affine3f::Identity());
+    m_shape.setVertices(m_mesh.vertices);
+
+    const int nF = m_mesh.numFaces();
+    double alpha = m_mat.alpha(), beta = m_mat.beta();
+    double h3_12 = m_mat.thickness*m_mat.thickness*m_mat.thickness / 12.0;
+    std::vector<Eigen::Vector3d> fN;
+    computeFaceNormals(m_mesh, fN);
+    m_faceEnergies.resize(nF);
+    for (int f = 0; f < nF; ++f) {
+        Matrix2d a = firstFundamentalForm(m_mesh, f);
+        Matrix2d aBI = m_rest.aBar[f].inverse();
+        Matrix2d Ms = aBI * a - Matrix2d::Identity();
+        double es = 0.25 * m_mat.thickness * m_rest.restArea[f]
+                  * (0.5*alpha*Ms.trace()*Ms.trace() + beta*(Ms*Ms).trace());
+        Matrix2d b = secondFundamentalForm(m_mesh, fN, f);
+        Matrix2d Mb = aBI * (b - m_rest.bBar[f]);
+        double eb = h3_12 * m_rest.restArea[f]
+                  * (0.5*alpha*Mb.trace()*Mb.trace() + beta*(Mb*Mb).trace());
+        m_faceEnergies[f] = es + eb;
+    }
+    m_shape.setFaceEnergies(m_faceEnergies);
+}
 
 void Simulation::togglePause()
 {
@@ -129,44 +142,35 @@ void Simulation::reset()
     std::cout << "Reset" << std::endl;
     m_mesh.vertices = m_restVertices;
     std::fill(m_velocities.begin(), m_velocities.end(), Vector3d::Zero());
-    std::fill(m_mPlus.begin(),  m_mPlus.end(),  0.0);
-    std::fill(m_mMinus.begin(), m_mMinus.end(), 0.0);
     m_growth.factor = 1.0;
     m_growth.target = 1.0;
     m_rest = m_initialRest;
-    m_shape.setModelMatrix(Affine3f::Identity());
-    m_shape.setVertices(m_mesh.vertices);
+
+    int nF = m_mesh.numFaces();
+    std::vector<Vector3d> fN; computeFaceNormals(m_mesh, fN);
+    for (int f = 0; f < nF; ++f) {
+        m_damp.aPrev[f] = firstFundamentalForm(m_mesh, f);
+        m_damp.bPrev[f] = secondFundamentalForm(m_mesh, fN, f);
+    }
+
+    updateDisplay();
 }
 
 void Simulation::setUniformGrowth(double factor)
 {
     m_growth.target = factor;
-    if (m_paused) {
-        m_paused = false;
-        std::cout << "Auto-unpaused" << std::endl;
-    }
+    if (m_paused) { m_paused = false; std::cout << "Auto-unpaused" << std::endl; }
     std::cout << "Growth target = " << factor << std::endl;
 }
 
-void Simulation::cycleGrowthDemo()
-{
-    ::cycleGrowthDemo(m_growth, m_paused);
-}
+void Simulation::cycleGrowthDemo() { ::cycleGrowthDemo(m_growth, m_paused); }
 
 void Simulation::singleStep()
 {
     stepOnce();
-    m_shape.setModelMatrix(Affine3f::Identity());
-    m_shape.setVertices(m_mesh.vertices);
+    updateDisplay();
     std::cout << "Step" << std::endl;
 }
 
-void Simulation::draw(Shader *shader)
-{
-    m_shape.draw(shader);
-}
-
-void Simulation::toggleWire()
-{
-    m_shape.toggleWireframe();
-}
+void Simulation::draw(Shader *shader) { m_shape.draw(shader); }
+void Simulation::toggleWire() { m_shape.cycleDisplayMode(); }

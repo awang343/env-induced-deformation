@@ -5,13 +5,14 @@
 #include <Eigen/Sparse>
 #include <vector>
 
-// Material parameters for the Koiter shell model.
+// Material parameters for the Koiter shell model (paper Table 1).
 struct MaterialParams
 {
-    double thickness  = 1e-4;   // h
-    double young      = 2e9;    // E
-    double poisson    = 0.3;    // nu
-    double density    = 250.0;  // rho
+    double thickness  = 1e-4;    // h    (m)
+    double young      = 2e9;     // E    (Pa)
+    double poisson    = 0.3;     // nu
+    double density    = 250.0;   // rho  (kg/m³)
+    double viscosity  = 5e-13;   // eta  Kelvin-Voigt damping (Pa·s)
 
     double alpha() const { return young * poisson / (1.0 - poisson * poisson); }
     double beta()  const { return young / (2.0 * (1.0 + poisson)); }
@@ -25,20 +26,22 @@ struct ShellRestState
     std::vector<double>          restArea;   // sqrt(det aBar) / 2
 };
 
+// Per-face history for Kelvin-Voigt damping (previous timestep forms).
+struct DampingState
+{
+    std::vector<Eigen::Matrix2d> aPrev;
+    std::vector<Eigen::Matrix2d> bPrev;
+};
+
 // ---- Fundamental forms ----
 
 Eigen::Matrix2d firstFundamentalForm(const ShellMesh &mesh, int face);
 
-// Uses libshell's MidedgeAverageFormulation:
-//   II[i] = qvec[i] · n_opp[i] / ||mvec[i]||
-//   b = [[II0+II1, II0], [II0, II0+II2]]
-// Requires precomputed unnormalized face normals.
 Eigen::Matrix2d secondFundamentalForm(
     const ShellMesh &mesh,
     const std::vector<Eigen::Vector3d> &faceNormalsUnnorm,
     int face);
 
-// Unnormalized face normals (cross product, not normalized).
 void computeFaceNormals(const ShellMesh &mesh,
                         std::vector<Eigen::Vector3d> &normals);
 
@@ -55,36 +58,34 @@ struct BendingData
 {
     double energy;
     Eigen::Matrix<double, 18, 1> gradient;
-    Eigen::Matrix<double, 18, 18> hessian;   // inexact (Gauss-Newton)
-    int vertIdx[6];  // global vertex indices: [tri0,tri1,tri2,opp0,opp1,opp2], -1 if boundary
+    Eigen::Matrix<double, 18, 18> hessian;
+    int vertIdx[6];
 };
 
-// Compute per-face stretching energy, gradient (9-DOF), and Hessian (9×9).
 StretchingData stretchingPerFace(const ShellMesh &mesh,
                                  const ShellRestState &rest,
                                  const MaterialParams &mat,
                                  int face);
 
-// Compute per-face bending energy, gradient (18-DOF), and inexact Hessian (18×18).
-// Uses the MidedgeAverage formulation with analytical ∂b/∂DOF.
 BendingData bendingPerFace(const ShellMesh &mesh,
                            const ShellRestState &rest,
                            const MaterialParams &mat,
                            const std::vector<Eigen::Vector3d> &faceNormalsUnnorm,
                            int face);
 
-// ---- Global assembly ----
+// ---- Global ----
 
 double totalEnergy(const ShellMesh &mesh,
                    const ShellRestState &rest,
-                   const MaterialParams &mat);
+                   const MaterialParams &mat,
+                   const std::vector<Eigen::Vector3d> *cachedNormals = nullptr);
 
 void assembleGradientAndHessian(
     ShellMesh &mesh,
     const ShellRestState &rest,
     const MaterialParams &mat,
-    const Eigen::Vector3d &gravity,
-    const std::vector<double> &masses,
+    const DampingState &damp,
+    double dt,
     Eigen::VectorXd &gradient,
     std::vector<Eigen::Triplet<double>> &hessianTriplets);
 
@@ -97,8 +98,9 @@ void stepImplicitEuler(
     const Eigen::Vector3d &gravity,
     std::vector<double> &masses,
     std::vector<Eigen::Vector3d> &velocities,
+    DampingState &damp,
     double dt,
-    int maxIters = 5,
+    int maxIters = 10,
     double tol = 1e-6);
 
 // ---- Lumped mass ----
@@ -113,6 +115,6 @@ void computeLumpedMasses(const ShellMesh &mesh,
 void verifyForceGradient(ShellMesh &mesh,
                          const ShellRestState &rest,
                          const MaterialParams &mat,
-                         const Eigen::Vector3d &gravity,
-                         const std::vector<double> &masses,
+                         const DampingState &damp,
+                         double dt,
                          double eps = 1e-6);

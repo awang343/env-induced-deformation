@@ -2440,6 +2440,8 @@ CMakeFiles/simulation.dir/src/demo.cpp.o: /home/alanxw/school/csci2240/env-induc
   /usr/include/c++/15.2.1/bits/postypes.h \
   /usr/include/c++/15.2.1/bits/predefined_ops.h \
   /usr/include/c++/15.2.1/bits/ptr_traits.h \
+  /usr/include/c++/15.2.1/bits/random.h \
+  /usr/include/c++/15.2.1/bits/random.tcc \
   /usr/include/c++/15.2.1/bits/range_access.h \
   /usr/include/c++/15.2.1/bits/ranges_algo.h \
   /usr/include/c++/15.2.1/bits/ranges_algobase.h \
@@ -2465,6 +2467,7 @@ CMakeFiles/simulation.dir/src/demo.cpp.o: /home/alanxw/school/csci2240/env-induc
   /usr/include/c++/15.2.1/bits/stl_list.h \
   /usr/include/c++/15.2.1/bits/stl_map.h \
   /usr/include/c++/15.2.1/bits/stl_multimap.h \
+  /usr/include/c++/15.2.1/bits/stl_numeric.h \
   /usr/include/c++/15.2.1/bits/stl_pair.h \
   /usr/include/c++/15.2.1/bits/stl_tempbuf.h \
   /usr/include/c++/15.2.1/bits/stl_tree.h \
@@ -2517,10 +2520,13 @@ CMakeFiles/simulation.dir/src/demo.cpp.o: /home/alanxw/school/csci2240/env-induc
   /usr/include/c++/15.2.1/map \
   /usr/include/c++/15.2.1/new \
   /usr/include/c++/15.2.1/numbers \
+  /usr/include/c++/15.2.1/numeric \
   /usr/include/c++/15.2.1/ostream \
   /usr/include/c++/15.2.1/pstl/execution_defs.h \
   /usr/include/c++/15.2.1/pstl/glue_algorithm_defs.h \
+  /usr/include/c++/15.2.1/pstl/glue_numeric_defs.h \
   /usr/include/c++/15.2.1/pstl/pstl_config.h \
+  /usr/include/c++/15.2.1/random \
   /usr/include/c++/15.2.1/sstream \
   /usr/include/c++/15.2.1/stdexcept \
   /usr/include/c++/15.2.1/stdlib.h \
@@ -2555,6 +2561,7 @@ CMakeFiles/simulation.dir/src/demo.cpp.o: /home/alanxw/school/csci2240/env-induc
   /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/error_constants.h \
   /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/gthr-default.h \
   /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/gthr.h \
+  /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/opt_random.h \
   /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/os_defines.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/bitsperlong.h \
@@ -3476,6 +3483,7 @@ CMakeFiles/simulation.dir/src/glwidget.cpp.o: /home/alanxw/school/csci2240/env-i
   /usr/include/qt6/QtCore/qxptype_traits.h \
   /usr/include/qt6/QtCore/qyieldcpu.h \
   /usr/include/qt6/QtGui/QKeyEvent \
+  /usr/include/qt6/QtGui/QPainter \
   /usr/include/qt6/QtGui/QSurfaceFormat \
   /usr/include/qt6/QtGui/QTransform \
   /usr/include/qt6/QtGui/qaction.h \
@@ -3499,7 +3507,9 @@ CMakeFiles/simulation.dir/src/glwidget.cpp.o: /home/alanxw/school/csci2240/env-i
   /usr/include/qt6/QtGui/qopengl.h \
   /usr/include/qt6/QtGui/qopenglext.h \
   /usr/include/qt6/QtGui/qpaintdevice.h \
+  /usr/include/qt6/QtGui/qpainter.h \
   /usr/include/qt6/QtGui/qpalette.h \
+  /usr/include/qt6/QtGui/qpen.h \
   /usr/include/qt6/QtGui/qpixelformat.h \
   /usr/include/qt6/QtGui/qpixmap.h \
   /usr/include/qt6/QtGui/qpointingdevice.h \
@@ -3510,6 +3520,7 @@ CMakeFiles/simulation.dir/src/glwidget.cpp.o: /home/alanxw/school/csci2240/env-i
   /usr/include/qt6/QtGui/qscreen.h \
   /usr/include/qt6/QtGui/qscreen_platform.h \
   /usr/include/qt6/QtGui/qsurfaceformat.h \
+  /usr/include/qt6/QtGui/qtextoption.h \
   /usr/include/qt6/QtGui/qtgui-config.h \
   /usr/include/qt6/QtGui/qtguiexports.h \
   /usr/include/qt6/QtGui/qtguiglobal.h \
@@ -10024,15 +10035,17 @@ CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o:
 
 /usr/include/c++/15.2.1/bits/fs_dir.h:
 
-/home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/StlSupport/StdVector.h:
-
 /usr/include/qt6/QtGui/qvectornd.h:
 
 /usr/include/qt6/QtGui/qvector2d.h:
 
+/usr/include/qt6/QtGui/qtextoption.h:
+
 /usr/include/qt6/QtGui/qscreen.h:
 
 /usr/include/qt6/QtGui/qpointingdevice.h:
+
+/usr/include/qt6/QtGui/qpainter.h:
 
 /usr/include/qt6/QtGui/qinputdevice.h:
 
@@ -10059,6 +10072,12 @@ CMakeFiles/simulation.dir/src/graphics/graphicsdebug.cpp.o:
 /usr/include/qt6/QtCore/QObject:
 
 /usr/include/c++/15.2.1/iostream:
+
+/home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/StlSupport/StdVector.h:
+
+/usr/include/c++/15.2.1/bits/random.tcc:
+
+/usr/include/c++/15.2.1/bits/random.h:
 
 /usr/lib/clang/22/include/sanitizer/tsan_interface.h:
 
@@ -10848,6 +10867,8 @@ CMakeFiles/4.3.1/CMakeCCompiler.cmake:
 
 /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Core/products/GeneralMatrixVector.h:
 
+/usr/include/c++/15.2.1/random:
+
 /usr/include/linux/posix_types.h:
 
 /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Core/functors/NullaryFunctors.h:
@@ -11294,6 +11315,8 @@ CMakeFiles/simulation.dir/src/graphics/shader.cpp.o:
 
 /usr/include/qt6/QtCore/qswap.h:
 
+/usr/include/qt6/QtGui/QPainter:
+
 /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/Core/MatrixBase.h:
 
 /usr/include/qt6/QtGui/qscreen_platform.h:
@@ -11618,6 +11641,8 @@ CMakeFiles/simulation.dir/src/shell_energy.cpp.o:
 
 /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/SparseLU/SparseLU_column_bmod.h:
 
+/usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/opt_random.h:
+
 /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/OrderingMethods/Amd.h:
 
 /home/alanxw/school/csci2240/env-induced-deformation/Eigen/src/OrderingMethods/Eigen_Colamd.h:
@@ -11925,6 +11950,8 @@ CMakeFiles/4.3.1/CMakeCXXCompiler.cmake:
 /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/ctype_inline.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QWaylandIntegrationPluginTargetsPrecheck.cmake:
+
+/usr/include/qt6/QtGui/qpen.h:
 
 /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/error_constants.h:
 

@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <random>
 
 using namespace Eigen;
 
@@ -75,17 +76,34 @@ void initStereographicDemo(ShellMesh &mesh,
     // first fundamental form of each triangle from the mapped positions.
     // This respects the actual edge lengths on the sphere rather than
     // evaluating a continuous conformal factor at the centroid.
-    auto stereoProject = [](const Vector3d &v) -> Vector3d {
+    // Sphere of radius R = 1 so the hemisphere has the same diameter
+    // as the flat disk (matching the paper's Figure 3 visuals).
+    const double R = 1.0;
+    auto stereoProject = [R](const Vector3d &v) -> Vector3d {
         double r2 = v.x() * v.x() + v.z() * v.z();
         double d  = 1.0 + r2;
-        return Vector3d(2.0 * v.x() / d,
-                        (1.0 - r2) / d,
-                        2.0 * v.z() / d);
+        return Vector3d(2.0 * R * v.x() / d,
+                        R * (1.0 - r2) / d,
+                        2.0 * R * v.z() / d);
     };
 
+    // Paper §7.1: "We apply a small random perturbation to the rest
+    // and initial configurations of all of our initially-flat examples
+    // with b̄ = 0, to force symmetry-breaking."
+    //
+    // Perturb both the rest configuration (sphere vertices used to
+    // compute āBar) and the initial mesh positions.
+    const double perturbScale = 0.05;
+    std::mt19937 rng(42);
+    std::uniform_real_distribution<double> dist(-0.5, 0.5);
+    auto randPerturbation = [&]() -> Vector3d {
+        return perturbScale * Vector3d(dist(rng), dist(rng), dist(rng));
+    };
+
+    // Perturbed sphere vertices → rest metric āBar.
     std::vector<Vector3d> sphereVerts(nV);
     for (int i = 0; i < nV; ++i)
-        sphereVerts[i] = stereoProject(mesh.vertices[i]);
+        sphereVerts[i] = stereoProject(mesh.vertices[i]) + randPerturbation();
 
     for (int f = 0; f < nF; ++f) {
         const Vector3i &tri = mesh.faces[f];
@@ -97,19 +115,10 @@ void initStereographicDemo(ShellMesh &mesh,
         rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, rest.aBar[f].determinant()));
     }
 
-    // bBar = 0 per the paper (Figure 3 caption): "we set b̄ = 0 and ā
-    // to this conformal metric." The stretching energy alone drives the
-    // shape; bending with b̄ = 0 provides smoothness. For thin shells
-    // (h << L), stretching dominates by 1/h² and the equilibrium is
-    // very close to the sphere.
+    // b̄ = 0 per the paper (Figure 3 caption).
     // (rest.bBar is already zero from init.)
 
-    // Small perturbation to break the flat symmetry (paper §7.1).
-    // The flat configuration is an unstable equilibrium; Newton's method
-    // needs a nudge to find the buckled (spherical) energy minimum.
-    for (int i = 0; i < nV; ++i) {
-        double r2 = mesh.vertices[i].x() * mesh.vertices[i].x()
-                   + mesh.vertices[i].z() * mesh.vertices[i].z();
-        mesh.vertices[i].y() += 0.001 * (1.0 - r2);
-    }
+    // Perturb initial mesh positions.
+    for (int i = 0; i < nV; ++i)
+        mesh.vertices[i] += randPerturbation();
 }

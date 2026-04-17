@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QKeyEvent>
+#include <QPainter>
 #include <iostream>
 
 #define SPEED 1.5
@@ -22,7 +23,7 @@ GLWidget::GLWidget(QWidget *parent)
     // GLWidget needs keyboard focus
     setFocusPolicy(Qt::StrongFocus);
 
-    // Function tick() will be called once per interva
+    // Function tick() will be called once per interval
     connect(&m_intervalTimer, SIGNAL(timeout()), this, SLOT(tick()));
 }
 
@@ -115,6 +116,13 @@ void GLWidget::paintGL()
     m_shader->setUniform("view", m_camera.getView());
     m_sim.draw(m_shader);
     m_shader->unbind();
+
+    // 2D text overlay via QPainter
+    QPainter painter(this);
+    painter.setPen(Qt::black);
+    painter.setFont(QFont("Monospace", 14));
+    painter.drawText(10, 24, QString("Step %1").arg(m_frameCount));
+    painter.end();
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -205,6 +213,7 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_R:
     case Qt::Key_P:
         m_sim.reset();
+        m_frameCount = 0;
         break;
     case Qt::Key_O:
         m_sim.toggleParallel();
@@ -222,6 +231,7 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_Period:
         m_sim.singleStep();
+        m_frameCount++;
         update();
         break;
     case Qt::Key_Escape:
@@ -262,10 +272,13 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
 void GLWidget::tick()
 {
     float deltaSeconds = m_deltaTimeProvider.restart() / 1000.f;
+
     m_tickCount++;
     if (m_tickCount >= m_physicsRate) {
         m_tickCount = 0;
         m_sim.update(deltaSeconds);
+        // Only increment if update actually stepped (not paused/empty).
+        if (!m_sim.isPaused()) m_frameCount++;
     }
 
     // Move camera
@@ -278,6 +291,5 @@ void GLWidget::tick()
     moveVec *= deltaSeconds;
     m_camera.move(moveVec);
 
-    // Flag this view for repainting (Qt will call paintGL() soon after)
     update();
 }
