@@ -1483,8 +1483,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm"
-      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm"
+      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8"
+      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_FLAGS: ""
@@ -1496,14 +1496,14 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm'
+        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_47a31/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_47a31.dir/build.make CMakeFiles/cmTC_47a31.dir/build
-        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm'
-        Building CXX object CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o
-        /usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
-        clang version 22.1.2
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_87cf8/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_87cf8.dir/build.make CMakeFiles/cmTC_87cf8.dir/build
+        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8'
+        Building CXX object CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        clang version 22.1.3
         Target: x86_64-pc-linux-gnu
         Thread model: posix
         InstalledDir: /usr/bin
@@ -1515,8 +1515,8 @@ events:
         Selected multilib: .;@m64
         Found CUDA installation: /opt/cuda, version 
          (in-process)
-         "/usr/bin/clang++" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm -v -fcoverage-compilation-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm -resource-dir /usr/lib/clang/22 -dependency-file CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1 -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward -internal-isystem /usr/lib/clang/22/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 2 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -fdwarf2-cfi-asm -o CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
-        clang -cc1 version 22.1.2 based upon LLVM 22.1.2 default target x86_64-pc-linux-gnu
+         "/usr/bin/clang++" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8 -v -fcoverage-compilation-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8 -resource-dir /usr/lib/clang/22 -dependency-file CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1 -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward -internal-isystem /usr/lib/clang/22/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 2 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -fdwarf2-cfi-asm -o CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 22.1.3 based upon LLVM 22.1.3 default target x86_64-pc-linux-gnu
         ignoring nonexistent directory "/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include"
         ignoring nonexistent directory "/include"
         #include "..." search starts here:
@@ -1528,9 +1528,9 @@ events:
          /usr/local/include
          /usr/include
         End of search list.
-        Linking CXX executable cmTC_47a31
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_47a31.dir/link.txt --verbose=1
-        clang version 22.1.2
+        Linking CXX executable cmTC_87cf8
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_87cf8.dir/link.txt --verbose=1
+        clang version 22.1.3
         Target: x86_64-pc-linux-gnu
         Thread model: posix
         InstalledDir: /usr/bin
@@ -1541,10 +1541,10 @@ events:
         Candidate multilib: 32;@m32
         Selected multilib: .;@m64
         Found CUDA installation: /opt/cuda, version 
-         "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_47a31 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o
+         "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_87cf8 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o
         GNU ld (GNU Binutils) 2.46
-        /usr/bin/clang++  -v -Wl,-v CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_47a31
-        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm'
+        /usr/bin/clang++  -v -Wl,-v CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_87cf8
+        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8'
         
       exitCode: 0
   -
@@ -1583,14 +1583,14 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm']
+        ignore line: [Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8']
         ignore line: []
-        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_47a31/fast]
-        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_47a31.dir/build.make CMakeFiles/cmTC_47a31.dir/build]
-        ignore line: [make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm']
-        ignore line: [Building CXX object CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o]
-        ignore line: [/usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
-        ignore line: [clang version 22.1.2]
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_87cf8/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_87cf8.dir/build.make CMakeFiles/cmTC_87cf8.dir/build]
+        ignore line: [make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8']
+        ignore line: [Building CXX object CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang version 22.1.3]
         ignore line: [Target: x86_64-pc-linux-gnu]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /usr/bin]
@@ -1605,8 +1605,8 @@ events:
         ignore line: [@m64]
         ignore line: [Found CUDA installation: /opt/cuda  version ]
         ignore line: [ (in-process)]
-        ignore line: [ "/usr/bin/clang++" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm -v -fcoverage-compilation-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-eEeDtm -resource-dir /usr/lib/clang/22 -dependency-file CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1 -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward -internal-isystem /usr/lib/clang/22/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 2 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -fdwarf2-cfi-asm -o CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
-        ignore line: [clang -cc1 version 22.1.2 based upon LLVM 22.1.2 default target x86_64-pc-linux-gnu]
+        ignore line: [ "/usr/bin/clang++" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -fdebug-compilation-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8 -v -fcoverage-compilation-dir=/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-caIrU8 -resource-dir /usr/lib/clang/22 -dependency-file CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1 -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward -internal-isystem /usr/lib/clang/22/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 2 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -fdwarf2-cfi-asm -o CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang -cc1 version 22.1.3 based upon LLVM 22.1.3 default target x86_64-pc-linux-gnu]
         ignore line: [ignoring nonexistent directory "/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include"]
         ignore line: [ignoring nonexistent directory "/include"]
         ignore line: [#include "..." search starts here:]
@@ -1618,9 +1618,9 @@ events:
         ignore line: [ /usr/local/include]
         ignore line: [ /usr/include]
         ignore line: [End of search list.]
-        ignore line: [Linking CXX executable cmTC_47a31]
-        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_47a31.dir/link.txt --verbose=1]
-        ignore line: [clang version 22.1.2]
+        ignore line: [Linking CXX executable cmTC_87cf8]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_87cf8.dir/link.txt --verbose=1]
+        ignore line: [clang version 22.1.3]
         ignore line: [Target: x86_64-pc-linux-gnu]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /usr/bin]
@@ -1634,7 +1634,7 @@ events:
         ignore line: [Selected multilib: .]
         ignore line: [@m64]
         ignore line: [Found CUDA installation: /opt/cuda  version ]
-        link line: [ "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_47a31 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o]
+        link line: [ "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_87cf8 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o]
           arg [/usr/bin/ld] ==> ignore
           arg [--hash-style=gnu] ==> ignore
           arg [--build-id] ==> ignore
@@ -1645,7 +1645,7 @@ events:
           arg [-dynamic-linker] ==> ignore
           arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_47a31] ==> ignore
+          arg [cmTC_87cf8] ==> ignore
           arg [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o] ==> obj [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o]
           arg [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o] ==> obj [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o]
           arg [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o] ==> obj [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o]
@@ -1656,7 +1656,7 @@ events:
           arg [-L/lib] ==> dir [/lib]
           arg [-L/usr/lib] ==> dir [/usr/lib]
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_47a31.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_87cf8.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
           arg [-lstdc++] ==> lib [stdc++]
           arg [-lm] ==> lib [m]
           arg [-lgcc_s] ==> lib [gcc_s]
@@ -1703,8 +1703,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-dvwGGT"
-      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-dvwGGT"
+      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-kATBvj"
+      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-kATBvj"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -1715,13 +1715,13 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-dvwGGT'
+        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-kATBvj'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_cc00d/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_cc00d.dir/build.make CMakeFiles/cmTC_cc00d.dir/build
-        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-dvwGGT'
-        Building C object CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o
-        /usr/bin/cc   -v -o CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_76aa3/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_76aa3.dir/build.make CMakeFiles/cmTC_76aa3.dir/build
+        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-kATBvj'
+        Building C object CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o
+        /usr/bin/cc   -v -o CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c
         Using built-in specs.
         COLLECT_GCC=/usr/bin/cc
         Target: x86_64-pc-linux-gnu
@@ -1729,8 +1729,8 @@ events:
         Thread model: posix
         Supported LTO compression algorithms: zlib zstd
         gcc version 15.2.1 20260209 (GCC) 
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cc00d.dir/'
-         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/cc1 -quiet -v /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_cc00d.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/ccjmCcuI.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_76aa3.dir/'
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/cc1 -quiet -v /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_76aa3.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/cclI6Iwb.s
         GNU C23 (GCC) version 15.2.1 20260209 (x86_64-pc-linux-gnu)
         	compiled by GNU C version 15.2.1 20260209, GMP version 6.3.0, MPFR version 4.2.2, MPC version 1.3.1, isl version isl-0.27-GMP
         
@@ -1745,14 +1745,14 @@ events:
          /usr/include
         End of search list.
         Compiler executable checksum: 4a3176b8a5098bb872007d0a1d5e5fb3
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cc00d.dir/'
-         as -v --64 -o CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o /tmp/ccjmCcuI.s
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_76aa3.dir/'
+         as -v --64 -o CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o /tmp/cclI6Iwb.s
         GNU assembler version 2.46 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.46
         COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/
         LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.'
-        Linking C executable cmTC_cc00d
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cc00d.dir/link.txt --verbose=1
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_76aa3
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_76aa3.dir/link.txt --verbose=1
         Using built-in specs.
         COLLECT_GCC=/usr/bin/cc
         COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper
@@ -1763,14 +1763,14 @@ events:
         gcc version 15.2.1 20260209 (GCC) 
         COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/
         LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cc00d' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_cc00d.'
-         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccRCNdjj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_cc00d /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_76aa3' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_76aa3.'
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/cced2N5o.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_76aa3 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o
         collect2 version 15.2.1 20260209
-        /usr/bin/ld -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccRCNdjj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_cc00d /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o
+        /usr/bin/ld -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/cced2N5o.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_76aa3 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o
         GNU ld (GNU Binutils) 2.46
-        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cc00d' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_cc00d.'
-        /usr/bin/cc  -v -Wl,-v CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o -o cmTC_cc00d
-        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-dvwGGT'
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_76aa3' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_76aa3.'
+        /usr/bin/cc  -v -Wl,-v CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o -o cmTC_76aa3
+        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-kATBvj'
         
       exitCode: 0
   -
@@ -1805,13 +1805,13 @@ events:
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-dvwGGT']
+        ignore line: [Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-kATBvj']
         ignore line: []
-        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_cc00d/fast]
-        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_cc00d.dir/build.make CMakeFiles/cmTC_cc00d.dir/build]
-        ignore line: [make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-dvwGGT']
-        ignore line: [Building C object CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o]
-        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_76aa3/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_76aa3.dir/build.make CMakeFiles/cmTC_76aa3.dir/build]
+        ignore line: [make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-kATBvj']
+        ignore line: [Building C object CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake/Modules/CMakeCCompilerABI.c]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/cc]
         ignore line: [Target: x86_64-pc-linux-gnu]
@@ -1819,8 +1819,8 @@ events:
         ignore line: [Thread model: posix]
         ignore line: [Supported LTO compression algorithms: zlib zstd]
         ignore line: [gcc version 15.2.1 20260209 (GCC) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cc00d.dir/']
-        ignore line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/cc1 -quiet -v /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_cc00d.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/ccjmCcuI.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_76aa3.dir/']
+        ignore line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/cc1 -quiet -v /usr/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_76aa3.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mtune=generic -march=x86-64 -version -o /tmp/cclI6Iwb.s]
         ignore line: [GNU C23 (GCC) version 15.2.1 20260209 (x86_64-pc-linux-gnu)]
         ignore line: [	compiled by GNU C version 15.2.1 20260209  GMP version 6.3.0  MPFR version 4.2.2  MPC version 1.3.1  isl version isl-0.27-GMP]
         ignore line: []
@@ -1835,14 +1835,14 @@ events:
         ignore line: [ /usr/include]
         ignore line: [End of search list.]
         ignore line: [Compiler executable checksum: 4a3176b8a5098bb872007d0a1d5e5fb3]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cc00d.dir/']
-        ignore line: [ as -v --64 -o CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o /tmp/ccjmCcuI.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_76aa3.dir/']
+        ignore line: [ as -v --64 -o CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o /tmp/cclI6Iwb.s]
         ignore line: [GNU assembler version 2.46 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.46]
         ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.']
-        ignore line: [Linking C executable cmTC_cc00d]
-        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cc00d.dir/link.txt --verbose=1]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64' '-dumpdir' 'CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_76aa3]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_76aa3.dir/link.txt --verbose=1]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/cc]
         ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper]
@@ -1853,13 +1853,13 @@ events:
         ignore line: [gcc version 15.2.1 20260209 (GCC) ]
         ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_cc00d' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_cc00d.']
-        link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccRCNdjj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_cc00d /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_76aa3' '-mtune=generic' '-march=x86-64' '-dumpdir' 'cmTC_76aa3.']
+        link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/cced2N5o.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_76aa3 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/tmp/ccRCNdjj.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/cced2N5o.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
           arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -1874,7 +1874,7 @@ events:
           arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
           arg [-pie] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_cc00d] ==> ignore
+          arg [cmTC_76aa3] ==> ignore
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o]
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o]
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o]
@@ -1886,7 +1886,7 @@ events:
           arg [-L/lib] ==> dir [/lib]
           arg [-L/usr/lib] ==> dir [/usr/lib]
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o] ==> ignore
           arg [-lgcc] ==> lib [gcc]
           arg [--push-state] ==> ignore
           arg [--as-needed] ==> ignore
@@ -1901,7 +1901,7 @@ events:
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o]
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o] ==> obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
         ignore line: [collect2 version 15.2.1 20260209]
-        ignore line: [/usr/bin/ld -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccRCNdjj.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_cc00d /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_cc00d.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
+        ignore line: [/usr/bin/ld -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/cced2N5o.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_76aa3 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib -v CMakeFiles/cmTC_76aa3.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
         linker tool for 'C': /usr/bin/ld
         collapse obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o] ==> [/usr/lib/Scrt1.o]
         collapse obj [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o] ==> [/usr/lib/crti.o]
@@ -1945,8 +1945,8 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-WHRQH1"
-      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-WHRQH1"
+      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bOPSFy"
+      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bOPSFy"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -1958,17 +1958,17 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-WHRQH1'
+        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bOPSFy'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_d8e22/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_d8e22.dir/build.make CMakeFiles/cmTC_d8e22.dir/build
-        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-WHRQH1'
-        Building C object CMakeFiles/cmTC_d8e22.dir/src.c.o
-        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_d8e22.dir/src.c.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-WHRQH1/src.c
-        Linking C executable cmTC_d8e22
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d8e22.dir/link.txt --verbose=1
-        /usr/bin/cc CMakeFiles/cmTC_d8e22.dir/src.c.o -o cmTC_d8e22
-        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-WHRQH1'
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0f68f/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_0f68f.dir/build.make CMakeFiles/cmTC_0f68f.dir/build
+        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bOPSFy'
+        Building C object CMakeFiles/cmTC_0f68f.dir/src.c.o
+        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_0f68f.dir/src.c.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bOPSFy/src.c
+        Linking C executable cmTC_0f68f
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0f68f.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_0f68f.dir/src.c.o -o cmTC_0f68f
+        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bOPSFy'
         
       exitCode: 0
   -
@@ -1987,8 +1987,8 @@ events:
     checks:
       - "Performing Test HAVE_STDATOMIC"
     directories:
-      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nciVWG"
-      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nciVWG"
+      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wWCrsO"
+      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wWCrsO"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_FLAGS: ""
@@ -2000,17 +2000,17 @@ events:
       variable: "HAVE_STDATOMIC"
       cached: true
       stdout: |
-        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nciVWG'
+        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wWCrsO'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_c2ea2/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_c2ea2.dir/build.make CMakeFiles/cmTC_c2ea2.dir/build
-        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nciVWG'
-        Building CXX object CMakeFiles/cmTC_c2ea2.dir/src.cxx.o
-        /usr/bin/clang++ -DHAVE_STDATOMIC  -std=gnu++20 -MD -MT CMakeFiles/cmTC_c2ea2.dir/src.cxx.o -MF CMakeFiles/cmTC_c2ea2.dir/src.cxx.o.d -o CMakeFiles/cmTC_c2ea2.dir/src.cxx.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nciVWG/src.cxx
-        Linking CXX executable cmTC_c2ea2
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c2ea2.dir/link.txt --verbose=1
-        /usr/bin/clang++ CMakeFiles/cmTC_c2ea2.dir/src.cxx.o -o cmTC_c2ea2
-        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nciVWG'
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_3b1c3/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_3b1c3.dir/build.make CMakeFiles/cmTC_3b1c3.dir/build
+        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wWCrsO'
+        Building CXX object CMakeFiles/cmTC_3b1c3.dir/src.cxx.o
+        /usr/bin/clang++ -DHAVE_STDATOMIC  -std=gnu++20 -MD -MT CMakeFiles/cmTC_3b1c3.dir/src.cxx.o -MF CMakeFiles/cmTC_3b1c3.dir/src.cxx.o.d -o CMakeFiles/cmTC_3b1c3.dir/src.cxx.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wWCrsO/src.cxx
+        Linking CXX executable cmTC_3b1c3
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3b1c3.dir/link.txt --verbose=1
+        /usr/bin/clang++ CMakeFiles/cmTC_3b1c3.dir/src.cxx.o -o cmTC_3b1c3
+        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wWCrsO'
         
       exitCode: 0
   -
@@ -7220,8 +7220,8 @@ events:
       - "CMakeLists.txt:24 (find_package)"
     description: "Detecting C OpenMP compiler info"
     directories:
-      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI"
-      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI"
+      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4"
+      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -7233,15 +7233,15 @@ events:
       variable: "OpenMP_COMPILE_RESULT_C_fopenmp"
       cached: true
       stdout: |
-        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI'
+        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_9f373/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_9f373.dir/build.make CMakeFiles/cmTC_9f373.dir/build
-        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI'
-        Building C object CMakeFiles/cmTC_9f373.dir/OpenMPTryFlag.c.o
-        /usr/bin/cc   -fopenmp -o CMakeFiles/cmTC_9f373.dir/OpenMPTryFlag.c.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI/OpenMPTryFlag.c
-        Linking C executable cmTC_9f373
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9f373.dir/link.txt --verbose=1
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ce3b2/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_ce3b2.dir/build.make CMakeFiles/cmTC_ce3b2.dir/build
+        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4'
+        Building C object CMakeFiles/cmTC_ce3b2.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -fopenmp -o CMakeFiles/cmTC_ce3b2.dir/OpenMPTryFlag.c.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4/OpenMPTryFlag.c
+        Linking C executable cmTC_ce3b2
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ce3b2.dir/link.txt --verbose=1
         Using built-in specs.
         COLLECT_GCC=/usr/bin/cc
         COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper
@@ -7253,11 +7253,11 @@ events:
         COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/
         LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/
         Reading specs from /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libgomp.spec
-        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_9f373' '-mtune=generic' '-march=x86-64' '-pthread' '-dumpdir' 'cmTC_9f373.'
-         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccb4a0XX.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_9f373 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib CMakeFiles/cmTC_9f373.dir/OpenMPTryFlag.c.o -lgomp -lgcc --push-state --as-needed -lgcc_s --pop-state -lpthread -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o
-        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_9f373' '-mtune=generic' '-march=x86-64' '-pthread' '-dumpdir' 'cmTC_9f373.'
-        /usr/bin/cc  -fopenmp -v CMakeFiles/cmTC_9f373.dir/OpenMPTryFlag.c.o -o cmTC_9f373
-        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI'
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_ce3b2' '-mtune=generic' '-march=x86-64' '-pthread' '-dumpdir' 'cmTC_ce3b2.'
+         /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccx4bcQX.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_ce3b2 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib CMakeFiles/cmTC_ce3b2.dir/OpenMPTryFlag.c.o -lgomp -lgcc --push-state --as-needed -lgcc_s --pop-state -lpthread -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_ce3b2' '-mtune=generic' '-march=x86-64' '-pthread' '-dumpdir' 'cmTC_ce3b2.'
+        /usr/bin/cc  -fopenmp -v CMakeFiles/cmTC_ce3b2.dir/OpenMPTryFlag.c.o -o cmTC_ce3b2
+        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4'
         
       exitCode: 0
   -
@@ -7269,15 +7269,15 @@ events:
     message: |
       Parsed C OpenMP implicit link information from above output:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI']
+        ignore line: [Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4']
         ignore line: []
-        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_9f373/fast]
-        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_9f373.dir/build.make CMakeFiles/cmTC_9f373.dir/build]
-        ignore line: [make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI']
-        ignore line: [Building C object CMakeFiles/cmTC_9f373.dir/OpenMPTryFlag.c.o]
-        ignore line: [/usr/bin/cc   -fopenmp -o CMakeFiles/cmTC_9f373.dir/OpenMPTryFlag.c.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-D1BpcI/OpenMPTryFlag.c]
-        ignore line: [Linking C executable cmTC_9f373]
-        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9f373.dir/link.txt --verbose=1]
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ce3b2/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_ce3b2.dir/build.make CMakeFiles/cmTC_ce3b2.dir/build]
+        ignore line: [make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4']
+        ignore line: [Building C object CMakeFiles/cmTC_ce3b2.dir/OpenMPTryFlag.c.o]
+        ignore line: [/usr/bin/cc   -fopenmp -o CMakeFiles/cmTC_ce3b2.dir/OpenMPTryFlag.c.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-wGp4N4/OpenMPTryFlag.c]
+        ignore line: [Linking C executable cmTC_ce3b2]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ce3b2.dir/link.txt --verbose=1]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/usr/bin/cc]
         ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper]
@@ -7289,13 +7289,13 @@ events:
         ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/]
         ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../:/lib/:/usr/lib/]
         ignore line: [Reading specs from /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libgomp.spec]
-        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_9f373' '-mtune=generic' '-march=x86-64' '-pthread' '-dumpdir' 'cmTC_9f373.']
-        link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccb4a0XX.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_9f373 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib CMakeFiles/cmTC_9f373.dir/OpenMPTryFlag.c.o -lgomp -lgcc --push-state --as-needed -lgcc_s --pop-state -lpthread -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_ce3b2' '-mtune=generic' '-march=x86-64' '-pthread' '-dumpdir' 'cmTC_ce3b2.']
+        link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccx4bcQX.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_ce3b2 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../.. -L/lib -L/usr/lib CMakeFiles/cmTC_ce3b2.dir/OpenMPTryFlag.c.o -lgomp -lgcc --push-state --as-needed -lgcc_s --pop-state -lpthread -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crtn.o]
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/tmp/ccb4a0XX.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccx4bcQX.res] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
           arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
           arg [-plugin-opt=-pass-through=-lpthread] ==> ignore
@@ -7311,7 +7311,7 @@ events:
           arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
           arg [-pie] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_9f373] ==> ignore
+          arg [cmTC_ce3b2] ==> ignore
           arg [-L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1] ==> dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1]
           arg [-L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib] ==> dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib]
           arg [-L/lib/../lib] ==> dir [/lib/../lib]
@@ -7319,7 +7319,7 @@ events:
           arg [-L/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../..] ==> dir [/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../..]
           arg [-L/lib] ==> dir [/lib]
           arg [-L/usr/lib] ==> dir [/usr/lib]
-          arg [CMakeFiles/cmTC_9f373.dir/OpenMPTryFlag.c.o] ==> ignore
+          arg [CMakeFiles/cmTC_ce3b2.dir/OpenMPTryFlag.c.o] ==> ignore
           arg [-lgomp] ==> lib [gomp]
           arg [-lgcc] ==> lib [gcc]
           arg [--push-state] ==> ignore
@@ -7510,8 +7510,8 @@ events:
       - "CMakeLists.txt:24 (find_package)"
     description: "Detecting CXX OpenMP compiler info"
     directories:
-      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks"
-      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks"
+      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl"
+      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_FLAGS: ""
@@ -7523,16 +7523,16 @@ events:
       variable: "OpenMP_COMPILE_RESULT_CXX_fopenmplibomp"
       cached: true
       stdout: |
-        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks'
+        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_7e54d/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_7e54d.dir/build.make CMakeFiles/cmTC_7e54d.dir/build
-        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks'
-        Building CXX object CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o
-        /usr/bin/clang++   -fopenmp=libomp -std=gnu++20 -MD -MT CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks/OpenMPTryFlag.cpp
-        Linking CXX executable cmTC_7e54d
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7e54d.dir/link.txt --verbose=1
-        clang version 22.1.2
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0eff1/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_0eff1.dir/build.make CMakeFiles/cmTC_0eff1.dir/build
+        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl'
+        Building CXX object CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/clang++   -fopenmp=libomp -std=gnu++20 -MD -MT CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl/OpenMPTryFlag.cpp
+        Linking CXX executable cmTC_0eff1
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0eff1.dir/link.txt --verbose=1
+        clang version 22.1.3
         Target: x86_64-pc-linux-gnu
         Thread model: posix
         InstalledDir: /usr/bin
@@ -7543,9 +7543,9 @@ events:
         Candidate multilib: 32;@m32
         Selected multilib: .;@m64
         Found CUDA installation: /opt/cuda, version 
-         "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_7e54d /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lomp -L/usr/lib -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o
-        /usr/bin/clang++  -fopenmp=libomp -v CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o -o cmTC_7e54d
-        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks'
+         "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_0eff1 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lomp -L/usr/lib -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o
+        /usr/bin/clang++  -fopenmp=libomp -v CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o -o cmTC_0eff1
+        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl'
         
       exitCode: 0
   -
@@ -7557,16 +7557,16 @@ events:
     message: |
       Parsed CXX OpenMP implicit link information from above output:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
-        ignore line: [Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks']
+        ignore line: [Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl']
         ignore line: []
-        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_7e54d/fast]
-        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_7e54d.dir/build.make CMakeFiles/cmTC_7e54d.dir/build]
-        ignore line: [make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks']
-        ignore line: [Building CXX object CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o]
-        ignore line: [/usr/bin/clang++   -fopenmp=libomp -std=gnu++20 -MD -MT CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-4sd2ks/OpenMPTryFlag.cpp]
-        ignore line: [Linking CXX executable cmTC_7e54d]
-        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7e54d.dir/link.txt --verbose=1]
-        ignore line: [clang version 22.1.2]
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0eff1/fast]
+        ignore line: [/usr/bin/make  -f CMakeFiles/cmTC_0eff1.dir/build.make CMakeFiles/cmTC_0eff1.dir/build]
+        ignore line: [make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl']
+        ignore line: [Building CXX object CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o]
+        ignore line: [/usr/bin/clang++   -fopenmp=libomp -std=gnu++20 -MD -MT CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o -MF CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o.d -o CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-hGQKfl/OpenMPTryFlag.cpp]
+        ignore line: [Linking CXX executable cmTC_0eff1]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0eff1.dir/link.txt --verbose=1]
+        ignore line: [clang version 22.1.3]
         ignore line: [Target: x86_64-pc-linux-gnu]
         ignore line: [Thread model: posix]
         ignore line: [InstalledDir: /usr/bin]
@@ -7580,7 +7580,7 @@ events:
         ignore line: [Selected multilib: .]
         ignore line: [@m64]
         ignore line: [Found CUDA installation: /opt/cuda  version ]
-        link line: [ "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_7e54d /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lomp -L/usr/lib -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o]
+        link line: [ "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_0eff1 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lomp -L/usr/lib -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o]
           arg [/usr/bin/ld] ==> ignore
           arg [--hash-style=gnu] ==> ignore
           arg [--build-id] ==> ignore
@@ -7591,14 +7591,14 @@ events:
           arg [-dynamic-linker] ==> ignore
           arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_7e54d] ==> ignore
+          arg [cmTC_0eff1] ==> ignore
           arg [-L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1] ==> dir [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1]
           arg [-L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64] ==> dir [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64]
           arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
           arg [-L/usr/lib64] ==> dir [/usr/lib64]
           arg [-L/lib] ==> dir [/lib]
           arg [-L/usr/lib] ==> dir [/usr/lib]
-          arg [CMakeFiles/cmTC_7e54d.dir/OpenMPTryFlag.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_0eff1.dir/OpenMPTryFlag.cpp.o] ==> ignore
           arg [-lstdc++] ==> lib [stdc++]
           arg [-lm] ==> lib [m]
           arg [-lomp] ==> lib [omp]
@@ -7710,8 +7710,8 @@ events:
       - "CMakeLists.txt:24 (find_package)"
     description: "Detecting C OpenMP version"
     directories:
-      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bV9YFE"
-      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bV9YFE"
+      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nvnXm7"
+      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nvnXm7"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_STDLIB_MODULES_JSON: ""
@@ -7723,17 +7723,17 @@ events:
       variable: "OpenMP_SPECTEST_C_"
       cached: true
       stdout: |
-        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bV9YFE'
+        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nvnXm7'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_e1b4d/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_e1b4d.dir/build.make CMakeFiles/cmTC_e1b4d.dir/build
-        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bV9YFE'
-        Building C object CMakeFiles/cmTC_e1b4d.dir/OpenMPCheckVersion.c.o
-        /usr/bin/cc   -fopenmp -o CMakeFiles/cmTC_e1b4d.dir/OpenMPCheckVersion.c.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bV9YFE/OpenMPCheckVersion.c
-        Linking C executable cmTC_e1b4d
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e1b4d.dir/link.txt --verbose=1
-        /usr/bin/cc  -fopenmp CMakeFiles/cmTC_e1b4d.dir/OpenMPCheckVersion.c.o -o cmTC_e1b4d
-        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-bV9YFE'
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_8bf12/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_8bf12.dir/build.make CMakeFiles/cmTC_8bf12.dir/build
+        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nvnXm7'
+        Building C object CMakeFiles/cmTC_8bf12.dir/OpenMPCheckVersion.c.o
+        /usr/bin/cc   -fopenmp -o CMakeFiles/cmTC_8bf12.dir/OpenMPCheckVersion.c.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nvnXm7/OpenMPCheckVersion.c
+        Linking C executable cmTC_8bf12
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8bf12.dir/link.txt --verbose=1
+        /usr/bin/cc  -fopenmp CMakeFiles/cmTC_8bf12.dir/OpenMPCheckVersion.c.o -o cmTC_8bf12
+        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-nvnXm7'
         
       exitCode: 0
   -
@@ -7744,8 +7744,8 @@ events:
       - "CMakeLists.txt:24 (find_package)"
     description: "Detecting CXX OpenMP version"
     directories:
-      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-1Y2c1W"
-      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-1Y2c1W"
+      source: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-2rDGAT"
+      binary: "/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-2rDGAT"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_FLAGS: ""
@@ -7757,17 +7757,17 @@ events:
       variable: "OpenMP_SPECTEST_CXX_"
       cached: true
       stdout: |
-        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-1Y2c1W'
+        Change Dir: '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-2rDGAT'
         
-        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5534c/fast
-        /usr/bin/make  -f CMakeFiles/cmTC_5534c.dir/build.make CMakeFiles/cmTC_5534c.dir/build
-        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-1Y2c1W'
-        Building CXX object CMakeFiles/cmTC_5534c.dir/OpenMPCheckVersion.cpp.o
-        /usr/bin/clang++   -fopenmp=libomp -std=gnu++20 -MD -MT CMakeFiles/cmTC_5534c.dir/OpenMPCheckVersion.cpp.o -MF CMakeFiles/cmTC_5534c.dir/OpenMPCheckVersion.cpp.o.d -o CMakeFiles/cmTC_5534c.dir/OpenMPCheckVersion.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-1Y2c1W/OpenMPCheckVersion.cpp
-        Linking CXX executable cmTC_5534c
-        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5534c.dir/link.txt --verbose=1
-        /usr/bin/clang++  -fopenmp=libomp CMakeFiles/cmTC_5534c.dir/OpenMPCheckVersion.cpp.o -o cmTC_5534c
-        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-1Y2c1W'
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_32e20/fast
+        /usr/bin/make  -f CMakeFiles/cmTC_32e20.dir/build.make CMakeFiles/cmTC_32e20.dir/build
+        make[1]: Entering directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-2rDGAT'
+        Building CXX object CMakeFiles/cmTC_32e20.dir/OpenMPCheckVersion.cpp.o
+        /usr/bin/clang++   -fopenmp=libomp -std=gnu++20 -MD -MT CMakeFiles/cmTC_32e20.dir/OpenMPCheckVersion.cpp.o -MF CMakeFiles/cmTC_32e20.dir/OpenMPCheckVersion.cpp.o.d -o CMakeFiles/cmTC_32e20.dir/OpenMPCheckVersion.cpp.o -c /home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-2rDGAT/OpenMPCheckVersion.cpp
+        Linking CXX executable cmTC_32e20
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_32e20.dir/link.txt --verbose=1
+        /usr/bin/clang++  -fopenmp=libomp CMakeFiles/cmTC_32e20.dir/OpenMPCheckVersion.cpp.o -o cmTC_32e20
+        make[1]: Leaving directory '/home/alanxw/school/csci2240/env-induced-deformation/build/CMakeFiles/CMakeScratch/TryCompile-2rDGAT'
         
       exitCode: 0
 ...

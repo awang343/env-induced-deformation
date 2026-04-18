@@ -975,7 +975,7 @@
 		"/home/alanxw/school/csci2240/env-induced-deformation/simulation",
 		"/home/alanxw/school/csci2240/env-induced-deformation/PRIVATE",
 		"/home/alanxw/school/csci2240/env-induced-deformation/glew/include",
-		"/home/alanxw/school/csci2240/env-induced-deformation/Eigen",
+		"/home/alanxw/school/csci2240/env-induced-deformation/extern",
 		"/usr/include/qt6/QtConcurrent",
 		"/usr/include/qt6",
 		"/usr/include/qt6/QtCore",
