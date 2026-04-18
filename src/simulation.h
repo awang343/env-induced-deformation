@@ -31,7 +31,6 @@ class Simulation
     ShellMesh        m_mesh;
     ShellRestState   m_rest;
     MaterialParams   m_mat;
-    DampingState     m_damp;
 
     std::vector<Eigen::Vector3d> m_restVertices;
     std::vector<Eigen::Vector3d> m_velocities;
@@ -43,7 +42,6 @@ class Simulation
     Shape m_shape;
 
     double m_dt;
-    Eigen::Vector3d m_gravity;
 
     GrowthState m_growth;
     std::string m_restMetric;

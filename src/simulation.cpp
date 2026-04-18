@@ -10,8 +10,7 @@
 using namespace Eigen;
 
 Simulation::Simulation()
-    : m_dt(1e-4),
-      m_gravity(0.0, -9.81, 0.0)
+    : m_dt(1e-4)
 {
     omp_set_num_threads(std::max(1, omp_get_num_procs() - 2));
 }
@@ -27,22 +26,17 @@ void Simulation::init(const std::string &config_path)
     m_mat.young      = cfg.value("young",       m_mat.young).toDouble();
     m_mat.poisson    = cfg.value("poisson",     m_mat.poisson).toDouble();
     m_mat.density    = cfg.value("density",     m_mat.density).toDouble();
-    m_mat.viscosity  = cfg.value("eta",         m_mat.viscosity).toDouble();
     m_dt             = cfg.value("dt",          m_dt).toDouble();
     m_growth.rate    = cfg.value("growth_rate", m_growth.rate).toDouble();
-    m_gravity.x()    = cfg.value("gravity_x",   m_gravity.x()).toDouble();
-    m_gravity.y()    = cfg.value("gravity_y",   m_gravity.y()).toDouble();
-    m_gravity.z()    = cfg.value("gravity_z",   m_gravity.z()).toDouble();
-    bool runFDCheck  = cfg.value("verify_forces", false).toBool();
     m_restMetric     = cfg.value("rest_metric", "").toString().toStdString();
+    int seed         = cfg.value("seed", 42).toInt();
+    double perturb   = cfg.value("perturb", 0.05).toDouble();
     cfg.endGroup();
 
-    // ---- Mesh ----
     m_mesh.load(meshPath);
     m_mesh.buildTopology();
     m_shape.init(m_mesh.vertices, m_mesh.faces);
 
-    // ---- Rest state from geometry ----
     const int nF = m_mesh.numFaces();
     m_rest.aBar.resize(nF);
     m_rest.bBar.assign(nF, Matrix2d::Zero());
@@ -54,29 +48,14 @@ void Simulation::init(const std::string &config_path)
         m_rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, m_a0[f].determinant()));
     }
 
-    // ---- Demo overrides ----
     if (m_restMetric == "stereographic")
-        initStereographicDemo(m_mesh, m_a0, m_rest);
+        initStereographicDemo(m_mesh, m_a0, m_rest, seed, perturb);
 
-    // ---- Snapshot for reset ----
     m_initialRest  = m_rest;
     m_restVertices = m_mesh.vertices;
 
-    // ---- Per-vertex state ----
     m_velocities.assign(m_mesh.numVerts(), Vector3d::Zero());
     computeLumpedMasses(m_mesh, m_rest, m_mat, m_masses);
-
-    // ---- Initialize damping state (prev forms = current forms) ----
-    m_damp.aPrev.resize(nF);
-    m_damp.bPrev.resize(nF);
-    std::vector<Vector3d> fN; computeFaceNormals(m_mesh, fN);
-    for (int f = 0; f < nF; ++f) {
-        m_damp.aPrev[f] = firstFundamentalForm(m_mesh, f);
-        m_damp.bPrev[f] = secondFundamentalForm(m_mesh, fN, f);
-    }
-
-    // ---- Diagnostics ----
-    if (runFDCheck) verifyForceGradient(m_mesh, m_rest, m_mat, m_damp, m_dt);
 
     updateDisplay();
 }
@@ -86,8 +65,8 @@ void Simulation::stepOnce()
     if (m_restMetric.empty())
         stepGrowthRamp(m_growth, m_dt, m_a0, m_rest);
 
-    stepImplicitEuler(m_mesh, m_rest, m_mat, m_gravity,
-                      m_masses, m_velocities, m_damp, m_dt);
+    stepImplicitEuler(m_mesh, m_rest, m_mat,
+                      m_masses, m_velocities, m_dt);
 }
 
 void Simulation::update(double /*seconds*/)
@@ -145,14 +124,6 @@ void Simulation::reset()
     m_growth.factor = 1.0;
     m_growth.target = 1.0;
     m_rest = m_initialRest;
-
-    int nF = m_mesh.numFaces();
-    std::vector<Vector3d> fN; computeFaceNormals(m_mesh, fN);
-    for (int f = 0; f < nF; ++f) {
-        m_damp.aPrev[f] = firstFundamentalForm(m_mesh, f);
-        m_damp.bPrev[f] = secondFundamentalForm(m_mesh, fN, f);
-    }
-
     updateDisplay();
 }
 

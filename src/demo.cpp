@@ -66,7 +66,7 @@ void cycleGrowthDemo(GrowthState &gs, bool &paused)
 void initStereographicDemo(ShellMesh &mesh,
                            const std::vector<Matrix2d> &a0,
                            ShellRestState &rest,
-                           double initBlend)
+                           int seed, double perturbScale)
 {
     const int nF = mesh.numFaces();
     const int nV = mesh.numVerts();
@@ -93,8 +93,8 @@ void initStereographicDemo(ShellMesh &mesh,
     //
     // Perturb both the rest configuration (sphere vertices used to
     // compute āBar) and the initial mesh positions.
-    const double perturbScale = 0.05;
-    std::mt19937 rng(42);
+    // perturbScale passed as parameter
+    std::mt19937 rng(seed);
     std::uniform_real_distribution<double> dist(-0.5, 0.5);
     auto randPerturbation = [&]() -> Vector3d {
         return perturbScale * Vector3d(dist(rng), dist(rng), dist(rng));
@@ -118,7 +118,7 @@ void initStereographicDemo(ShellMesh &mesh,
     // b̄ = 0 per the paper (Figure 3 caption).
     // (rest.bBar is already zero from init.)
 
-    // Perturb initial mesh positions.
+    // Random perturbation to break symmetry.
     for (int i = 0; i < nV; ++i)
         mesh.vertices[i] += randPerturbation();
 }

@@ -41,4 +41,5 @@ void cycleGrowthDemo(GrowthState &gs, bool &paused);
 void initStereographicDemo(ShellMesh &mesh,
                            const std::vector<Eigen::Matrix2d> &a0,
                            ShellRestState &rest,
-                           double initBlend = 0.3);
+                           int seed = 42,
+                           double perturbScale = 0.05);

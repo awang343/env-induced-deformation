@@ -8,6 +8,12 @@
 
 using namespace Eigen;
 
+#ifdef HAVE_CHOLMOD
+using SparseSolver = CholmodSupernodalLLT<SparseMatrix<double>>;
+#else
+using SparseSolver = SimplicialLDLT<SparseMatrix<double>>;
+#endif
+
 // =============================================================================
 // Helpers
 // =============================================================================
@@ -337,12 +343,11 @@ double totalEnergy(const ShellMesh &mesh, const ShellRestState &rest,
 }
 
 // =============================================================================
-// Global assembly (elastic + Kelvin-Voigt damping)
+// Global assembly
 // =============================================================================
 
 void assembleGradientAndHessian(
     ShellMesh &mesh, const ShellRestState &rest, const MaterialParams &mat,
-    const DampingState &damp, double dt,
     VectorXd &grad, std::vector<Triplet<double>> &trip)
 {
     int n = mesh.numVerts(), nF = mesh.numFaces(), dim = 3*n;
@@ -404,17 +409,35 @@ void assembleGradientAndHessian(
 
 void stepImplicitEuler(
     ShellMesh &mesh, const ShellRestState &rest, const MaterialParams &mat,
-    const Vector3d &gravity, std::vector<double> &masses,
-    std::vector<Vector3d> &velocities, DampingState &damp,
+    std::vector<double> &masses,
+    std::vector<Vector3d> &velocities,
     double dt, int maxIters, double tol)
 {
     const int n = mesh.numVerts(), dim = 3*n;
     const double inv_dt2 = 1.0 / (dt*dt);
 
+    static SparseMatrix<double> H;
+    static SparseSolver solver;
+    static bool patternBuilt = false;
+
+    if (!patternBuilt) {
+        VectorXd dummyGrad;
+        std::vector<Triplet<double>> dummyTrip;
+        assembleGradientAndHessian(mesh, rest, mat, dummyGrad, dummyTrip);
+        for (int i = 0; i < n; ++i)
+            for (int a = 0; a < 3; ++a)
+                dummyTrip.emplace_back(3*i+a, 3*i+a, 1.0);
+        H.resize(dim, dim);
+        H.setFromTriplets(dummyTrip.begin(), dummyTrip.end());
+        H.makeCompressed();
+        solver.analyzePattern(H);
+        patternBuilt = true;
+    }
+
     auto pos0 = mesh.vertices;
     std::vector<Vector3d> xTilde(n);
     for (int i=0; i<n; ++i)
-        xTilde[i] = pos0[i] + dt*velocities[i] + dt*dt*gravity;
+        xTilde[i] = pos0[i]; // + dt*velocities[i];  // uncomment for momentum
     mesh.vertices = xTilde;
 
     const int numFaces = mesh.numFaces();
@@ -427,7 +450,7 @@ void stepImplicitEuler(
     for (int iter = 0; iter < maxIters; ++iter) {
         VectorXd eGrad;
         std::vector<Triplet<double>> hTrip;
-        assembleGradientAndHessian(mesh, rest, mat, damp, dt, eGrad, hTrip);
+        assembleGradientAndHessian(mesh, rest, mat, eGrad, hTrip);
 
         VectorXd g(dim);
         for (int i=0; i<n; ++i) {
@@ -443,32 +466,38 @@ void stepImplicitEuler(
             return totalEnergy(mesh, rest, mat, &curFN);
         };
 
-        // Factorize with progressive regularization if needed.
+        // Scatter elastic Hessian once, save for reg loop.
+        std::fill(H.valuePtr(), H.valuePtr() + H.nonZeros(), 0.0);
+        for (auto &t : hTrip)
+            H.coeffRef(t.row(), t.col()) += t.value();
+        std::vector<double> elasticVals(H.valuePtr(), H.valuePtr() + H.nonZeros());
+
         VectorXd dx;
         bool solved = false;
         for (double reg = 0.0; reg <= 16.0; reg = (reg == 0.0) ? 1.0 : reg * 2.0) {
-            std::vector<Triplet<double>> sTrip;
-            sTrip.reserve(hTrip.size() + dim);
+            std::copy(elasticVals.begin(), elasticVals.end(), H.valuePtr());
             for (int i = 0; i < n; ++i) {
                 double diag = (1.0 + reg) * masses[i] * inv_dt2;
                 for (int a = 0; a < 3; ++a)
-                    sTrip.emplace_back(3*i+a, 3*i+a, diag);
+                    H.coeffRef(3*i+a, 3*i+a) += diag;
             }
-            for (auto &t : hTrip)
-                sTrip.emplace_back(t.row(), t.col(), t.value());
 
-            SparseMatrix<double> H(dim, dim);
-            H.setFromTriplets(sTrip.begin(), sTrip.end());
-
-            SimplicialLDLT<SparseMatrix<double>> solver(H);
+            solver.factorize(H);
             if (solver.info() != Eigen::Success) continue;
             dx = solver.solve(-g);
             if (solver.info() == Eigen::Success) { solved = true; break; }
         }
         if (!solved) break;
 
-        // Backtrack only for triangle inversion.
+        // Backtrack for inversion + energy decrease.
+        auto elasticEnergy = [&]() -> double {
+            std::vector<Vector3d> curFN; computeFaceNormals(mesh, curFN);
+            return totalEnergy(mesh, rest, mat, &curFN);
+        };
+        double E0 = elasticEnergy();
+
         double alpha_ls = 1.0;
+        bool accepted = false;
         for (int ls = 0; ls < 20; ++ls) {
             for (int i = 0; i < n; ++i)
                 mesh.vertices[i] = posSave[i] + alpha_ls * Vector3d(dx.segment<3>(3*i));
@@ -480,29 +509,15 @@ void stepImplicitEuler(
                               .cross(mesh.vertices[t[2]] - mesh.vertices[t[0]]);
                 if (nn.dot(restNormals[f]) <= 0) { inverted = true; break; }
             }
-            if (!inverted) break;
+            if (!inverted && elasticEnergy() < E0) { accepted = true; break; }
             alpha_ls *= 0.5;
         }
+        if (!accepted) mesh.vertices = posSave;
     }
 
-    // Zero velocity: quasi-static stepping. Full momentum (v = dx/dt)
-    // causes overshoot with the paper's tiny η. Re-enable when Kelvin-
-    // Voigt damping is tuned to dissipate kinetic energy.
     for (int i=0; i<n; ++i)
-        velocities[i] = Vector3d::Zero();
+        velocities[i] = Eigen::Vector3d::Zero(); // (mesh.vertices[i] - pos0[i]) / dt;  // uncomment for momentum
 
-    // Store current fundamental forms for next step's damping
-    // (only when damping is actually active).
-    if (mat.viscosity / mat.young > 1e-10) {
-        int nF = mesh.numFaces();
-        damp.aPrev.resize(nF);
-        damp.bPrev.resize(nF);
-        std::vector<Vector3d> fN; computeFaceNormals(mesh, fN);
-        for (int f=0; f<nF; ++f) {
-            damp.aPrev[f] = firstFundamentalForm(mesh, f);
-            damp.bPrev[f] = secondFundamentalForm(mesh, fN, f);
-        }
-    }
 }
 
 // =============================================================================
@@ -521,36 +536,3 @@ void computeLumpedMasses(const ShellMesh &mesh, const ShellRestState &rest,
 
 // =============================================================================
 // Diagnostics
-// =============================================================================
-
-void verifyForceGradient(ShellMesh &mesh, const ShellRestState &rest,
-                         const MaterialParams &mat, const DampingState &damp,
-                         double dt, double eps)
-{
-    if (mesh.vertices.empty()) return;
-    int n = mesh.numVerts();
-    auto saved = mesh.vertices;
-
-    for (int i=0; i<n; ++i)
-        mesh.vertices[i] += Vector3d(0.01*std::sin(0.7*i+1),
-                                      0.01*std::cos(1.3*i+0.4),
-                                      0.01*std::sin(0.5*i-0.2));
-
-    VectorXd grad;
-    std::vector<Triplet<double>> hTrip;
-    assembleGradientAndHessian(mesh, rest, mat, damp, dt, grad, hTrip);
-
-    double wAbs=0, wRel=0; int wI=-1, wK=-1;
-    for (int i=0; i<n; ++i) for (int k=0; k<3; ++k) {
-        double orig = mesh.vertices[i][k];
-        mesh.vertices[i][k] = orig+eps; double Ep = totalEnergy(mesh,rest,mat);
-        mesh.vertices[i][k] = orig-eps; double Em = totalEnergy(mesh,rest,mat);
-        mesh.vertices[i][k] = orig;
-        double nf = (Ep-Em)/(2*eps), af = grad[3*i+k];
-        double ae = std::abs(nf-af), den = std::max({std::abs(nf),std::abs(af),1e-12});
-        if (ae > wAbs) { wAbs=ae; wRel=ae/den; wI=i; wK=k; }
-    }
-    std::cout << "[FD check] |abs|=" << wAbs << " rel=" << wRel
-              << " v" << wI << " axis" << wK << std::endl;
-    mesh.vertices = saved;
-}
