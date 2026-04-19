@@ -437,7 +437,7 @@ void stepImplicitEuler(
     auto pos0 = mesh.vertices;
     std::vector<Vector3d> xTilde(n);
     for (int i=0; i<n; ++i)
-        xTilde[i] = pos0[i]; // + dt*velocities[i];  // uncomment for momentum
+        xTilde[i] = pos0[i] + dt*velocities[i];
     mesh.vertices = xTilde;
 
     const int numFaces = mesh.numFaces();
@@ -516,7 +516,7 @@ void stepImplicitEuler(
     }
 
     for (int i=0; i<n; ++i)
-        velocities[i] = Eigen::Vector3d::Zero(); // (mesh.vertices[i] - pos0[i]) / dt;  // uncomment for momentum
+        velocities[i] = 0.5 * (mesh.vertices[i] - pos0[i]) / dt;  // TODO: replace with Kelvin-Voigt damping
 
 }
 
