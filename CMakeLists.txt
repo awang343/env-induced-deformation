@@ -21,7 +21,10 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS OpenGL)
 find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
-find_package(OpenMP REQUIRED)
+
+if(NOT APPLE)
+    find_package(OpenMP REQUIRED)
+endif()
 
 # Optional: CHOLMOD for faster sparse Cholesky (paper uses this).
 find_path(CHOLMOD_INCLUDE_DIR cholmod.h PATHS /usr/include/suitesparse /usr/local/include)
