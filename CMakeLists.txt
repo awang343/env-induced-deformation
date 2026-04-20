@@ -21,7 +21,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS OpenGL)
 find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
-find_package(OpenMP REQUIRED)
+# find_package(OpenMP REQUIRED)
 
 # Optional: CHOLMOD for faster sparse Cholesky (paper uses this).
 find_path(CHOLMOD_INCLUDE_DIR cholmod.h PATHS /usr/include/suitesparse /usr/local/include)
@@ -123,4 +123,12 @@ endif()
 # Set this flag to silence warnings on MacOS
 if (APPLE)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated-volatile")
+  list(APPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/libomp")
+endif()
+
+# 2. Now ask CMake to find it naturally
+find_package(OpenMP REQUIRED COMPONENTS CXX)
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 endif()
