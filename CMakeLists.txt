@@ -23,6 +23,16 @@ find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
 find_package(OpenMP REQUIRED)
 
+# Optional: CHOLMOD for faster sparse Cholesky (paper uses this).
+find_path(CHOLMOD_INCLUDE_DIR cholmod.h PATHS /usr/include/suitesparse /usr/local/include)
+find_library(CHOLMOD_LIBRARY cholmod)
+if (CHOLMOD_INCLUDE_DIR AND CHOLMOD_LIBRARY)
+    message(STATUS "Found CHOLMOD: ${CHOLMOD_LIBRARY}")
+    add_compile_definitions(HAVE_CHOLMOD)
+else()
+    message(STATUS "CHOLMOD not found, using Eigen's SimplicialLDLT (slower)")
+endif()
+
 # Allows you to include files from within those directories, without prefixing their filepaths
 include_directories(src)
 include_directories(libs)
@@ -74,6 +84,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     StaticGLEW
     OpenMP::OpenMP_CXX
 )
+
+if (CHOLMOD_INCLUDE_DIR AND CHOLMOD_LIBRARY)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${CHOLMOD_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${CHOLMOD_LIBRARY})
+endif()
 
 # This allows you to `#include "Eigen/..."`
 target_include_directories(${PROJECT_NAME} PRIVATE
