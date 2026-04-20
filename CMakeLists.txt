@@ -126,4 +126,12 @@ endif()
 # Set this flag to silence warnings on MacOS
 if (APPLE)
   set(CMAKE_CXX_FLAGS "-Wno-deprecated-volatile")
+  list(APPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/libomp")
+endif()
+
+# 2. Now ask CMake to find it naturally
+find_package(OpenMP REQUIRED COMPONENTS CXX)
+
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 endif()
