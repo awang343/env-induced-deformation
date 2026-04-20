@@ -3,6 +3,7 @@
 .cache/
 build/
 meshes/
+configs/
 
 # Compiled Object files
 *.slo
