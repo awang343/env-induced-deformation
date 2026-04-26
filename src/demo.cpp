@@ -1,124 +1,151 @@
 #include "demo.h"
 
 #include <cmath>
-#include <iostream>
 #include <random>
 
 using namespace Eigen;
 
-// =============================================================================
-// Uniform growth
-// =============================================================================
-
-void applyGrowthFactor(double factor,
-                       const std::vector<Matrix2d> &a0,
-                       ShellRestState &rest)
+// Shared: stereographic projection to unit sphere.
+static Vector3d stereoProject(const Vector3d &v)
 {
-    const double s2 = factor * factor;
-    const int nF = static_cast<int>(a0.size());
-    for (int f = 0; f < nF; ++f) {
-        rest.aBar[f]    = s2 * a0[f];
-        rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, rest.aBar[f].determinant()));
-    }
+    double r2 = v.x() * v.x() + v.z() * v.z();
+    double d  = 1.0 + r2;
+    return Vector3d(2.0 * v.x() / d, (1.0 - r2) / d, 2.0 * v.z() / d);
 }
 
-bool stepGrowthRamp(GrowthState &gs, double dt,
-                    const std::vector<Matrix2d> &a0,
-                    ShellRestState &rest)
-{
-    if (std::abs(gs.factor - gs.target) < 1e-9) return false;
-    double sign = (gs.target > gs.factor) ? 1.0 : -1.0;
-    double next = gs.factor + sign * gs.rate * dt;
-    if (sign > 0 && next > gs.target) next = gs.target;
-    if (sign < 0 && next < gs.target) next = gs.target;
-    gs.factor = next;
-    applyGrowthFactor(next, a0, rest);
-    return true;
-}
-
-void cycleGrowthDemo(GrowthState &gs, bool &paused)
-{
-    static const double step = 0.2;
-    static const double maxTarget = 1.6;
-    static const double minTarget = 1.0;
-    static int direction = +1;
-
-    double next = gs.target + direction * step;
-    if (next > maxTarget + 1e-9) {
-        direction = -1;
-        next = gs.target + direction * step;
-    } else if (next < minTarget - 1e-9) {
-        direction = +1;
-        next = gs.target + direction * step;
-    }
-    gs.target = next;
-    if (paused) {
-        paused = false;
-        std::cout << "Auto-unpaused" << std::endl;
-    }
-    std::cout << "Growth target = " << gs.target << std::endl;
-}
-
-// =============================================================================
-// Stereographic disk-to-sphere
-// =============================================================================
-
-void initStereographicDemo(ShellMesh &mesh,
-                           const std::vector<Matrix2d> &a0,
-                           ShellRestState &rest,
-                           int seed, double perturbScale)
+void initSphereStretching(ShellMesh &mesh,
+                          const std::vector<Matrix2d> &a0,
+                          ShellRestState &rest,
+                          int seed, double perturbScale)
 {
     const int nF = mesh.numFaces();
     const int nV = mesh.numVerts();
 
-    // Compute aBar from the discrete geometry: map each vertex onto the
-    // unit sphere via inverse stereographic projection, then compute the
-    // first fundamental form of each triangle from the mapped positions.
-    // This respects the actual edge lengths on the sphere rather than
-    // evaluating a continuous conformal factor at the centroid.
-    // Sphere of radius R = 1 so the hemisphere has the same diameter
-    // as the flat disk (matching the paper's Figure 3 visuals).
-    const double R = 1.0;
-    auto stereoProject = [R](const Vector3d &v) -> Vector3d {
-        double r2 = v.x() * v.x() + v.z() * v.z();
-        double d  = 1.0 + r2;
-        return Vector3d(2.0 * R * v.x() / d,
-                        R * (1.0 - r2) / d,
-                        2.0 * R * v.z() / d);
-    };
-
-    // Paper §7.1: "We apply a small random perturbation to the rest
-    // and initial configurations of all of our initially-flat examples
-    // with b̄ = 0, to force symmetry-breaking."
-    //
-    // Perturb both the rest configuration (sphere vertices used to
-    // compute āBar) and the initial mesh positions.
-    // perturbScale passed as parameter
     std::mt19937 rng(seed);
     std::uniform_real_distribution<double> dist(-0.5, 0.5);
-    auto randPerturbation = [&]() -> Vector3d {
+    auto randPerturb = [&]() -> Vector3d {
         return perturbScale * Vector3d(dist(rng), dist(rng), dist(rng));
     };
 
-    // Perturbed sphere vertices → rest metric āBar.
+    // āBar from sphere geometry.
     std::vector<Vector3d> sphereVerts(nV);
     for (int i = 0; i < nV; ++i)
-        sphereVerts[i] = stereoProject(mesh.vertices[i]) + randPerturbation();
+        sphereVerts[i] = stereoProject(mesh.vertices[i]) + randPerturb();
 
     for (int f = 0; f < nF; ++f) {
         const Vector3i &tri = mesh.faces[f];
         Vector3d e1 = sphereVerts[tri[1]] - sphereVerts[tri[0]];
         Vector3d e2 = sphereVerts[tri[2]] - sphereVerts[tri[0]];
         double d12 = e1.dot(e2);
-        rest.aBar[f] << e1.dot(e1), d12,
-                         d12,        e2.dot(e2);
+        rest.aBar[f] << e1.dot(e1), d12, d12, e2.dot(e2);
         rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, rest.aBar[f].determinant()));
     }
 
-    // b̄ = 0 per the paper (Figure 3 caption).
-    // (rest.bBar is already zero from init.)
+    // b̄ = 0 (paper Figure 3 caption).
 
-    // Random perturbation to break symmetry.
     for (int i = 0; i < nV; ++i)
-        mesh.vertices[i] += randPerturbation();
+        mesh.vertices[i] += randPerturb();
+}
+
+void initSphereBending(ShellMesh &mesh,
+                       const std::vector<Matrix2d> &a0,
+                       ShellRestState &rest,
+                       int seed, double perturbScale)
+{
+    const int nF = mesh.numFaces();
+    const int nV = mesh.numVerts();
+
+    std::mt19937 rng(seed);
+    std::uniform_real_distribution<double> dist(-0.5, 0.5);
+    auto randPerturb = [&]() -> Vector3d {
+        return perturbScale * Vector3d(dist(rng), dist(rng), dist(rng));
+    };
+
+    // āBar = flat disk (no stretching drive).
+    for (int f = 0; f < nF; ++f) {
+        rest.aBar[f] = a0[f];
+        rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, a0[f].determinant()));
+    }
+
+    // b̄ from sphere curvature.
+    std::vector<Vector3d> sphereVerts(nV);
+    for (int i = 0; i < nV; ++i)
+        sphereVerts[i] = stereoProject(mesh.vertices[i]);
+
+    auto flatVerts = mesh.vertices;
+    for (int i = 0; i < nV; ++i)
+        mesh.vertices[i] = sphereVerts[i];
+
+    std::vector<Vector3d> sphereFN;
+    computeFaceNormals(mesh, sphereFN);
+    for (int f = 0; f < nF; ++f)
+        rest.bBar[f] = secondFundamentalForm(mesh, sphereFN, f);
+
+    mesh.vertices = flatVerts;
+
+    for (int i = 0; i < nV; ++i)
+        mesh.vertices[i] += randPerturb();
+}
+
+void initIsotropicGrowth(ShellMesh &mesh,
+                         const std::vector<Matrix2d> &a0,
+                         ShellRestState &rest,
+                         double growthFactor,
+                         int seed, double perturbScale)
+{
+    const int nF = mesh.numFaces();
+    const int nV = mesh.numVerts();
+
+    // āBar = s² · a₀ (rest edges are s× longer than current).
+    const double s2 = growthFactor * growthFactor;
+    for (int f = 0; f < nF; ++f) {
+        rest.aBar[f] = s2 * a0[f];
+        rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, rest.aBar[f].determinant()));
+    }
+
+    // b̄ = b⁰ (initial curvature preserved, per paper Section 2).
+    std::vector<Vector3d> fN;
+    computeFaceNormals(mesh, fN);
+    for (int f = 0; f < nF; ++f)
+        rest.bBar[f] = secondFundamentalForm(mesh, fN, f);
+
+    // Small perturbation to break symmetry (only matters for flat meshes).
+    std::mt19937 rng(seed);
+    std::uniform_real_distribution<double> dist(-0.5, 0.5);
+    for (int i = 0; i < nV; ++i)
+        mesh.vertices[i].y() += perturbScale * dist(rng);
+}
+
+void initCylinderDemo(ShellMesh &mesh,
+                      const std::vector<Matrix2d> &a0,
+                      ShellRestState &rest,
+                      double kappa,
+                      int seed, double perturbScale)
+{
+    const int nF = mesh.numFaces();
+    const int nV = mesh.numVerts();
+
+    // āBar = flat metric (cylinder is developable).
+    for (int f = 0; f < nF; ++f) {
+        rest.aBar[f] = a0[f];
+        rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, a0[f].determinant()));
+    }
+
+    // b̄ for curvature κ=1 in the x-direction, expressed in each face's
+    // local barycentric coordinates: b̄_ij = κ · (e_i · x̂)(e_j · x̂)
+    // This ensures all faces agree on a consistent global curl direction.
+    // kappa passed as parameter
+    for (int f = 0; f < nF; ++f) {
+        const Vector3i &tri = mesh.faces[f];
+        Vector3d e1 = mesh.vertices[tri[1]] - mesh.vertices[tri[0]];
+        Vector3d e2 = mesh.vertices[tri[2]] - mesh.vertices[tri[0]];
+        double e1x = e1.x(), e2x = e2.x();
+        rest.bBar[f] << kappa*e1x*e1x, kappa*e1x*e2x,
+                         kappa*e1x*e2x, kappa*e2x*e2x;
+    }
+
+    std::mt19937 rng(seed);
+    std::uniform_real_distribution<double> dist(-0.5, 0.5);
+    for (int i = 0; i < nV; ++i)
+        mesh.vertices[i].y() += perturbScale * dist(rng);
 }

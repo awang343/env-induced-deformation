@@ -40,9 +40,13 @@ def main():
             b = j * (N + 1) + i + 1
             c = (j + 1) * (N + 1) + i + 1
             d = (j + 1) * (N + 1) + i
-            # OBJ indices are 1-based.
-            faces.append((a + 1, b + 1, c + 1))
-            faces.append((a + 1, c + 1, d + 1))
+            # Alternate diagonals in a checkerboard pattern for isotropy.
+            if (i + j) % 2 == 0:
+                faces.append((a + 1, b + 1, c + 1))
+                faces.append((a + 1, c + 1, d + 1))
+            else:
+                faces.append((a + 1, b + 1, d + 1))
+                faces.append((b + 1, c + 1, d + 1))
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w") as f:

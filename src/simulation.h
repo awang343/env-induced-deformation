@@ -20,9 +20,10 @@ class Simulation
     void toggleParallel();
     void reset();
     bool isPaused() const { return m_paused; }
-    void setUniformGrowth(double factor);
-    void cycleGrowthDemo();
     void singleStep();
+    // Interpolate display between previous and current physics state.
+    // alpha: 0 = previous, 1 = current. Call from render loop.
+    void interpolateDisplay(float alpha);
 
   private:
     void stepOnce();
@@ -36,17 +37,22 @@ class Simulation
     std::vector<Eigen::Vector3d> m_velocities;
     std::vector<double>          m_masses;
 
+    // For smooth interpolation between physics steps.
+    std::vector<Eigen::Vector3d> m_prevVertices;
+    std::vector<Eigen::Vector3d> m_currVertices;
+    bool m_hasPhysicsStep = false;
+    float m_interpAlpha = 1.0f;  // 0 = prevVertices, 1 = currVertices
+
     std::vector<Eigen::Matrix2d> m_a0;
     ShellRestState m_initialRest;
 
     Shape m_shape;
 
     double m_dt;
-
-    GrowthState m_growth;
     std::string m_restMetric;
 
-    std::vector<double> m_faceEnergies;  // cached for heatmap upload
+    std::vector<double> m_faceEnergies;
+    double m_maxInitialEnergy = 0.0;
 
     bool m_paused = true;
     bool m_parallel = true;

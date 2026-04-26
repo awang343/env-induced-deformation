@@ -27,10 +27,7 @@ void Simulation::init(const std::string &config_path)
     m_mat.poisson    = cfg.value("poisson",     m_mat.poisson).toDouble();
     m_mat.density    = cfg.value("density",     m_mat.density).toDouble();
     m_dt             = cfg.value("dt",          m_dt).toDouble();
-    m_growth.rate    = cfg.value("growth_rate", m_growth.rate).toDouble();
     m_restMetric     = cfg.value("rest_metric", "").toString().toStdString();
-    int seed         = cfg.value("seed", 42).toInt();
-    double perturb   = cfg.value("perturb", 0.05).toDouble();
     cfg.endGroup();
 
     m_mesh.load(meshPath);
@@ -48,8 +45,26 @@ void Simulation::init(const std::string &config_path)
         m_rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, m_a0[f].determinant()));
     }
 
-    if (m_restMetric == "stereographic")
-        initStereographicDemo(m_mesh, m_a0, m_rest, seed, perturb);
+    if (!m_restMetric.empty()) {
+        cfg.beginGroup("rest_metric");
+        int seed       = cfg.value("seed", 42).toInt();
+        double perturb = cfg.value("perturb", 0.05).toDouble();
+
+        if (m_restMetric == "sphere_stretching")
+            initSphereStretching(m_mesh, m_a0, m_rest, seed, perturb);
+        else if (m_restMetric == "sphere_bending")
+            initSphereBending(m_mesh, m_a0, m_rest, seed, perturb);
+        else if (m_restMetric == "isotropic_growth") {
+            double growth = cfg.value("growth_factor", 2.0).toDouble();
+            initIsotropicGrowth(m_mesh, m_a0, m_rest, growth, seed, perturb);
+        }
+        else if (m_restMetric == "cylinder") {
+            double kappa = cfg.value("kappa", 1.0).toDouble();
+            initCylinderDemo(m_mesh, m_a0, m_rest, kappa, seed, perturb);
+        }
+
+        cfg.endGroup();
+    }
 
     m_initialRest  = m_rest;
     m_restVertices = m_mesh.vertices;
@@ -57,22 +72,45 @@ void Simulation::init(const std::string &config_path)
     m_velocities.assign(m_mesh.numVerts(), Vector3d::Zero());
     computeLumpedMasses(m_mesh, m_rest, m_mat, m_masses);
 
+    m_prevVertices = m_mesh.vertices;
+    m_currVertices = m_mesh.vertices;
+
     updateDisplay();
+
+    // Capture max initial energy for heatmap scaling.
+    m_maxInitialEnergy = 0.0;
+    for (double e : m_faceEnergies)
+        m_maxInitialEnergy = std::max(m_maxInitialEnergy, e);
 }
 
 void Simulation::stepOnce()
 {
-    if (m_restMetric.empty())
-        stepGrowthRamp(m_growth, m_dt, m_a0, m_rest);
-
+    m_prevVertices = m_currVertices;
+    // Restore actual physics state (interpolateDisplay may have modified mesh).
+    m_mesh.vertices = m_currVertices;
     stepImplicitEuler(m_mesh, m_rest, m_mat,
                       m_masses, m_velocities, m_dt);
+    m_currVertices = m_mesh.vertices;
+    m_interpAlpha = 0.0f;
+    m_hasPhysicsStep = true;
 }
 
 void Simulation::update(double /*seconds*/)
 {
     if (m_mesh.vertices.empty() || m_paused) return;
     stepOnce();
+    // Don't call updateDisplay here — let interpolateDisplay handle
+    // the smooth transition. The glwidget tick will call it.
+}
+
+void Simulation::interpolateDisplay(float alpha)
+{
+    if (!m_hasPhysicsStep) return;
+    m_interpAlpha = std::min(1.0f, std::max(0.0f, alpha));
+    const int n = m_mesh.numVerts();
+    for (int i = 0; i < n; ++i)
+        m_mesh.vertices[i] = (1.0 - m_interpAlpha) * m_prevVertices[i]
+                            + m_interpAlpha * m_currVertices[i];
     updateDisplay();
 }
 
@@ -99,7 +137,17 @@ void Simulation::updateDisplay()
                   * (0.5*alpha*Mb.trace()*Mb.trace() + beta*(Mb*Mb).trace());
         m_faceEnergies[f] = es + eb;
     }
-    m_shape.setFaceEnergies(m_faceEnergies);
+    // Log-normalize energies: log(1+e) / log(1+maxInitial).
+    // Compresses dynamic range so small energies are visible.
+    if (m_maxInitialEnergy > 0.0) {
+        double logMax = std::log(1.0 + m_maxInitialEnergy);
+        std::vector<double> normalized(m_faceEnergies.size());
+        for (size_t f = 0; f < m_faceEnergies.size(); ++f)
+            normalized[f] = std::log(1.0 + m_faceEnergies[f]) / logMax;
+        m_shape.setFaceEnergies(normalized);
+    } else {
+        m_shape.setFaceEnergies(m_faceEnergies);
+    }
 }
 
 void Simulation::togglePause()
@@ -121,24 +169,19 @@ void Simulation::reset()
     std::cout << "Reset" << std::endl;
     m_mesh.vertices = m_restVertices;
     std::fill(m_velocities.begin(), m_velocities.end(), Vector3d::Zero());
-    m_growth.factor = 1.0;
-    m_growth.target = 1.0;
     m_rest = m_initialRest;
+    m_prevVertices = m_restVertices;
+    m_currVertices = m_restVertices;
+    m_hasPhysicsStep = false;
     updateDisplay();
 }
-
-void Simulation::setUniformGrowth(double factor)
-{
-    m_growth.target = factor;
-    if (m_paused) { m_paused = false; std::cout << "Auto-unpaused" << std::endl; }
-    std::cout << "Growth target = " << factor << std::endl;
-}
-
-void Simulation::cycleGrowthDemo() { ::cycleGrowthDemo(m_growth, m_paused); }
 
 void Simulation::singleStep()
 {
     stepOnce();
+    // Show final state immediately (no interpolation for single-step).
+    m_mesh.vertices = m_currVertices;
+    m_prevVertices = m_currVertices;
     updateDisplay();
     std::cout << "Step" << std::endl;
 }

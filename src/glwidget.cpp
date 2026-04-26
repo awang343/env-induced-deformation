@@ -218,9 +218,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_O:
         m_sim.toggleParallel();
         break;
-    case Qt::Key_G:
-        m_sim.cycleGrowthDemo();
-        break;
     case Qt::Key_BracketRight:
         m_physicsRate = std::max(1, m_physicsRate / 2);
         std::cout << "Physics: every " << m_physicsRate << " frame(s)" << std::endl;
@@ -277,8 +274,14 @@ void GLWidget::tick()
     if (m_tickCount >= m_physicsRate) {
         m_tickCount = 0;
         m_sim.update(deltaSeconds);
-        // Only increment if update actually stepped (not paused/empty).
         if (!m_sim.isPaused()) m_frameCount++;
+    }
+    // Always interpolate — smoothly transitions from prev to curr state.
+    // Right after physics: alpha ≈ 0 (showing start of transition).
+    // Just before next physics: alpha ≈ 1 (showing end of transition).
+    if (!m_sim.isPaused()) {
+        float alpha = static_cast<float>(m_tickCount) / std::max(1, m_physicsRate);
+        m_sim.interpolateDisplay(alpha);
     }
 
     // Move camera

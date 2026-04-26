@@ -50,9 +50,8 @@ void main() {
 
     vec3 baseColor;
     if (displayMode == 1) {
-        // Energy heatmap. Map energy through log scale for better contrast.
-        // vEnergy is raw energy density; use log(1+e) to compress range.
-        float e = log(1.0 + vEnergy) / 15.0;  // /15 controls the scale
+        // Energy heatmap. vEnergy is pre-normalized: 0 = zero, 1 = initial max.
+        float e = clamp(vEnergy, 0.0, 1.0);
         baseColor = heatmap(e);
     } else {
         baseColor = vec3(red, green, blue);
