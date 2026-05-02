@@ -12,19 +12,24 @@ import os
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--nx", type=int, default=20, help="cells along x")
-    ap.add_argument("--nz", type=int, default=10, help="cells along z")
-    ap.add_argument("--width", type=float, default=2.0, help="width along x")
-    ap.add_argument("--height", type=float, default=1.0, help="height along z")
+    ap.add_argument("--nx", type=int, default=10, help="cells along x")
+    ap.add_argument("--nz", type=int, default=20, help="cells along z")
+    ap.add_argument("--width", type=float, default=1.0, help="width along x")
+    ap.add_argument("--height", type=float, default=2.0, help="height along z")
+    ap.add_argument("--plane", choices=["xy", "xz"], default="xy",
+                    help="which plane the rectangle lies in (default xy)")
     ap.add_argument("--out", default="meshes/flat_rect.obj", help="output path")
     args = ap.parse_args()
 
     verts = []
     for j in range(args.nz + 1):
         for i in range(args.nx + 1):
-            x = -args.width / 2 + args.width * i / args.nx
-            z = -args.height / 2 + args.height * j / args.nz
-            verts.append((x, 0.0, z))
+            u = -args.width / 2 + args.width * i / args.nx
+            v = -args.height / 2 + args.height * j / args.nz
+            if args.plane == "xy":
+                verts.append((u, v, 0.0))
+            else:
+                verts.append((u, 0.0, v))
 
     faces = []
     for j in range(args.nz):

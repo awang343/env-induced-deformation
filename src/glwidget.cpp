@@ -1,5 +1,6 @@
 #include "glwidget.h"
 
+#include "graphics/shape.h"
 #include <QApplication>
 #include <QKeyEvent>
 #include <QPainter>
@@ -121,7 +122,8 @@ void GLWidget::paintGL()
     QPainter painter(this);
     painter.setPen(Qt::black);
     painter.setFont(QFont("Monospace", 14));
-    painter.drawText(10, 24, QString("Step %1").arg(m_frameCount));
+    painter.drawText(10, 24, QString("Step %1  |  %2").arg(m_sim.stepCount())
+                     .arg(Shape::displayModeName(m_sim.displayMode())));
     painter.end();
 }
 
@@ -213,7 +215,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_R:
     case Qt::Key_P:
         m_sim.reset();
-        m_frameCount = 0;
         break;
     case Qt::Key_O:
         m_sim.toggleParallel();
@@ -228,7 +229,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_Period:
         m_sim.singleStep();
-        m_frameCount++;
         update();
         break;
     case Qt::Key_Escape:
@@ -274,7 +274,6 @@ void GLWidget::tick()
     if (m_tickCount >= m_physicsRate) {
         m_tickCount = 0;
         m_sim.update(deltaSeconds);
-        if (!m_sim.isPaused()) m_frameCount++;
     }
     // Always interpolate — smoothly transitions from prev to curr state.
     // Right after physics: alpha ≈ 0 (showing start of transition).

@@ -28,6 +28,13 @@ void initIsotropicGrowth(ShellMesh &mesh,
                          double growthFactor = 2.0,
                          int seed = 42, double perturbScale = 0.01);
 
+// Swelling: āBar = a₀, b̄ = b₀ (initial geometry preserved).
+// Rest forms will be updated dynamically from moisture scalars.
+void initSwelling(ShellMesh &mesh,
+                  const std::vector<Eigen::Matrix2d> &a0,
+                  ShellRestState &rest,
+                  int seed = 42, double perturbScale = 0.01);
+
 // Cylinder curling via pure bending: āBar = flat, b̄ = κ in x-direction.
 void initCylinderDemo(ShellMesh &mesh,
                       const std::vector<Eigen::Matrix2d> &a0,

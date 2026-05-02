@@ -1,9 +1,20 @@
-#include "demo.h"
+#include "rest_metric.h"
 
 #include <cmath>
 #include <random>
 
 using namespace Eigen;
+
+// Average face normal of the mesh (for perturbation direction).
+static Vector3d averageNormal(const ShellMesh &mesh)
+{
+    std::vector<Vector3d> fN;
+    computeFaceNormals(mesh, fN);
+    Vector3d avg = Vector3d::Zero();
+    for (auto &n : fN) avg += n;
+    double len = avg.norm();
+    return (len > 0) ? Vector3d(avg / len) : Vector3d::UnitY();
+}
 
 // Shared: stereographic projection to unit sphere.
 static Vector3d stereoProject(const Vector3d &v)
@@ -109,11 +120,40 @@ void initIsotropicGrowth(ShellMesh &mesh,
     for (int f = 0; f < nF; ++f)
         rest.bBar[f] = secondFundamentalForm(mesh, fN, f);
 
-    // Small perturbation to break symmetry (only matters for flat meshes).
+    // Small perturbation along mesh normal to break symmetry.
+    Vector3d avgN = averageNormal(mesh);
     std::mt19937 rng(seed);
     std::uniform_real_distribution<double> dist(-0.5, 0.5);
     for (int i = 0; i < nV; ++i)
-        mesh.vertices[i].y() += perturbScale * dist(rng);
+        mesh.vertices[i] += perturbScale * dist(rng) * avgN;
+}
+
+void initSwelling(ShellMesh &mesh,
+                  const std::vector<Matrix2d> &a0,
+                  ShellRestState &rest,
+                  int seed, double perturbScale)
+{
+    const int nF = mesh.numFaces();
+    const int nV = mesh.numVerts();
+
+    // Initialize rest forms to current geometry (no deformation yet).
+    // āBar = a₀, b̄ = b₀. These will be updated each step from moisture.
+    for (int f = 0; f < nF; ++f) {
+        rest.aBar[f] = a0[f];
+        rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, a0[f].determinant()));
+    }
+
+    std::vector<Vector3d> fN;
+    computeFaceNormals(mesh, fN);
+    for (int f = 0; f < nF; ++f)
+        rest.bBar[f] = secondFundamentalForm(mesh, fN, f);
+
+    // Small perturbation along mesh normal for symmetry breaking.
+    Vector3d avgN = averageNormal(mesh);
+    std::mt19937 rng(seed);
+    std::uniform_real_distribution<double> dist(-0.5, 0.5);
+    for (int i = 0; i < nV; ++i)
+        mesh.vertices[i] += perturbScale * dist(rng) * avgN;
 }
 
 void initCylinderDemo(ShellMesh &mesh,
@@ -144,8 +184,9 @@ void initCylinderDemo(ShellMesh &mesh,
                          kappa*e1x*e2x, kappa*e2x*e2x;
     }
 
+    Vector3d avgN = averageNormal(mesh);
     std::mt19937 rng(seed);
     std::uniform_real_distribution<double> dist(-0.5, 0.5);
     for (int i = 0; i < nV; ++i)
-        mesh.vertices[i].y() += perturbScale * dist(rng);
+        mesh.vertices[i] += perturbScale * dist(rng) * avgN;
 }
