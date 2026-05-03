@@ -31,6 +31,12 @@ class Simulation
     // alpha: 0 = previous, 1 = current. Call from render loop.
     void interpolateDisplay(float alpha);
 
+    // Moisture painting: raycast from camera and paint moisture at hit point.
+    // button: 0 = add m⁺, 1 = add m⁻
+    void paintMoisture(const Eigen::Vector3f &rayOrigin,
+                       const Eigen::Vector3f &rayDir,
+                       int button, float radius = 0.3f, float strength = 0.1f);
+
   private:
     void stepOnce();
     void updateDisplay();
@@ -52,13 +58,18 @@ class Simulation
     float m_interpAlpha = 1.0f;
 
     std::vector<Eigen::Matrix2d> m_a0;
+    std::vector<Eigen::Matrix2d> m_b0;
     ShellRestState m_initialRest;
+    double m_swellMu = 0.0025;
+    double m_swellMuPerp = 0.001;
+    std::vector<Eigen::Vector2d> m_machineDir;
 
     Shape m_shape;
 
     double m_dt;
     double m_diffusivity = 0.0;
     std::string m_restMetric;
+    std::string m_moistureInit;  // "none" or "one_sided"
 
     bool isSwellingMetric() const {
         return m_restMetric == "swelling_linear" ||
@@ -67,11 +78,13 @@ class Simulation
     }
 
     std::vector<double> m_faceEnergies;
-    double m_maxInitialEnergy = 0.0;
+    double m_maxEnergy = 0.0;
 
     // Per-vertex moisture/temperature (top and bottom of shell).
-    std::vector<double> m_mPlus;   // top surface
-    std::vector<double> m_mMinus;  // bottom surface
+    std::vector<double> m_mPlus;   // top surface (current, for physics)
+    std::vector<double> m_mMinus;  // bottom surface (current, for physics)
+    std::vector<double> m_prevMPlus, m_prevMMinus;
+    std::vector<double> m_currMPlus, m_currMMinus;
 
     int m_stepCount = 0;
     bool m_paused = true;

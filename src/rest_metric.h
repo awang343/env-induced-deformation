@@ -41,3 +41,47 @@ void initCylinderDemo(ShellMesh &mesh,
                       ShellRestState &rest,
                       double kappa = 1.0,
                       int seed = 42, double perturbScale = 0.01);
+
+// Sphere target: map any mesh to a unit sphere by normalizing vertices.
+// Sets ā and b̄ from the sphere geometry. Works on any genus-0 mesh.
+void initSphereTarget(ShellMesh &mesh,
+                      const std::vector<Eigen::Matrix2d> &a0,
+                      ShellRestState &rest,
+                      double radius = 1.0,
+                      int seed = 42, double perturbScale = 0.01);
+
+// ---------- Swelling rest form updates (paper Section 2, page 6) ----------
+
+// Update ā, b̄ from per-vertex moisture using linear differential swelling.
+// g⁺ = (1+m⁺μ)²(a⁰ − hb⁰),  g⁻ = (1+m⁻μ)²(a⁰ + hb⁰)
+// ā = (g⁺+g⁻)/2,  b̄ = (g⁻−g⁺)/(2h)
+void updateRestFormsLinear(
+    const ShellMesh &mesh, ShellRestState &rest,
+    const std::vector<Eigen::Matrix2d> &a0,
+    const std::vector<Eigen::Matrix2d> &b0,
+    const std::vector<double> &mPlus,
+    const std::vector<double> &mMinus,
+    double h, double mu);
+
+// Update ā, b̄ from per-vertex moisture using piecewise constant swelling.
+// g⁺ = (1+m⁺μ)²(a⁰ − ⅔hb⁰),  g⁻ = (1+m⁻μ)²(a⁰ + ⅔hb⁰)
+// ā = (g⁺+g⁻)/2,  b̄ = 3/(4h)·(g⁻−g⁺)
+void updateRestFormsPiecewise(
+    const ShellMesh &mesh, ShellRestState &rest,
+    const std::vector<Eigen::Matrix2d> &a0,
+    const std::vector<Eigen::Matrix2d> &b0,
+    const std::vector<double> &mPlus,
+    const std::vector<double> &mMinus,
+    double h, double mu);
+
+// Update ā, b̄ from per-vertex moisture using machine direction swelling.
+// Anisotropic: μ along fibers, μ⊥ across fibers.
+// Requires per-face machine direction d in barycentric coordinates.
+void updateRestFormsMachine(
+    const ShellMesh &mesh, ShellRestState &rest,
+    const std::vector<Eigen::Matrix2d> &a0,
+    const std::vector<Eigen::Matrix2d> &b0,
+    const std::vector<double> &mPlus,
+    const std::vector<double> &mMinus,
+    const std::vector<Eigen::Vector2d> &machineDir,
+    double h, double mu, double muPerp);

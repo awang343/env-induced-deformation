@@ -58,6 +58,9 @@ private:
     int m_lastY;
 
     bool m_capture;
+    bool m_paintMode = false;
+    bool m_painting = false;
+    int m_paintButton = 0;  // 0=left (m⁺), 1=right (m⁻)
     std::string mesh_path;
 
     int m_physicsRate = 64;  // run physics every Nth tick

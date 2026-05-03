@@ -142,6 +142,22 @@ void GLWidget::setMeshPath(const QString &meshPath)
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
+    if (m_paintMode) {
+        m_painting = true;
+        m_paintButton = (event->button() == Qt::RightButton) ? 1 : 0;
+        // Paint at click position.
+        float x = event->position().x(), y = event->position().y();
+        float ndcX = 2.0f * x / width() - 1.0f;
+        float ndcY = 1.0f - 2.0f * y / height();
+        Eigen::Matrix4f invPV = (m_camera.getProjection() * m_camera.getView()).inverse();
+        Eigen::Vector4f nearH = invPV * Eigen::Vector4f(ndcX, ndcY, -1, 1);
+        Eigen::Vector4f farH  = invPV * Eigen::Vector4f(ndcX, ndcY,  1, 1);
+        Eigen::Vector3f near3 = nearH.head<3>() / nearH.w();
+        Eigen::Vector3f far3  = farH.head<3>()  / farH.w();
+        Eigen::Vector3f dir   = (far3 - near3).normalized();
+        m_sim.paintMoisture(near3, dir, m_paintButton);
+        return;
+    }
     m_capture = true;
     m_lastX = event->position().x();
     m_lastY = event->position().y();
@@ -149,6 +165,20 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event)
 {
+    if (m_painting) {
+        float x = event->position().x(), y = event->position().y();
+        float ndcX = 2.0f * x / width() - 1.0f;
+        float ndcY = 1.0f - 2.0f * y / height();
+        Eigen::Matrix4f invPV = (m_camera.getProjection() * m_camera.getView()).inverse();
+        Eigen::Vector4f nearH = invPV * Eigen::Vector4f(ndcX, ndcY, -1, 1);
+        Eigen::Vector4f farH  = invPV * Eigen::Vector4f(ndcX, ndcY,  1, 1);
+        Eigen::Vector3f near3 = nearH.head<3>() / nearH.w();
+        Eigen::Vector3f far3  = farH.head<3>()  / farH.w();
+        Eigen::Vector3f dir   = (far3 - near3).normalized();
+        m_sim.paintMoisture(near3, dir, m_paintButton);
+        return;
+    }
+
     if (!m_capture)
         return;
 
@@ -169,6 +199,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    m_painting = false;
     m_capture = false;
 }
 
@@ -226,6 +257,10 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_BracketLeft:
         m_physicsRate = std::min(128, m_physicsRate * 2);
         std::cout << "Physics: every " << m_physicsRate << " frame(s)" << std::endl;
+        break;
+    case Qt::Key_M:
+        m_paintMode = !m_paintMode;
+        std::cout << "Paint mode: " << (m_paintMode ? "ON" : "OFF") << std::endl;
         break;
     case Qt::Key_Period:
         m_sim.singleStep();
