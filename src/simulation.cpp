@@ -1,4 +1,5 @@
 #include "simulation.h"
+#include "geometry.h"
 
 #include <QSettings>
 #include <omp.h>
@@ -27,10 +28,9 @@ void Simulation::init(const std::string &config_path)
     m_mat.poisson    = cfg.value("poisson",     m_mat.poisson).toDouble();
     m_mat.density    = cfg.value("density",     m_mat.density).toDouble();
     m_dt             = cfg.value("dt",          m_dt).toDouble();
-    m_growth.rate    = cfg.value("growth_rate", m_growth.rate).toDouble();
     m_restMetric     = cfg.value("rest_metric", "").toString().toStdString();
-    int seed         = cfg.value("seed", 42).toInt();
-    double perturb   = cfg.value("perturb", 0.05).toDouble();
+    m_moistureInit   = cfg.value("moisture",    "none").toString().toStdString();
+    m_diffusivity    = cfg.value("diffusivity", 0.0).toDouble();
     cfg.endGroup();
 
     m_mesh.load(meshPath);
@@ -48,31 +48,201 @@ void Simulation::init(const std::string &config_path)
         m_rest.restArea[f] = 0.5 * std::sqrt(std::max(0.0, m_a0[f].determinant()));
     }
 
-    if (m_restMetric == "stereographic")
-        initStereographicDemo(m_mesh, m_a0, m_rest, seed, perturb);
+    if (!m_restMetric.empty()) {
+        cfg.beginGroup("rest_metric");
+        int seed       = cfg.value("seed", 42).toInt();
+        double perturb = cfg.value("perturb", 0.05).toDouble();
+
+        if (m_restMetric == "sphere_stretching")
+            initSphereStretching(m_mesh, m_a0, m_rest, seed, perturb);
+        else if (m_restMetric == "sphere_bending")
+            initSphereBending(m_mesh, m_a0, m_rest, seed, perturb);
+        else if (m_restMetric == "isotropic_growth") {
+            double growth = cfg.value("growth_factor", 2.0).toDouble();
+            initIsotropicGrowth(m_mesh, m_a0, m_rest, growth, seed, perturb);
+        }
+        else if (m_restMetric == "sphere_target") {
+            double radius = cfg.value("radius", 1.0).toDouble();
+            initSphereTarget(m_mesh, m_a0, m_rest, radius, seed, perturb);
+        }
+        else if (m_restMetric == "cylinder") {
+            double kappa = cfg.value("kappa", 1.0).toDouble();
+            initCylinderDemo(m_mesh, m_a0, m_rest, kappa, seed, perturb);
+        }
+        else if (isSwellingMetric()) {
+            m_swellMu     = cfg.value("mu", 0.0025).toDouble();
+            m_swellMuPerp = cfg.value("mu_perp", 0.001).toDouble();
+            initSwelling(m_mesh, m_a0, m_rest, seed, perturb);
+        }
+        else {
+            std::cerr << "ERROR: unrecognized rest_metric '" << m_restMetric << "'" << std::endl;
+            std::exit(1);
+        }
+
+        cfg.endGroup();
+    }
 
     m_initialRest  = m_rest;
+    m_b0 = m_rest.bBar;  // store initial b for swelling updates
     m_restVertices = m_mesh.vertices;
 
     m_velocities.assign(m_mesh.numVerts(), Vector3d::Zero());
     computeLumpedMasses(m_mesh, m_rest, m_mat, m_masses);
 
+    // Initialize moisture.
+    const int nV = m_mesh.numVerts();
+    if (m_moistureInit == "one_sided") {
+        m_mPlus.assign(nV, 1.0);
+        m_mMinus.assign(nV, 0.0);
+    } else {
+        m_mPlus.assign(nV, 0.0);
+        m_mMinus.assign(nV, 0.0);
+    }
+
+    m_prevMPlus = m_mPlus;  m_currMPlus = m_mPlus;
+    m_prevMMinus = m_mMinus; m_currMMinus = m_mMinus;
+
+    m_prevVertices = m_mesh.vertices;
+    m_currVertices = m_mesh.vertices;
+    m_prevVelocities.assign(m_mesh.numVerts(), Vector3d::Zero());
+    m_currVelocities.assign(m_mesh.numVerts(), Vector3d::Zero());
+    m_hasPhysicsStep = true;  // allow interpolateDisplay to run from the start
+
     updateDisplay();
+
+    m_maxEnergy = 0.0;
+    for (double e : m_faceEnergies)
+        m_maxEnergy = std::max(m_maxEnergy, e);
 }
 
 void Simulation::stepOnce()
 {
-    if (m_restMetric.empty())
-        stepGrowthRamp(m_growth, m_dt, m_a0, m_rest);
+    // TODO: recompute ā, b̄ from m⁺, m⁻ via swelling formulas (Section 2).
 
+    m_prevVertices = m_currVertices;
+    m_prevVelocities = m_velocities;
+    m_mesh.vertices = m_currVertices;
     stepImplicitEuler(m_mesh, m_rest, m_mat,
                       m_masses, m_velocities, m_dt);
+    m_currVertices = m_mesh.vertices;
+    m_currVelocities = m_velocities;
+    m_interpAlpha = 0.0f;
+    m_hasPhysicsStep = true;
+}
+
+void Simulation::launchPhysics()
+{
+    if (m_physicsRunning) return;
+    // Copy state for background thread to work on.
+    m_physicsMesh.vertices = m_currVertices;
+    m_physicsMesh.faces = m_mesh.faces;
+    m_physicsMesh.edges = m_mesh.edges;
+    m_physicsMesh.faceEdges = m_mesh.faceEdges;
+    m_physicsMesh.faceNeighbors = m_mesh.faceNeighbors;
+    m_physicsMesh.edgeFaces = m_mesh.edgeFaces;
+    m_physicsMesh.vertexFaceOffsets = m_mesh.vertexFaceOffsets;
+    m_physicsMesh.vertexFaceList = m_mesh.vertexFaceList;
+    m_physicsVelocities = m_velocities;
+
+    m_physicsRunning = true;
+    m_physicsFuture = std::async(std::launch::async, [this]() {
+        stepImplicitEuler(m_physicsMesh, m_rest, m_mat,
+                          m_masses, m_physicsVelocities, m_dt);
+    });
+}
+
+void Simulation::collectPhysics()
+{
+    if (!m_physicsRunning) return;
+    m_physicsFuture.get();
+    m_physicsRunning = false;
+    m_stepCount++;
+
+    // Diffuse moisture in sync with vertex results.
+    // Diffuse moisture if active.
+    if (m_diffusivity > 0.0)
+        diffuseMoisture(m_mesh, m_rest, m_mat, m_dt, m_diffusivity,
+                        m_mPlus, m_mMinus);
+
+    // Update rest forms from moisture.
+    if (m_restMetric == "swelling_linear")
+        updateRestFormsLinear(m_mesh, m_rest, m_a0, m_b0,
+                             m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
+    else if (m_restMetric == "swelling_piecewise")
+        updateRestFormsPiecewise(m_mesh, m_rest, m_a0, m_b0,
+                                m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
+    else if (m_restMetric == "swelling_machine")
+        updateRestFormsMachine(m_mesh, m_rest, m_a0, m_b0,
+                              m_mPlus, m_mMinus, m_machineDir,
+                              m_mat.thickness, m_swellMu, m_swellMuPerp);
+
+    m_prevVertices = m_currVertices;
+    m_prevVelocities = m_currVelocities;
+    m_prevMPlus = m_currMPlus;
+    m_prevMMinus = m_currMMinus;
+    m_currVertices = m_physicsMesh.vertices;
+    m_currVelocities = m_physicsVelocities;
+    m_currMPlus = m_mPlus;
+    m_currMMinus = m_mMinus;
+    m_velocities = m_physicsVelocities;
+    m_interpAlpha = 0.0f;
+    m_hasPhysicsStep = true;
+    m_stepReady = true;
+}
+
+void Simulation::waitForPhysics()
+{
+    if (m_physicsRunning) {
+        m_physicsFuture.get();
+        m_physicsRunning = false;
+    }
 }
 
 void Simulation::update(double /*seconds*/)
 {
     if (m_mesh.vertices.empty() || m_paused) return;
-    stepOnce();
+
+    // Check if background physics finished.
+    if (m_physicsRunning &&
+        m_physicsFuture.wait_for(std::chrono::seconds(0)) == std::future_status::ready) {
+        collectPhysics();
+    }
+
+    // Launch next step if not already running.
+    if (!m_physicsRunning)
+        launchPhysics();
+}
+
+void Simulation::interpolateDisplay(float alpha)
+{
+    if (!m_hasPhysicsStep) return;
+
+    const double t = std::min(1.0, std::max(0.0, (double)alpha));
+    const int n = m_mesh.numVerts();
+
+    // Cubic Hermite interpolation using positions and velocities at
+    // both endpoints. Gives C1 continuity (smooth velocity) across
+    // physics step boundaries.
+    //   p(t) = h00·p0 + h10·dt·v0 + h01·p1 + h11·dt·v1
+    // where h00 = 2t³-3t²+1, h10 = t³-2t²+t, h01 = -2t³+3t², h11 = t³-t²
+    const double t2 = t * t, t3 = t2 * t;
+    const double h00 = 2*t3 - 3*t2 + 1;
+    const double h10 = t3 - 2*t2 + t;
+    const double h01 = -2*t3 + 3*t2;
+    const double h11 = t3 - t2;
+
+    for (int i = 0; i < n; ++i)
+        m_mesh.vertices[i] = h00 * m_prevVertices[i]
+                            + h10 * m_dt * m_prevVelocities[i]
+                            + h01 * m_currVertices[i]
+                            + h11 * m_dt * m_currVelocities[i];
+
+    // Linear interpolation for moisture.
+    for (int i = 0; i < n; ++i) {
+        m_mPlus[i]  = (1.0 - t) * m_prevMPlus[i]  + t * m_currMPlus[i];
+        m_mMinus[i] = (1.0 - t) * m_prevMMinus[i] + t * m_currMMinus[i];
+    }
+
     updateDisplay();
 }
 
@@ -99,7 +269,29 @@ void Simulation::updateDisplay()
                   * (0.5*alpha*Mb.trace()*Mb.trace() + beta*(Mb*Mb).trace());
         m_faceEnergies[f] = es + eb;
     }
-    m_shape.setFaceEnergies(m_faceEnergies);
+    // Channel 0: log-normalized energy against scale captured at init.
+    std::vector<double> ch0(nF, 0.0);
+    if (m_maxEnergy > 0.0) {
+        double logMax = std::log(1.0 + m_maxEnergy);
+        for (int f = 0; f < nF; ++f)
+            ch0[f] = std::log(1.0 + m_faceEnergies[f]) / logMax;
+    }
+
+    // Channel 1: m_minus per face (for moisture back-face display).
+    // Channel 0 doubles as m_plus when in moisture mode.
+    std::vector<double> ch1(nF, 0.0);
+
+    int mode = m_shape.displayMode();
+    if (mode == 2) {
+        // Override ch0 with m_plus, ch1 with m_minus for moisture display.
+        for (int f = 0; f < nF; ++f) {
+            const auto &tri = m_mesh.faces[f];
+            ch0[f] = (m_mPlus[tri[0]] + m_mPlus[tri[1]] + m_mPlus[tri[2]]) / 3.0;
+            ch1[f] = (m_mMinus[tri[0]] + m_mMinus[tri[1]] + m_mMinus[tri[2]]) / 3.0;
+        }
+    }
+
+    m_shape.setFaceData(ch0, ch1);
 }
 
 void Simulation::togglePause()
@@ -117,31 +309,131 @@ void Simulation::toggleParallel()
 
 void Simulation::reset()
 {
+    waitForPhysics();
     m_paused = true;
     std::cout << "Reset" << std::endl;
     m_mesh.vertices = m_restVertices;
     std::fill(m_velocities.begin(), m_velocities.end(), Vector3d::Zero());
-    m_growth.factor = 1.0;
-    m_growth.target = 1.0;
     m_rest = m_initialRest;
+    m_b0 = m_initialRest.bBar;
+    m_prevVertices = m_restVertices;
+    m_currVertices = m_restVertices;
+    m_prevVelocities.assign(m_mesh.numVerts(), Vector3d::Zero());
+    m_currVelocities.assign(m_mesh.numVerts(), Vector3d::Zero());
+    m_stepCount = 0;
+    m_maxEnergy = 0.0;
+    m_hasPhysicsStep = true;
+    if (m_moistureInit == "one_sided") {
+        m_mPlus.assign(m_mesh.numVerts(), 1.0);
+        m_mMinus.assign(m_mesh.numVerts(), 0.0);
+    } else {
+        m_mPlus.assign(m_mesh.numVerts(), 0.0);
+        m_mMinus.assign(m_mesh.numVerts(), 0.0);
+    }
+    m_prevMPlus = m_mPlus;  m_currMPlus = m_mPlus;
+    m_prevMMinus = m_mMinus; m_currMMinus = m_mMinus;
     updateDisplay();
 }
 
-void Simulation::setUniformGrowth(double factor)
-{
-    m_growth.target = factor;
-    if (m_paused) { m_paused = false; std::cout << "Auto-unpaused" << std::endl; }
-    std::cout << "Growth target = " << factor << std::endl;
-}
-
-void Simulation::cycleGrowthDemo() { ::cycleGrowthDemo(m_growth, m_paused); }
-
 void Simulation::singleStep()
 {
+    waitForPhysics();
+    if (m_diffusivity > 0.0)
+        diffuseMoisture(m_mesh, m_rest, m_mat, m_dt, m_diffusivity,
+                        m_mPlus, m_mMinus);
+    if (m_restMetric == "swelling_linear")
+        updateRestFormsLinear(m_mesh, m_rest, m_a0, m_b0,
+                             m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
+    else if (m_restMetric == "swelling_piecewise")
+        updateRestFormsPiecewise(m_mesh, m_rest, m_a0, m_b0,
+                                m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
+    else if (m_restMetric == "swelling_machine")
+        updateRestFormsMachine(m_mesh, m_rest, m_a0, m_b0,
+                              m_mPlus, m_mMinus, m_machineDir,
+                              m_mat.thickness, m_swellMu, m_swellMuPerp);
     stepOnce();
+    m_stepCount++;
+    m_currMPlus = m_mPlus;
+    m_currMMinus = m_mMinus;
+    m_mesh.vertices = m_currVertices;
+    m_prevVertices = m_currVertices;
+    m_prevMPlus = m_currMPlus;
+    m_prevMMinus = m_currMMinus;
     updateDisplay();
     std::cout << "Step" << std::endl;
 }
 
+void Simulation::paintMoisture(const Eigen::Vector3f &rayOrigin,
+                               const Eigen::Vector3f &rayDir,
+                               int /*button*/, float radius, float strength)
+{
+    // Brute-force ray-triangle intersection (Möller–Trumbore).
+    float bestT = std::numeric_limits<float>::max();
+    int hitFace = -1;
+    Eigen::Vector3f hitPoint;
+
+    for (int f = 0; f < m_mesh.numFaces(); ++f) {
+        const auto &tri = m_mesh.faces[f];
+        Eigen::Vector3f v0 = m_mesh.vertices[tri[0]].cast<float>();
+        Eigen::Vector3f v1 = m_mesh.vertices[tri[1]].cast<float>();
+        Eigen::Vector3f v2 = m_mesh.vertices[tri[2]].cast<float>();
+
+        Eigen::Vector3f e1 = v1 - v0, e2 = v2 - v0;
+        Eigen::Vector3f h = rayDir.cross(e2);
+        float a = e1.dot(h);
+        if (std::abs(a) < 1e-8f) continue;
+
+        float invA = 1.0f / a;
+        Eigen::Vector3f s = rayOrigin - v0;
+        float u = invA * s.dot(h);
+        if (u < 0.0f || u > 1.0f) continue;
+
+        Eigen::Vector3f q = s.cross(e1);
+        float v = invA * rayDir.dot(q);
+        if (v < 0.0f || u + v > 1.0f) continue;
+
+        float t = invA * e2.dot(q);
+        if (t > 1e-4f && t < bestT) {
+            bestT = t;
+            hitFace = f;
+            hitPoint = rayOrigin + t * rayDir;
+        }
+    }
+
+    if (hitFace < 0) return;
+
+    // Determine which side was clicked: front face → m⁺, back face → m⁻.
+    const auto &tri = m_mesh.faces[hitFace];
+    Eigen::Vector3f faceNormal = (m_mesh.vertices[tri[1]] - m_mesh.vertices[tri[0]])
+                                  .cross(m_mesh.vertices[tri[2]] - m_mesh.vertices[tri[0]])
+                                  .cast<float>();
+    bool frontFace = rayDir.dot(faceNormal) < 0;
+
+    // Paint moisture on nearby vertices within radius.
+    Eigen::Vector3d hp = hitPoint.cast<double>();
+    for (int i = 0; i < m_mesh.numVerts(); ++i) {
+        double dist = (m_mesh.vertices[i] - hp).norm();
+        if (dist < radius) {
+            double falloff = 1.0 - dist / radius;
+            double delta = strength * falloff;
+            if (frontFace)
+                m_mPlus[i] = std::min(1.0, m_mPlus[i] + delta);
+            else
+                m_mMinus[i] = std::min(1.0, m_mMinus[i] + delta);
+        }
+    }
+    m_currMPlus = m_mPlus;
+    m_currMMinus = m_mMinus;
+    m_prevMPlus = m_mPlus;
+    m_prevMMinus = m_mMinus;
+    updateDisplay();
+}
+
 void Simulation::draw(Shader *shader) { m_shape.draw(shader); }
-void Simulation::toggleWire() { m_shape.cycleDisplayMode(); }
+void Simulation::toggleWire()
+{
+    m_shape.cycleDisplayMode(4);
+    // Refresh VBO with correct data for the new mode.
+    m_mesh.vertices = m_currVertices;
+    updateDisplay();
+}

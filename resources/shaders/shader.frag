@@ -3,32 +3,33 @@ out vec4 fragColor;
 
 in vec4 normal_worldSpace;
 in vec4 position_worldSpace;
-in float vEnergy;
+in vec2 vFaceData;  // x = energy or m_plus, y = m_minus
 
-uniform int displayMode = 0;  // 0=solid, 1=heatmap, 2=wireframe
+uniform int displayMode = 0;  // 0=solid, 1=energy, 2=moisture, 3=wireframe
 uniform float red = 1.0;
 uniform float green = 1.0;
 uniform float blue = 1.0;
 uniform float alpha = 1.0;
 
 // Turbo-ish colormap: blue → cyan → green → yellow → red
-vec3 heatmap(float t) {
+vec3 heatmapHot(float t) {
     t = clamp(t, 0.0, 1.0);
-    vec3 c;
-    if (t < 0.25) {
-        c = mix(vec3(0.0, 0.0, 0.5), vec3(0.0, 0.5, 1.0), t / 0.25);
-    } else if (t < 0.5) {
-        c = mix(vec3(0.0, 0.5, 1.0), vec3(0.0, 1.0, 0.2), (t - 0.25) / 0.25);
-    } else if (t < 0.75) {
-        c = mix(vec3(0.0, 1.0, 0.2), vec3(1.0, 1.0, 0.0), (t - 0.5) / 0.25);
-    } else {
-        c = mix(vec3(1.0, 1.0, 0.0), vec3(1.0, 0.0, 0.0), (t - 0.75) / 0.25);
-    }
-    return c;
+    if (t < 0.25) return mix(vec3(0.0, 0.0, 0.5), vec3(0.0, 0.5, 1.0), t / 0.25);
+    if (t < 0.5)  return mix(vec3(0.0, 0.5, 1.0), vec3(0.0, 1.0, 0.2), (t - 0.25) / 0.25);
+    if (t < 0.75) return mix(vec3(0.0, 1.0, 0.2), vec3(1.0, 1.0, 0.0), (t - 0.5) / 0.25);
+    return mix(vec3(1.0, 1.0, 0.0), vec3(1.0, 0.0, 0.0), (t - 0.75) / 0.25);
+}
+
+// Moisture colormap: sandy yellow (dry) → green → teal → deep blue (wet)
+vec3 heatmapCool(float t) {
+    t = clamp(t, 0.0, 1.0);
+    if (t < 0.33) return mix(vec3(0.9, 0.8, 0.4), vec3(0.3, 0.7, 0.3), t / 0.33);
+    if (t < 0.66) return mix(vec3(0.3, 0.7, 0.3), vec3(0.1, 0.5, 0.7), (t - 0.33) / 0.33);
+    return mix(vec3(0.1, 0.5, 0.7), vec3(0.05, 0.15, 0.5), (t - 0.66) / 0.34);
 }
 
 void main() {
-    if (displayMode == 2) {
+    if (displayMode == 3) {
         fragColor = vec4(0.1, 0.1, 0.1, 1.0);
         return;
     }
@@ -36,7 +37,6 @@ void main() {
     vec3 N = normalize(normal_worldSpace.xyz);
     if (!gl_FrontFacing) N = -N;
 
-    // Two-point lighting
     vec3 lightPos1 = vec3(3.0, 5.0, -4.0);
     vec3 lightColor1 = vec3(1.0, 0.85, 0.65);
     vec3 lightPos2 = vec3(-3.0, 2.0, 3.0);
@@ -50,10 +50,10 @@ void main() {
 
     vec3 baseColor;
     if (displayMode == 1) {
-        // Energy heatmap. Map energy through log scale for better contrast.
-        // vEnergy is raw energy density; use log(1+e) to compress range.
-        float e = log(1.0 + vEnergy) / 15.0;  // /15 controls the scale
-        baseColor = heatmap(e);
+        baseColor = heatmapHot(clamp(vFaceData.x, 0.0, 1.0));
+    } else if (displayMode == 2) {
+        float m = gl_FrontFacing ? vFaceData.x : vFaceData.y;
+        baseColor = heatmapCool(clamp(m, 0.0, 1.0));
     } else {
         baseColor = vec3(red, green, blue);
     }

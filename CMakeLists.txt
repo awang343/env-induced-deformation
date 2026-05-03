@@ -46,8 +46,11 @@ add_executable(${PROJECT_NAME}
     src/mainwindow.cpp
     src/simulation.cpp
     src/shell_mesh.cpp
-    src/shell_energy.cpp
-    src/demo.cpp
+    src/geometry.cpp
+    src/energy.cpp
+    src/implicit_euler.cpp
+    src/diffusion.cpp
+    src/rest_metric.cpp
     src/glwidget.cpp
     src/graphics/camera.cpp
     src/graphics/graphicsdebug.cpp
@@ -59,7 +62,12 @@ add_executable(${PROJECT_NAME}
     src/simulation.h
     src/shell_mesh.h
     src/shell_energy.h
-    src/demo.h
+    src/geometry.h
+    src/energy.h
+    src/implicit_euler.h
+    src/diffusion.h
+    src/display_mode.h
+    src/rest_metric.h
     src/glwidget.h
     src/graphics/camera.h
     src/graphics/graphicsdebug.h

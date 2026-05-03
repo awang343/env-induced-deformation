@@ -58,10 +58,14 @@ private:
     int m_lastY;
 
     bool m_capture;
+    bool m_paintMode = false;
+    bool m_painting = false;
+    int m_paintButton = 0;  // 0=left (m⁺), 1=right (m⁻)
     std::string mesh_path;
 
     int m_physicsRate = 64;  // run physics every Nth tick
     int m_tickCount = 0;
+    int m_interpTick = 0;   // ticks since last step completed
     int m_frameCount = 0;
 
 private slots:

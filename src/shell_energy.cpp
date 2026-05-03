@@ -521,6 +521,152 @@ void stepImplicitEuler(
 }
 
 // =============================================================================
+// Moisture/temperature diffusion (paper Section 4)
+// =============================================================================
+
+void diffuseMoisture(const ShellMesh &mesh,
+                     const ShellRestState &rest,
+                     const MaterialParams &mat,
+                     double dt, double diffusivity,
+                     std::vector<double> &mPlus,
+                     std::vector<double> &mMinus,
+                     const std::vector<double> &sPlus,
+                     const std::vector<double> &sMinus)
+{
+    const int nV = mesh.numVerts();
+    const int nF = mesh.numFaces();
+    const double h = mat.thickness;
+    const int dim = 2 * nV;  // DOFs: [m⁺_0..m⁺_{nV-1}, m⁻_0..m⁻_{nV-1}]
+
+    // Assemble 2D mass matrix M2D and cotangent stiffness K2D from rest metric.
+    // Then build the 2nV×2nV system with through-thickness coupling.
+    std::vector<Triplet<double>> trips;
+
+    for (int f = 0; f < nF; ++f) {
+        const auto &tri = mesh.faces[f];
+        double area = rest.restArea[f];
+        const Matrix2d &ab = rest.aBar[f];
+
+        // 2D consistent mass matrix entries for this face:
+        //   M2D(vi,vi) += area/6,  M2D(vi,vj) += area/12
+        double mDiag = area / 6.0;
+        double mOff  = area / 12.0;
+
+        // Cotangent Laplacian weights from rest metric ā.
+        // cot(angle at v0) = ā(0,1) / (2·restArea)
+        // cot(angle at v1) = (ā(0,0) - ā(0,1)) / (2·restArea)
+        // cot(angle at v2) = (ā(1,1) - ā(0,1)) / (2·restArea)
+        double cot0 = ab(0,1) / (2.0 * area);
+        double cot1 = (ab(0,0) - ab(0,1)) / (2.0 * area);
+        double cot2 = (ab(1,1) - ab(0,1)) / (2.0 * area);
+
+        // K2D contributions: K(vi,vj) += -cot(opposite)/2
+        // Edge v1-v2 (opposite v0): -cot0/2
+        // Edge v0-v2 (opposite v1): -cot1/2
+        // Edge v0-v1 (opposite v2): -cot2/2
+        double kEdge[3] = {-cot0 / 2.0, -cot1 / 2.0, -cot2 / 2.0};
+        // kEdge[0] = K(v1,v2), kEdge[1] = K(v0,v2), kEdge[2] = K(v0,v1)
+        int edgeVerts[3][2] = {{tri[1],tri[2]}, {tri[0],tri[2]}, {tri[0],tri[1]}};
+
+        // z-integration factors:
+        //   ∫(h/2+z)²/h² dz = h/3,  ∫(h/2+z)(h/2-z)/h² dz = h/6
+        // Through-thickness: ∂ψ⁺/∂z = φ/h, ∂ψ⁻/∂z = -φ/h
+        //   K_z(+,+) = 1/h·M2D,  K_z(+,-) = -1/h·M2D,  K_z(-,-) = 1/h·M2D
+
+        // For each pair of local vertices (a,b) in this face:
+        int localVerts[3] = {tri[0], tri[1], tri[2]};
+        for (int a = 0; a < 3; ++a) {
+            for (int b = 0; b < 3; ++b) {
+                int va = localVerts[a], vb = localVerts[b];
+                double m2d = (a == b) ? mDiag : mOff;
+
+                // Mass: M_G = [[h/3·M2D, h/6·M2D], [h/6·M2D, h/3·M2D]]
+                trips.emplace_back(va,      vb,      h/3.0 * m2d);  // ++
+                trips.emplace_back(va,      nV+vb,   h/6.0 * m2d);  // +-
+                trips.emplace_back(nV+va,   vb,      h/6.0 * m2d);  // -+
+                trips.emplace_back(nV+va,   nV+vb,   h/3.0 * m2d);  // --
+
+                // Through-thickness stiffness: K_z
+                double kz = m2d / h;
+                trips.emplace_back(va,      vb,      dt * diffusivity * kz);    // ++
+                trips.emplace_back(va,      nV+vb,   dt * diffusivity * (-kz)); // +-
+                trips.emplace_back(nV+va,   vb,      dt * diffusivity * (-kz)); // -+
+                trips.emplace_back(nV+va,   nV+vb,   dt * diffusivity * kz);    // --
+            }
+        }
+
+        // In-plane stiffness: K_ip = [[h/3·K2D, h/6·K2D], [h/6·K2D, h/3·K2D]]
+        for (int e = 0; e < 3; ++e) {
+            int va = edgeVerts[e][0], vb = edgeVerts[e][1];
+            double k = kEdge[e];
+
+            trips.emplace_back(va,    vb,    dt * diffusivity * h/3.0 * k);  // ++
+            trips.emplace_back(vb,    va,    dt * diffusivity * h/3.0 * k);
+            trips.emplace_back(va,    nV+vb, dt * diffusivity * h/6.0 * k);  // +-
+            trips.emplace_back(vb,    nV+va, dt * diffusivity * h/6.0 * k);
+            trips.emplace_back(nV+va, vb,    dt * diffusivity * h/6.0 * k);  // -+
+            trips.emplace_back(nV+vb, va,    dt * diffusivity * h/6.0 * k);
+            trips.emplace_back(nV+va, nV+vb, dt * diffusivity * h/3.0 * k);  // --
+            trips.emplace_back(nV+vb, nV+va, dt * diffusivity * h/3.0 * k);
+
+            // Diagonal entries (negative sum of off-diag)
+            trips.emplace_back(va,    va,    dt * diffusivity * h/3.0 * (-k));  // ++
+            trips.emplace_back(vb,    vb,    dt * diffusivity * h/3.0 * (-k));
+            trips.emplace_back(va,    nV+va, dt * diffusivity * h/6.0 * (-k));  // +-
+            trips.emplace_back(vb,    nV+vb, dt * diffusivity * h/6.0 * (-k));
+            trips.emplace_back(nV+va, va,    dt * diffusivity * h/6.0 * (-k));  // -+
+            trips.emplace_back(nV+vb, vb,    dt * diffusivity * h/6.0 * (-k));
+            trips.emplace_back(nV+va, nV+va, dt * diffusivity * h/3.0 * (-k));  // --
+            trips.emplace_back(nV+vb, nV+vb, dt * diffusivity * h/3.0 * (-k));
+        }
+    }
+
+    SparseMatrix<double> A(dim, dim);
+    A.setFromTriplets(trips.begin(), trips.end());
+
+    // RHS: M_G · (m_old + dt·s)
+    VectorXd m_old(dim), rhs(dim);
+    for (int i = 0; i < nV; ++i) {
+        m_old[i]    = mPlus[i]  + (sPlus.empty()  ? 0.0 : dt * sPlus[i]);
+        m_old[nV+i] = mMinus[i] + (sMinus.empty() ? 0.0 : dt * sMinus[i]);
+    }
+
+    // Extract mass part of A (M_G) for RHS. Since A = M_G + dt*D*K_G,
+    // we need M_G separately. Rebuild M_G from the mass triplets only.
+    // For simplicity, just multiply A by m_old — this gives
+    // (M_G + dt*D*K_G)·m_old, but we want M_G·m_old. So we need M_G.
+    // Rebuild M_G:
+    std::vector<Triplet<double>> mTrips;
+    for (int f = 0; f < nF; ++f) {
+        const auto &tri = mesh.faces[f];
+        double area = rest.restArea[f];
+        double mDiag = area / 6.0, mOff = area / 12.0;
+        int lv[3] = {tri[0], tri[1], tri[2]};
+        for (int a = 0; a < 3; ++a)
+            for (int b = 0; b < 3; ++b) {
+                double m2d = (a == b) ? mDiag : mOff;
+                mTrips.emplace_back(lv[a],    lv[b],    h/3.0 * m2d);
+                mTrips.emplace_back(lv[a],    nV+lv[b], h/6.0 * m2d);
+                mTrips.emplace_back(nV+lv[a], lv[b],    h/6.0 * m2d);
+                mTrips.emplace_back(nV+lv[a], nV+lv[b], h/3.0 * m2d);
+            }
+    }
+    SparseMatrix<double> MG(dim, dim);
+    MG.setFromTriplets(mTrips.begin(), mTrips.end());
+    rhs = MG * m_old;
+
+    // Solve A · m_new = rhs.
+    SparseSolver solver;
+    solver.compute(A);
+    VectorXd m_new = solver.solve(rhs);
+
+    for (int i = 0; i < nV; ++i) {
+        mPlus[i]  = m_new[i];
+        mMinus[i] = m_new[nV+i];
+    }
+}
+
+// =============================================================================
 // Lumped mass
 // =============================================================================
 

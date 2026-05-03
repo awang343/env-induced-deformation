@@ -55,9 +55,9 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // Energy VBO: one float per expanded vertex (3 per face), initialized to 0.
-    std::vector<float> zeroEnergy(triangles.size() * 3, 0.0f);
+    std::vector<float> zeroData(triangles.size() * 3 * 2, 0.0f);
     glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * zeroEnergy.size(), zeroEnergy.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * zeroData.size(), zeroData.data(), GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_surfaceIbo);
@@ -72,7 +72,7 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 0, reinterpret_cast<GLvoid *>(sizeof(double) * vertices.size() * 3));
     glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, static_cast<GLvoid *>(0));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, static_cast<GLvoid *>(0));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_surfaceIbo);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -118,9 +118,9 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     glBufferSubData(GL_ARRAY_BUFFER, sizeof(double) * verts.size() * 3, sizeof(double) * verts.size() * 3, static_cast<const void *>(normals.data()));
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    std::vector<float> zeroEnergy(faces.size() * 3, 0.0f);
+    std::vector<float> zeroData2(faces.size() * 3 * 2, 0.0f);
     glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * zeroEnergy.size(), zeroEnergy.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * zeroData2.size(), zeroData2.data(), GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_surfaceIbo);
@@ -135,7 +135,7 @@ void Shape::init(const std::vector<Eigen::Vector3d> &vertices, const std::vector
     glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 0, reinterpret_cast<GLvoid *>(sizeof(double) * verts.size() * 3));
     glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, static_cast<GLvoid *>(0));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, static_cast<GLvoid *>(0));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_surfaceIbo);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -181,16 +181,19 @@ void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Shape::setFaceEnergies(const std::vector<double> &energies)
+void Shape::setFaceData(const std::vector<double> &ch0,
+                        const std::vector<double> &ch1)
 {
-    // Expand per-face energy to per-expanded-vertex (3 per face).
+    // Expand per-face (ch0, ch1) to per-expanded-vertex vec2 (3 per face).
     std::vector<float> expanded;
-    expanded.reserve(m_faces.size() * 3);
+    expanded.reserve(m_faces.size() * 3 * 2);
     for (size_t f = 0; f < m_faces.size(); ++f) {
-        float e = (f < energies.size()) ? static_cast<float>(energies[f]) : 0.0f;
-        expanded.push_back(e);
-        expanded.push_back(e);
-        expanded.push_back(e);
+        float a = (f < ch0.size()) ? static_cast<float>(ch0[f]) : 0.0f;
+        float b = (f < ch1.size()) ? static_cast<float>(ch1[f]) : 0.0f;
+        for (int v = 0; v < 3; ++v) {
+            expanded.push_back(a);
+            expanded.push_back(b);
+        }
     }
     glBindBuffer(GL_ARRAY_BUFFER, m_energyVbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * expanded.size(), expanded.data());
@@ -202,11 +205,17 @@ void Shape::setModelMatrix(const Eigen::Affine3f &model)
     m_modelMatrix = model.matrix();
 }
 
-void Shape::cycleDisplayMode()
+void Shape::cycleDisplayMode(int numModes)
 {
-    m_displayMode = (m_displayMode + 1) % 3;
-    const char *names[] = {"Solid", "Energy heatmap", "Wireframe"};
-    std::cout << "Display: " << names[m_displayMode] << std::endl;
+    m_displayMode = (m_displayMode + 1) % numModes;
+    std::cout << "Display: " << displayModeName(m_displayMode) << std::endl;
+}
+
+const char* Shape::displayModeName(int mode)
+{
+    static const char *names[] = {"Solid", "Energy", "Moisture", "Wireframe"};
+    if (mode >= 0 && mode < 4) return names[mode];
+    return "Unknown";
 }
 
 void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3d> &normals)
@@ -238,7 +247,7 @@ void Shape::draw(Shader *shader)
     shader->setUniform("blue",  m_blue);
     shader->setUniform("alpha", m_alpha);
     glBindVertexArray(m_surfaceVao);
-    if (m_displayMode == 2) {
+    if (m_displayMode == 3) {  // wireframe
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, m_numSurfaceVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

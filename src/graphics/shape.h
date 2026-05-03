@@ -21,19 +21,21 @@ public:
     void setVertices(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3d> &normals);
     void setVertices(const std::vector<Eigen::Vector3d> &vertices);
 
-    // Per-face energy values for heatmap visualization.
-    // One value per face — gets expanded to 3 identical values per triangle vertex.
-    void setFaceEnergies(const std::vector<double> &energies);
+    // Per-face data for heatmap visualization.
+    // Two values per face (e.g., energy+0, or m_plus+m_minus).
+    void setFaceData(const std::vector<double> &channel0,
+                     const std::vector<double> &channel1);
 
     void setModelMatrix(const Eigen::Affine3f &model);
 
-    // Cycles: solid → heatmap → wireframe → solid
-    void cycleDisplayMode();
+    // Cycles display modes. numModes controls how many are available.
+    void cycleDisplayMode(int numModes = 3);
 
     void draw(Shader *shader);
 
-    // 0 = solid color, 1 = energy heatmap, 2 = wireframe
+    // 0 = solid, 1 = energy heatmap, 2 = moisture heatmap, 3 = wireframe
     int displayMode() const { return m_displayMode; }
+    static const char* displayModeName(int mode);
 
 private:
     GLuint m_surfaceVao;
