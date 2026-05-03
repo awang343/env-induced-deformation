@@ -65,6 +65,7 @@ private:
 
     int m_physicsRate = 64;  // run physics every Nth tick
     int m_tickCount = 0;
+    int m_interpTick = 0;   // ticks since last step completed
     int m_frameCount = 0;
 
 private slots:

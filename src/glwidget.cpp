@@ -311,11 +311,15 @@ void GLWidget::tick()
         m_sim.update(deltaSeconds);
     }
     // Always interpolate — smoothly transitions from prev to curr state.
-    // Right after physics: alpha ≈ 0 (showing start of transition).
-    // Just before next physics: alpha ≈ 1 (showing end of transition).
+    // Reset the interpolation cycle only when a new step is ready.
     if (!m_sim.isPaused()) {
-        float alpha = static_cast<float>(m_tickCount) / std::max(1, m_physicsRate);
+        if (m_sim.stepReady()) {
+            m_sim.clearStepReady();
+            m_interpTick = 0;
+        }
+        float alpha = std::min(1.0f, static_cast<float>(m_interpTick) / std::max(1, m_physicsRate));
         m_sim.interpolateDisplay(alpha);
+        m_interpTick++;
     }
 
     // Move camera

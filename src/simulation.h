@@ -26,6 +26,8 @@ class Simulation
     bool isPaused() const { return m_paused; }
     int displayMode() const { return m_shape.displayMode(); }
     int stepCount() const { return m_stepCount; }
+    bool stepReady() const { return m_stepReady; }
+    void clearStepReady() { m_stepReady = false; }
     void singleStep();
     // Interpolate display between previous and current physics state.
     // alpha: 0 = previous, 1 = current. Call from render loop.
@@ -87,6 +89,7 @@ class Simulation
     std::vector<double> m_currMPlus, m_currMMinus;
 
     int m_stepCount = 0;
+    bool m_stepReady = false;  // true when collectPhysics delivers new results
     bool m_paused = true;
     bool m_parallel = true;
     std::string m_configPath;

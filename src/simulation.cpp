@@ -187,6 +187,7 @@ void Simulation::collectPhysics()
     m_velocities = m_physicsVelocities;
     m_interpAlpha = 0.0f;
     m_hasPhysicsStep = true;
+    m_stepReady = true;
 }
 
 void Simulation::waitForPhysics()
@@ -364,7 +365,7 @@ void Simulation::singleStep()
 
 void Simulation::paintMoisture(const Eigen::Vector3f &rayOrigin,
                                const Eigen::Vector3f &rayDir,
-                               int button, float radius, float strength)
+                               int /*button*/, float radius, float strength)
 {
     // Brute-force ray-triangle intersection (Möller–Trumbore).
     float bestT = std::numeric_limits<float>::max();
@@ -401,6 +402,13 @@ void Simulation::paintMoisture(const Eigen::Vector3f &rayOrigin,
 
     if (hitFace < 0) return;
 
+    // Determine which side was clicked: front face → m⁺, back face → m⁻.
+    const auto &tri = m_mesh.faces[hitFace];
+    Eigen::Vector3f faceNormal = (m_mesh.vertices[tri[1]] - m_mesh.vertices[tri[0]])
+                                  .cross(m_mesh.vertices[tri[2]] - m_mesh.vertices[tri[0]])
+                                  .cast<float>();
+    bool frontFace = rayDir.dot(faceNormal) < 0;
+
     // Paint moisture on nearby vertices within radius.
     Eigen::Vector3d hp = hitPoint.cast<double>();
     for (int i = 0; i < m_mesh.numVerts(); ++i) {
@@ -408,7 +416,7 @@ void Simulation::paintMoisture(const Eigen::Vector3f &rayOrigin,
         if (dist < radius) {
             double falloff = 1.0 - dist / radius;
             double delta = strength * falloff;
-            if (button == 0)
+            if (frontFace)
                 m_mPlus[i] = std::min(1.0, m_mPlus[i] + delta);
             else
                 m_mMinus[i] = std::min(1.0, m_mMinus[i] + delta);
