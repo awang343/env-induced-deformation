@@ -93,7 +93,11 @@ void stepImplicitEuler(
             dx = solver.solve(-g);
             if (solver.info() == Eigen::Success) { solved = true; break; }
         }
-        if (!solved) break;
+        if (!solved) {
+            std::cerr << "[newton] Cholesky failed at iter " << iter
+                      << " |g|=" << g.norm() << std::endl;
+            break;
+        }
 
         // Backtrack for inversion + energy decrease.
         auto elasticEnergy = [&]() -> double {
@@ -118,7 +122,11 @@ void stepImplicitEuler(
             if (!inverted && elasticEnergy() < E0) { accepted = true; break; }
             alpha_ls *= 0.5;
         }
-        if (!accepted) mesh.vertices = posSave;
+        if (!accepted) {
+            std::cerr << "[newton] line search failed at iter " << iter
+                      << " |g|=" << g.norm() << " E=" << E0 << std::endl;
+            mesh.vertices = posSave;
+        }
     }
 
     for (int i=0; i<n; ++i)

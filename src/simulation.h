@@ -7,6 +7,7 @@
 #include "rest_metric.h"
 #include "display_mode.h"
 #include "graphics/shape.h"
+#include <chrono>
 #include <future>
 #include <string>
 
@@ -26,6 +27,7 @@ class Simulation
     bool isPaused() const { return m_paused; }
     int displayMode() const { return m_shape.displayMode(); }
     int stepCount() const { return m_stepCount; }
+    double avgStepMs() const { return m_avgStepMs; }
     bool stepReady() const { return m_stepReady; }
     void clearStepReady() { m_stepReady = false; }
     void singleStep();
@@ -89,6 +91,8 @@ class Simulation
     std::vector<double> m_currMPlus, m_currMMinus;
 
     int m_stepCount = 0;
+    double m_avgStepMs = 0.0;
+    std::chrono::steady_clock::time_point m_launchTime;
     bool m_stepReady = false;  // true when collectPhysics delivers new results
     bool m_paused = true;
     bool m_parallel = true;
@@ -99,6 +103,9 @@ class Simulation
     bool m_physicsRunning = false;
     ShellMesh m_physicsMesh;  // physics works on its own copy
     std::vector<Eigen::Vector3d> m_physicsVelocities;
+    std::vector<double> m_physicsMPlus, m_physicsMMinus;
+    std::vector<double> m_launchMPlus, m_launchMMinus;  // snapshot at launch for paint merging
+    ShellRestState m_physicsRest;  // rest state for background thread
 
     void waitForPhysics();    // block until in-flight physics finishes
     void launchPhysics();     // start background physics step

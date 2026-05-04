@@ -143,10 +143,34 @@ void Simulation::launchPhysics()
     m_physicsMesh.vertexFaceOffsets = m_mesh.vertexFaceOffsets;
     m_physicsMesh.vertexFaceList = m_mesh.vertexFaceList;
     m_physicsVelocities = m_velocities;
+    m_physicsMPlus = m_mPlus;
+    m_physicsMMinus = m_mMinus;
+    m_launchMPlus = m_mPlus;
+    m_launchMMinus = m_mMinus;
+    m_physicsRest = m_rest;
 
     m_physicsRunning = true;
+    m_launchTime = std::chrono::steady_clock::now();
     m_physicsFuture = std::async(std::launch::async, [this]() {
-        stepImplicitEuler(m_physicsMesh, m_rest, m_mat,
+        // Diffuse moisture.
+        if (m_diffusivity > 0.0)
+            diffuseMoisture(m_physicsMesh, m_physicsRest, m_mat, m_dt,
+                            m_diffusivity, m_physicsMPlus, m_physicsMMinus);
+
+        // Update rest forms from moisture.
+        if (m_restMetric == "swelling_linear")
+            updateRestFormsLinear(m_physicsMesh, m_physicsRest, m_a0, m_b0,
+                                 m_physicsMPlus, m_physicsMMinus, m_mat.thickness, m_swellMu);
+        else if (m_restMetric == "swelling_piecewise")
+            updateRestFormsPiecewise(m_physicsMesh, m_physicsRest, m_a0, m_b0,
+                                    m_physicsMPlus, m_physicsMMinus, m_mat.thickness, m_swellMu);
+        else if (m_restMetric == "swelling_machine")
+            updateRestFormsMachine(m_physicsMesh, m_physicsRest, m_a0, m_b0,
+                                  m_physicsMPlus, m_physicsMMinus, m_machineDir,
+                                  m_mat.thickness, m_swellMu, m_swellMuPerp);
+
+        // Solve mechanics with updated rest forms.
+        stepImplicitEuler(m_physicsMesh, m_physicsRest, m_mat,
                           m_masses, m_physicsVelocities, m_dt);
     });
 }
@@ -157,33 +181,28 @@ void Simulation::collectPhysics()
     m_physicsFuture.get();
     m_physicsRunning = false;
     m_stepCount++;
+    double ms = std::chrono::duration<double, std::milli>(
+        std::chrono::steady_clock::now() - m_launchTime).count();
+    m_avgStepMs = (m_stepCount == 1) ? ms : 0.9 * m_avgStepMs + 0.1 * ms;
 
-    // Diffuse moisture in sync with vertex results.
-    // Diffuse moisture if active.
-    if (m_diffusivity > 0.0)
-        diffuseMoisture(m_mesh, m_rest, m_mat, m_dt, m_diffusivity,
-                        m_mPlus, m_mMinus);
-
-    // Update rest forms from moisture.
-    if (m_restMetric == "swelling_linear")
-        updateRestFormsLinear(m_mesh, m_rest, m_a0, m_b0,
-                             m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
-    else if (m_restMetric == "swelling_piecewise")
-        updateRestFormsPiecewise(m_mesh, m_rest, m_a0, m_b0,
-                                m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
-    else if (m_restMetric == "swelling_machine")
-        updateRestFormsMachine(m_mesh, m_rest, m_a0, m_b0,
-                              m_mPlus, m_mMinus, m_machineDir,
-                              m_mat.thickness, m_swellMu, m_swellMuPerp);
-
+    // Copy all results from background thread.
     m_prevVertices = m_currVertices;
     m_prevVelocities = m_currVelocities;
     m_prevMPlus = m_currMPlus;
     m_prevMMinus = m_currMMinus;
     m_currVertices = m_physicsMesh.vertices;
     m_currVelocities = m_physicsVelocities;
+    // Merge any moisture painted during this step on top of physics result.
+    const int nV = m_mesh.numVerts();
+    for (int i = 0; i < nV; ++i) {
+        double paintDeltaP = m_mPlus[i] - m_launchMPlus[i];
+        double paintDeltaM = m_mMinus[i] - m_launchMMinus[i];
+        m_mPlus[i]  = std::clamp(m_physicsMPlus[i] + paintDeltaP, 0.0, 1.0);
+        m_mMinus[i] = std::clamp(m_physicsMMinus[i] + paintDeltaM, 0.0, 1.0);
+    }
     m_currMPlus = m_mPlus;
     m_currMMinus = m_mMinus;
+    m_rest = m_physicsRest;
     m_velocities = m_physicsVelocities;
     m_interpAlpha = 0.0f;
     m_hasPhysicsStep = true;
@@ -297,6 +316,24 @@ void Simulation::updateDisplay()
 void Simulation::togglePause()
 {
     m_paused = !m_paused;
+    if (!m_paused) {
+        // Update rest forms from current moisture before rescaling.
+        if (m_restMetric == "swelling_linear")
+            updateRestFormsLinear(m_mesh, m_rest, m_a0, m_b0,
+                                 m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
+        else if (m_restMetric == "swelling_piecewise")
+            updateRestFormsPiecewise(m_mesh, m_rest, m_a0, m_b0,
+                                    m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
+        else if (m_restMetric == "swelling_machine")
+            updateRestFormsMachine(m_mesh, m_rest, m_a0, m_b0,
+                                  m_mPlus, m_mMinus, m_machineDir,
+                                  m_mat.thickness, m_swellMu, m_swellMuPerp);
+        updateDisplay();
+        // Rescale energy display to current max.
+        m_maxEnergy = 0.0;
+        for (double e : m_faceEnergies)
+            m_maxEnergy = std::max(m_maxEnergy, e);
+    }
     std::cout << (m_paused ? "Paused" : "Running") << std::endl;
 }
 
