@@ -124,11 +124,12 @@ void GLWidget::paintGL()
     painter.setFont(QFont("Monospace", 14));
     QString status = m_sim.isPaused() ? "Paused" : "Running";
     if (m_paintMode) status += " | Paint";
-    painter.drawText(10, 24, QString("Step %1  |  %2  |  Rate %3  |  %4 ms  |  %5")
+    double stepSec = m_sim.avgStepMs() / 1000.0;
+    painter.drawText(10, 24, QString("Step %1  |  %2  |  %3 ticks/step  |  %4 s/step  |  %5")
                      .arg(m_sim.stepCount())
                      .arg(Shape::displayModeName(m_sim.displayMode()))
                      .arg(m_physicsRate)
-                     .arg(m_sim.avgStepMs(), 0, 'f', 0)
+                     .arg(stepSec, 0, 'f', 2)
                      .arg(status));
     painter.end();
 }

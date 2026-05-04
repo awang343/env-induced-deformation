@@ -181,9 +181,8 @@ void Simulation::collectPhysics()
     m_physicsFuture.get();
     m_physicsRunning = false;
     m_stepCount++;
-    double ms = std::chrono::duration<double, std::milli>(
+    m_avgStepMs = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - m_launchTime).count();
-    m_avgStepMs = (m_stepCount == 1) ? ms : 0.9 * m_avgStepMs + 0.1 * ms;
 
     // Copy all results from background thread.
     m_prevVertices = m_currVertices;
@@ -203,6 +202,20 @@ void Simulation::collectPhysics()
     m_currMPlus = m_mPlus;
     m_currMMinus = m_mMinus;
     m_rest = m_physicsRest;
+
+    // Re-apply rest form update from current moisture (which may include
+    // paint applied while this step was in flight).
+    if (m_restMetric == "swelling_linear")
+        updateRestFormsLinear(m_mesh, m_rest, m_a0, m_b0,
+                             m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
+    else if (m_restMetric == "swelling_piecewise")
+        updateRestFormsPiecewise(m_mesh, m_rest, m_a0, m_b0,
+                                m_mPlus, m_mMinus, m_mat.thickness, m_swellMu);
+    else if (m_restMetric == "swelling_machine")
+        updateRestFormsMachine(m_mesh, m_rest, m_a0, m_b0,
+                              m_mPlus, m_mMinus, m_machineDir,
+                              m_mat.thickness, m_swellMu, m_swellMuPerp);
+
     m_velocities = m_physicsVelocities;
     m_interpAlpha = 0.0f;
     m_hasPhysicsStep = true;
