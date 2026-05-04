@@ -26,11 +26,56 @@ if(NOT APPLE)
     find_package(OpenMP REQUIRED)
 endif()
 
-# Optional: CHOLMOD for faster sparse Cholesky (paper uses this).
-find_path(CHOLMOD_INCLUDE_DIR cholmod.h PATHS /usr/include/suitesparse /usr/local/include)
-find_library(CHOLMOD_LIBRARY cholmod)
+# Optional: CHOLMOD for faster sparse Cholesky.
+# CHOLMOD is part of SuiteSparse.
+
+if (APPLE)
+    # Homebrew-friendly CHOLMOD search for macOS.
+
+    execute_process(
+        COMMAND brew --prefix suite-sparse
+        OUTPUT_VARIABLE HOMEBREW_SUITESPARSE_PREFIX
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+
+    set(SUITESPARSE_SEARCH_DIRS
+        ${HOMEBREW_SUITESPARSE_PREFIX}
+        /opt/homebrew/opt/suite-sparse
+        /usr/local/opt/suite-sparse
+        /opt/homebrew
+        /usr/local
+    )
+
+    find_path(CHOLMOD_INCLUDE_DIR
+        NAMES cholmod.h
+        PATHS ${SUITESPARSE_SEARCH_DIRS}
+        PATH_SUFFIXES include/suitesparse include
+    )
+
+    find_library(CHOLMOD_LIBRARY
+        NAMES cholmod
+        PATHS ${SUITESPARSE_SEARCH_DIRS}
+        PATH_SUFFIXES lib
+    )
+
+else()
+    # Original behavior for Linux / Windows.
+
+    find_path(CHOLMOD_INCLUDE_DIR
+        NAMES cholmod.h
+        PATHS /usr/include/suitesparse /usr/local/include /usr/local/include/suitesparse
+    )
+
+    find_library(CHOLMOD_LIBRARY
+        NAMES cholmod
+    )
+
+endif()
+
 if (CHOLMOD_INCLUDE_DIR AND CHOLMOD_LIBRARY)
-    message(STATUS "Found CHOLMOD: ${CHOLMOD_LIBRARY}")
+    message(STATUS "Found CHOLMOD include: ${CHOLMOD_INCLUDE_DIR}")
+    message(STATUS "Found CHOLMOD library: ${CHOLMOD_LIBRARY}")
     add_compile_definitions(HAVE_CHOLMOD)
 else()
     message(STATUS "CHOLMOD not found, using Eigen's SimplicialLDLT (slower)")
