@@ -83,6 +83,7 @@ endif()
 
 # Allows you to include files from within those directories, without prefixing their filepaths
 include_directories(src)
+include_directories(src/simplify)
 include_directories(libs)
 
 # Specifies .cpp and .h files to be passed to the compiler
@@ -96,6 +97,16 @@ add_executable(${PROJECT_NAME}
     src/implicit_euler.cpp
     src/diffusion.cpp
     src/rest_metric.cpp
+    src/embedding.cpp
+    src/simplify/mesh.cpp
+    src/simplify/simplify_mesh.cpp
+    src/simplify/halfedge/halfedge.cpp
+    src/simplify/halfedge/operations.cpp
+    src/simplify/halfedge/validation.cpp
+    src/simplify/halfedge/quadric.cpp
+    src/simplify/halfedge/helpers.cpp
+    src/simplify/halfedge/loop.cpp
+    src/simplify/halfedge/remesh.cpp
     src/glwidget.cpp
     src/graphics/camera.cpp
     src/graphics/graphicsdebug.cpp
@@ -113,6 +124,10 @@ add_executable(${PROJECT_NAME}
     src/diffusion.h
     src/display_mode.h
     src/rest_metric.h
+    src/embedding.h
+    src/simplify/simplify_mesh.h
+    src/simplify/mesh.h
+    src/simplify/halfedge/halfedge.h
     src/glwidget.h
     src/graphics/camera.h
     src/graphics/graphicsdebug.h
