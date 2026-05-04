@@ -6,7 +6,7 @@
 #include <QPainter>
 #include <iostream>
 
-#define SPEED 1.5
+#define SPEED 5.0
 #define ROTATE_SPEED 0.0025
 
 using namespace std;
@@ -122,8 +122,13 @@ void GLWidget::paintGL()
     QPainter painter(this);
     painter.setPen(Qt::black);
     painter.setFont(QFont("Monospace", 14));
-    painter.drawText(10, 24, QString("Step %1  |  %2").arg(m_sim.stepCount())
-                     .arg(Shape::displayModeName(m_sim.displayMode())));
+    QString status = m_paintMode ? "Paint" : (m_sim.isPaused() ? "Paused" : "Running");
+    painter.drawText(10, 24, QString("Step %1  |  %2  |  Rate %3  |  %4 ms  |  %5")
+                     .arg(m_sim.stepCount())
+                     .arg(Shape::displayModeName(m_sim.displayMode()))
+                     .arg(m_physicsRate)
+                     .arg(m_sim.avgStepMs(), 0, 'f', 0)
+                     .arg(status));
     painter.end();
 }
 
@@ -145,6 +150,9 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
     if (m_paintMode) {
         m_painting = true;
         m_paintButton = (event->button() == Qt::RightButton) ? 1 : 0;
+        m_wasRunningBeforePaint = !m_sim.isPaused();
+        if (m_wasRunningBeforePaint)
+            m_sim.togglePause();
         // Paint at click position.
         float x = event->position().x(), y = event->position().y();
         float ndcX = 2.0f * x / width() - 1.0f;
@@ -199,6 +207,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+    if (m_painting && m_wasRunningBeforePaint)
+        m_sim.togglePause();
     m_painting = false;
     m_capture = false;
 }
@@ -251,13 +261,21 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
         m_sim.toggleParallel();
         break;
     case Qt::Key_BracketRight:
-        m_physicsRate = std::max(1, m_physicsRate / 2);
-        std::cout << "Physics: every " << m_physicsRate << " frame(s)" << std::endl;
-        break;
     case Qt::Key_BracketLeft:
-        m_physicsRate = std::min(128, m_physicsRate * 2);
+    {
+        static const int rates[] = {1,2,4,8,15,30,60,120,240,360};
+        static const int nRates = sizeof(rates)/sizeof(rates[0]);
+        int idx = 0;
+        for (int i = 0; i < nRates; ++i)
+            if (rates[i] == m_physicsRate) { idx = i; break; }
+        if (event->key() == Qt::Key_BracketRight)
+            idx = std::max(0, idx - 1);
+        else
+            idx = std::min(nRates - 1, idx + 1);
+        m_physicsRate = rates[idx];
         std::cout << "Physics: every " << m_physicsRate << " frame(s)" << std::endl;
         break;
+    }
     case Qt::Key_M:
         m_paintMode = !m_paintMode;
         std::cout << "Paint mode: " << (m_paintMode ? "ON" : "OFF") << std::endl;
@@ -310,8 +328,6 @@ void GLWidget::tick()
         m_tickCount = 0;
         m_sim.update(deltaSeconds);
     }
-    // Always interpolate — smoothly transitions from prev to curr state.
-    // Reset the interpolation cycle only when a new step is ready.
     if (!m_sim.isPaused()) {
         if (m_sim.stepReady()) {
             m_sim.clearStepReady();
