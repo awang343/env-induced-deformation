@@ -42,3 +42,6 @@ configs/
 
 # debug information files
 *.dwo
+
+# Visual Studio Code
+.vscode/
