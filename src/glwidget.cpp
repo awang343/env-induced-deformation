@@ -122,7 +122,8 @@ void GLWidget::paintGL()
     QPainter painter(this);
     painter.setPen(Qt::black);
     painter.setFont(QFont("Monospace", 14));
-    QString status = m_paintMode ? "Paint" : (m_sim.isPaused() ? "Paused" : "Running");
+    QString status = m_sim.isPaused() ? "Paused" : "Running";
+    if (m_paintMode) status += " | Paint";
     painter.drawText(10, 24, QString("Step %1  |  %2  |  Rate %3  |  %4 ms  |  %5")
                      .arg(m_sim.stepCount())
                      .arg(Shape::displayModeName(m_sim.displayMode()))
