@@ -1,6 +1,5 @@
 #include "simulation.h"
 #include "geometry.h"
-#include "simplify/simplify_mesh.h"
 
 #include <QSettings>
 #include <omp.h>
@@ -32,28 +31,10 @@ void Simulation::init(const std::string &config_path)
     m_restMetric     = cfg.value("rest_metric", "").toString().toStdString();
     m_moistureInit   = cfg.value("moisture",    "none").toString().toStdString();
     m_diffusivity    = cfg.value("diffusivity", 0.0).toDouble();
-    m_simplification = cfg.value("simplification", 0.0).toDouble();
     cfg.endGroup();
 
-    // Load display (high-res) mesh.
-    m_displayMesh.load(meshPath);
-    m_displayMesh.buildTopology();
-    m_displayShape.init(m_displayMesh.vertices, m_displayMesh.faces);
-    m_displayVertices = m_displayMesh.vertices;
-
-    // Create physics mesh (simplified or same as display).
-    if (m_simplification > 0.0) {
-        std::vector<Vector3d> simVerts;
-        std::vector<Vector3i> simFaces;
-        simplifyMesh(m_displayMesh.vertices, m_displayMesh.faces,
-                     m_simplification, simVerts, simFaces);
-        m_mesh.vertices = simVerts;
-        m_mesh.faces = simFaces;
-        m_mesh.buildTopology();
-        computeEmbedding(m_displayMesh, m_mesh, m_displayEmbed);
-    } else {
-        m_mesh = m_displayMesh;
-    }
+    m_mesh.load(meshPath);
+    m_mesh.buildTopology();
     m_shape.init(m_mesh.vertices, m_mesh.faces);
 
     const int nF = m_mesh.numFaces();
@@ -297,33 +278,8 @@ void Simulation::interpolateDisplay(float alpha)
     updateDisplay();
 }
 
-void Simulation::transferDeformation()
-{
-    if (m_simplification <= 0.0) return;
-    const int nD = m_displayMesh.numVerts();
-    m_displayVertices.resize(nD);
-    for (int i = 0; i < nD; ++i) {
-        const auto &emb = m_displayEmbed[i];
-        const auto &tri = m_mesh.faces[emb.face];
-        m_displayVertices[i] = emb.bary[0] * m_mesh.vertices[tri[0]]
-                             + emb.bary[1] * m_mesh.vertices[tri[1]]
-                             + emb.bary[2] * m_mesh.vertices[tri[2]];
-    }
-}
-
 void Simulation::updateDisplay()
 {
-    int mode = m_shape.displayMode();
-
-    // Solid mode with simplification: show high-res display mesh.
-    if (mode == 0 && m_simplification > 0.0) {
-        transferDeformation();
-        m_displayShape.setModelMatrix(Affine3f::Identity());
-        m_displayShape.setVertices(m_displayVertices);
-    }
-
-    // Always update physics mesh shape (for energy/moisture/wireframe modes,
-    // and to keep face energies current for the overlay).
     m_shape.setModelMatrix(Affine3f::Identity());
     m_shape.setVertices(m_mesh.vertices);
 
@@ -353,6 +309,7 @@ void Simulation::updateDisplay()
     }
 
     std::vector<double> ch1(nF, 0.0);
+    int mode = m_shape.displayMode();
     if (mode == 2) {
         for (int f = 0; f < nF; ++f) {
             const auto &tri = m_mesh.faces[f];
@@ -420,7 +377,6 @@ void Simulation::reset()
     }
     m_prevMPlus = m_mPlus;  m_currMPlus = m_mPlus;
     m_prevMMinus = m_mMinus; m_currMMinus = m_mMinus;
-    m_displayVertices = m_displayMesh.vertices;
     updateDisplay();
 }
 
@@ -456,22 +412,16 @@ void Simulation::paintMoisture(const Eigen::Vector3f &rayOrigin,
                                const Eigen::Vector3f &rayDir,
                                int /*button*/, float radius, float strength)
 {
-    // Raycast against whichever mesh the user sees.
-    int mode = m_shape.displayMode();
-    bool useDisplay = (mode == 0 && m_simplification > 0.0);
-    const auto &rayVerts = useDisplay ? m_displayVertices : m_mesh.vertices;
-    const auto &rayFaces = useDisplay ? m_displayMesh.faces : m_mesh.faces;
-    int numRayFaces = (int)rayFaces.size();
-
+    // Brute-force ray-triangle intersection (Möller–Trumbore).
     float bestT = std::numeric_limits<float>::max();
     int hitFace = -1;
     Eigen::Vector3f hitPoint;
 
-    for (int f = 0; f < numRayFaces; ++f) {
-        const auto &tri = rayFaces[f];
-        Eigen::Vector3f v0 = rayVerts[tri[0]].cast<float>();
-        Eigen::Vector3f v1 = rayVerts[tri[1]].cast<float>();
-        Eigen::Vector3f v2 = rayVerts[tri[2]].cast<float>();
+    for (int f = 0; f < m_mesh.numFaces(); ++f) {
+        const auto &tri = m_mesh.faces[f];
+        Eigen::Vector3f v0 = m_mesh.vertices[tri[0]].cast<float>();
+        Eigen::Vector3f v1 = m_mesh.vertices[tri[1]].cast<float>();
+        Eigen::Vector3f v2 = m_mesh.vertices[tri[2]].cast<float>();
 
         Eigen::Vector3f e1 = v1 - v0, e2 = v2 - v0;
         Eigen::Vector3f h = rayDir.cross(e2);
@@ -498,9 +448,9 @@ void Simulation::paintMoisture(const Eigen::Vector3f &rayOrigin,
     if (hitFace < 0) return;
 
     // Determine which side was clicked: front face → m⁺, back face → m⁻.
-    const auto &hitTri = rayFaces[hitFace];
-    Eigen::Vector3f faceNormal = (rayVerts[hitTri[1]] - rayVerts[hitTri[0]])
-                                  .cross(rayVerts[hitTri[2]] - rayVerts[hitTri[0]])
+    const auto &hitTri = m_mesh.faces[hitFace];
+    Eigen::Vector3f faceNormal = (m_mesh.vertices[hitTri[1]] - m_mesh.vertices[hitTri[0]])
+                                  .cross(m_mesh.vertices[hitTri[2]] - m_mesh.vertices[hitTri[0]])
                                   .cast<float>();
     bool frontFace = rayDir.dot(faceNormal) < 0;
 
@@ -524,18 +474,10 @@ void Simulation::paintMoisture(const Eigen::Vector3f &rayOrigin,
     updateDisplay();
 }
 
-void Simulation::draw(Shader *shader)
-{
-    int mode = m_shape.displayMode();
-    if (mode == 0 && m_simplification > 0.0)
-        m_displayShape.draw(shader);
-    else
-        m_shape.draw(shader);
-}
+void Simulation::draw(Shader *shader) { m_shape.draw(shader); }
 void Simulation::toggleWire()
 {
     m_shape.cycleDisplayMode(4);
-    m_displayShape.cycleDisplayMode(4);
     // Refresh VBO with correct data for the new mode.
     m_mesh.vertices = m_currVertices;
     updateDisplay();

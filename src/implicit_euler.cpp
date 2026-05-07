@@ -58,6 +58,8 @@ void stepImplicitEuler(
         restNormals[f] = (pos0[t[1]]-pos0[t[0]]).cross(pos0[t[2]]-pos0[t[0]]);
     }
 
+    double minReg = 0.0;  // increases on line search failure
+
     for (int iter = 0; iter < maxIters; ++iter) {
         VectorXd eGrad;
         std::vector<Triplet<double>> hTrip;
@@ -80,7 +82,8 @@ void stepImplicitEuler(
 
         VectorXd dx;
         bool solved = false;
-        for (double reg = 0.0; reg <= 16.0; reg = (reg == 0.0) ? 1.0 : reg * 2.0) {
+        double startReg = minReg;
+        for (double reg = startReg; reg <= 1024.0; reg = (reg < 1.0) ? 1.0 : reg * 2.0) {
             std::copy(elasticVals.begin(), elasticVals.end(), H.valuePtr());
             for (int i = 0; i < n; ++i) {
                 double diag = (1.0 + reg) * masses[i] * inv_dt2;
@@ -123,9 +126,15 @@ void stepImplicitEuler(
             alpha_ls *= 0.5;
         }
         if (!accepted) {
+            // Increase regularization for next iteration.
+            minReg = (minReg < 1.0) ? 1.0 : minReg * 2.0;
             std::cerr << "[newton] line search failed at iter " << iter
-                      << " |g|=" << g.norm() << " E=" << E0 << std::endl;
+                      << " |g|=" << g.norm() << " E=" << E0
+                      << " reg→" << minReg << std::endl;
             mesh.vertices = posSave;
+        } else {
+            // Successful step — relax regularization.
+            minReg = std::max(0.0, minReg * 0.5);
         }
     }
 

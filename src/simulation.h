@@ -6,7 +6,6 @@
 #include "diffusion.h"
 #include "rest_metric.h"
 #include "display_mode.h"
-#include "embedding.h"
 #include "graphics/shape.h"
 #include <chrono>
 #include <future>
@@ -69,15 +68,7 @@ class Simulation
     double m_swellMuPerp = 0.001;
     std::vector<Eigen::Vector2d> m_machineDir;
 
-    Shape m_shape;       // physics mesh shape (energy/moisture/wireframe)
-    Shape m_displayShape; // display mesh shape (solid mode)
-
-    // Dual mesh: display (high-res) vs physics (simplified).
-    double m_simplification = 0.0;
-    ShellMesh m_displayMesh;
-    std::vector<BarycentricEmbed> m_displayEmbed;
-    std::vector<Eigen::Vector3d> m_displayVertices;
-    void transferDeformation();
+    Shape m_shape;
 
     double m_dt;
     double m_diffusivity = 0.0;
