@@ -10,3 +10,4 @@ Link to paper: https://dl.acm.org/doi/10.1145/3197517.3201395
 
 Link to slides: https://docs.google.com/presentation/d/1d94-tWePmH09UxO89-6XdBlCNK8kG3gknQxOcfTQHkU/edit?usp=sharing
 
+<img width="800" height="662" alt="wb_5" src="https://github.com/user-attachments/assets/03673a9c-8403-403e-8bbf-fd5c3d04ac1b" />
